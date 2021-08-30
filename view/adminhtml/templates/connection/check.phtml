@@ -1,0 +1,12 @@
+<?php
+/** @var \MageSuite\ErpConnector\Block\Adminhtml\Connection\Check $block */
+?>
+<script>
+    require([
+        'mage/url',
+        'Magento_Ui/js/block-loader'
+    ], function (url, blockLoader) {
+        blockLoader("<?= /* @noEscape */ $block->getViewFileUrl('images/loader-1.gif') ?>");
+        window.checkConfigUrl = '<?= /* @noEscape */ $block->getCheckConnectionUrl() ?>'
+    });
+</script>

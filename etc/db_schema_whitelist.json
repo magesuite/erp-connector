@@ -1,0 +1,50 @@
+{
+    "erp_connector_provider": {
+        "column": {
+            "provider_id": true,
+            "name": true,
+            "code": true,
+            "email": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "erp_connector_connector": {
+        "column": {
+            "connector_id": true,
+            "provider_id": true,
+            "name": true,
+            "type": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_514AA38689500AC8CD110B368A7DF3C0": true
+        }
+    },
+    "erp_connector_connector_configuration": {
+        "column": {
+            "entity_id": true,
+            "provider_id": true,
+            "connector_id": true,
+            "name": true,
+            "value": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_13256E91860C04E7419B8C8A850EA215": true
+        }
+    },
+    "erp_connector_provider_additional_configuration": {
+        "column": {
+            "entity_id": true,
+            "provider_id": true,
+            "key": true,
+            "value": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_0BA5A10947C9A57D32693670A226012F": true
+        }
+    }
+}

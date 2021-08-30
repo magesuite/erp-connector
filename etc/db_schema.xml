@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="erp_connector_provider" resource="default" engine="innodb">
+        <column xsi:type="int" name="provider_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="50"/>
+        <column xsi:type="varchar" name="code" nullable="true" length="50"/>
+        <column xsi:type="varchar" name="email" nullable="true" length="255"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="provider_id"/>
+        </constraint>
+    </table>
+    <table name="erp_connector_connector" resource="default" engine="innodb">
+        <column xsi:type="int" name="connector_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="provider_id" padding="10" unsigned="true" nullable="false"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="50"/>
+        <column xsi:type="varchar" name="type" nullable="true" length="50"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="connector_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="erp_connector_connector_provider" table="erp_connector_connector"
+                    column="provider_id" referenceTable="erp_connector_provider" referenceColumn="provider_id"
+                    onDelete="CASCADE"/>
+    </table>
+    <table name="erp_connector_connector_configuration" resource="default" engine="innodb">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="provider_id" padding="10" unsigned="true" nullable="false"/>
+        <column xsi:type="int" name="connector_id" padding="10" unsigned="true" nullable="false"/>
+        <column xsi:type="varchar" name="name" nullable="true" length="50"/>
+        <column xsi:type="text" name="value" nullable="true"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="erp_connector_connector_configuration_connector" table="erp_connector_connector_configuration"
+                    column="connector_id" referenceTable="erp_connector_connector" referenceColumn="connector_id"
+                    onDelete="CASCADE"/>
+    </table>
+    <table name="erp_connector_provider_additional_configuration" resource="default" engine="innodb">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="provider_id" padding="10" unsigned="true" nullable="false"/>
+        <column xsi:type="varchar" name="key" nullable="true" length="32"/>
+        <column xsi:type="text" name="value" nullable="true"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="erp_connector_additional_configuration_provider" table="erp_connector_additional_configuration"
+                    column="provider_id" referenceTable="erp_connector_provider" referenceColumn="provider_id"
+                    onDelete="CASCADE"/>
+    </table>
+</schema>
