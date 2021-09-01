@@ -18,14 +18,20 @@ class Ftp extends Client implements ClientInterface
         $this->ftpFactory = $ftpFactory;
     }
 
-    public function checkConnectiona()
+    public function checkConnection()
     {
         $ftpPath = [
             'host' => $this->getData('host'),
             'user' => $this->getData('username'),
             'password' => $this->getData('password'),
-            'passive' => $this->getData('passive_mode'), //todo add config for FTP mode
+            'passive' => $this->getData('passive_mode'),
         ];
+
+        $port = $this->getData('port');
+
+        if ($port) {
+            $ftpPath['port'] = $port;
+        }
 
         $location = $ftpPath['user'] . '@' .$ftpPath['host'];
 

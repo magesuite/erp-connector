@@ -17,6 +17,10 @@
     <preference for="MageSuite\ErpConnector\Api\Data\ProviderAdditionalConfigurationInterface" type="MageSuite\ErpConnector\Model\Data\ProviderAdditionalConfiguration"/>
     <preference for="MageSuite\ErpConnector\Api\ProviderAdditionalConfigurationRepositoryInterface" type="MageSuite\ErpConnector\Model\ProviderAdditionalConfigurationRepository"/>
 
+    <preference for="MageSuite\ErpConnector\Api\Data\SchedulerSearchResultsInterface" type="MageSuite\ErpConnector\Model\Data\SchedulerSearchResults"/>
+    <preference for="MageSuite\ErpConnector\Api\Data\SchedulerInterface" type="MageSuite\ErpConnector\Model\Data\Scheduler"/>
+    <preference for="MageSuite\ErpConnector\Api\SchedulerRepositoryInterface" type="MageSuite\ErpConnector\Model\SchedulerRepository"/>
+
     <type name="MageSuite\ErpConnector\Logger\Handler">
         <arguments>
             <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
@@ -52,9 +56,9 @@
                     <item name="class" xsi:type="object">\MageSuite\ErpConnector\Model\Connector\Sftp</item>
                     <item name="configuration" xsi:type="array">
                         <item name="host" xsi:type="string">host</item>
-                        <item name="port" xsi:type="string">port</item>
                         <item name="username" xsi:type="string">username</item>
                         <item name="password" xsi:type="string">password</item>
+                        <item name="timeout" xsi:type="string">timeout</item>
                         <item name="source_dir" xsi:type="string">source_dir</item>
                         <item name="destination_dir" xsi:type="string">destination_dir</item>
                         <item name="skip_validation" xsi:type="string">skip_validation</item>

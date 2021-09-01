@@ -132,18 +132,17 @@ class Save extends \Magento\Backend\App\Action implements \Magento\Framework\App
                 $this->providerRepository->save($provider);
 
                 try {
-                    $this->eventManager->dispatch('erp_connector_full_save_before', ['provider' => $provider]); //TODO: potrzebne?
+                    $this->eventManager->dispatch('erp_connector_full_save_before', ['provider' => $provider]);
 
                     $formData = $data['additional_configuration']['additional_configuration'] ?? [];
                     $this->processProviderAdditionalConfig($provider, $formData);
 
                     $this->processConnectors($provider);
 
-                    $this->eventManager->dispatch('erp_connector_full_save_after', ['provider' => $provider]); //TODO: potrzebne?
+                    $this->eventManager->dispatch('erp_connector_full_save_after', ['provider' => $provider]);
                 } catch (\Exception $e) {
                     $this->logger->error($e->getMessage());
                 }
-
 
                 $this->messageManager->addSuccessMessage(__('You saved the provider.'));
                 $this->dataPersistor->clear('erp_connector_provider');

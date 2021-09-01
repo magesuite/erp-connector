@@ -1,37 +1,46 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <tab id="magesuite" translate="label" sortOrder="500">
             <label>MageSuite Extensions</label>
         </tab>
-        <section id="erp_connector" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
-            <label>Remote Provider</label>
+        <section id="erp_connector" translate="label" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>Erp Connector</label>
             <tab>magesuite</tab>
             <resource>MageSuite_ErpConnector::erp_connector</resource>
-            <group id="general" translate="label" type="text"
-                   sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>General</label>
-                <field id="enabled" translate="label" type="select"
-                       sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="provider_attribute" translate="label" type="select"
-                       sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Product attribute that contain provider</label>
-                    <source_model>MageSuite\ErpConnector\Model\Source\Product\Attribute</source_model>
-                    <depends>
-                        <field id="enabled">1</field>
-                    </depends>
-                </field>
-                <field id="additional_codes" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="provider_configuration_codes" translate="label" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Additional Code List</label>
                     <frontend_model>MageSuite\ErpConnector\Block\Adminhtml\System\Config\Form\Field\ProviderAdditionalConfiguration\ConfigurationCodes</frontend_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
-                    <depends>
-                        <field id="enabled">1</field>
-                    </depends>
+                </field>
+            </group>
+            <group id="connector" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Connectors</label>
+                <group id="email" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Email</label>
+                    <field id="name" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Sender Name</label>
+                        <backend_model>Magento\Config\Model\Config\Backend\Email\Sender</backend_model>
+                        <validate>validate-emailSender</validate>
+                    </field>
+                    <field id="email" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Sender Email</label>
+                        <validate>validate-email</validate>
+                        <backend_model>Magento\Config\Model\Config\Backend\Email\Address</backend_model>
+                    </field>
+                </group>
+            </group>
+            <group id="scheduler" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Scheduler</label>
+                <field id="type" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Type</label>
+                    <source_model>MageSuite\ErpConnector\Model\Source\SchedulerType</source_model>
                 </field>
             </group>
         </section>

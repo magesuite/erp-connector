@@ -16,7 +16,7 @@ class ConnectorPool
         $connectorConfiguration = [];
 
         foreach ($this->connectors as $connectorType => $connector) {
-            $connectorConfiguration[$connectorType] = $connector['configuration']; //TODO: check it
+            $connectorConfiguration[$connectorType] = $connector['configuration'];
         }
 
         return $connectorConfiguration;
@@ -25,7 +25,7 @@ class ConnectorPool
     public function getConnector($key)
     {
         foreach ($this->connectors as $connector) {
-            if (!$connector['class']->isApplicable($key)) { //TODO: check it
+            if (!$connector['class']->isApplicable($key)) {
                 continue;
             }
 

@@ -24,7 +24,7 @@ class Sftp extends Client implements ClientInterface
             'host' => $this->getData('host'),
             'user' => $this->getData('username'),
             'password' => $this->getData('password'),
-            'timeout' => 10,
+            'timeout' => $this->getData('timeout'),
         ];
 
         $location = $sftpPath['user'] . '@' . $sftpPath['host'];

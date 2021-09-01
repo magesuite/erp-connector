@@ -4,6 +4,7 @@ namespace MageSuite\ErpConnector\Helper;
 class Configuration
 {
     const XML_PATH_IS_ENABLED = 'erp_connector/general/enabled';
+    const XML_PATH_SCHEDULER_TYPE = 'erp_connector/scheduler/type';
     const XML_PATH_PROVIDER_CONFIGURATION_CODES = 'erp_connector/general/provider_configuration_codes';
 
     /**
@@ -27,6 +28,11 @@ class Configuration
     public function isEnabled()
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_IS_ENABLED);
+    }
+
+    public function getSchedulerType()
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_IS_ENABLED);
     }
 
     public function getProviderAdditionalConfigurationCodes()

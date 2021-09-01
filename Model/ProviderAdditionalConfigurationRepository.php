@@ -69,7 +69,7 @@ class ProviderAdditionalConfigurationRepository implements \MageSuite\ErpConnect
             throw new \Magento\Framework\Exception\NoSuchEntityException(__('ProviderAdditional with id "%1" does not exist.', $id));
         }
 
-        return $providerAdditionalConfiguration->getDataModel(); //TODO: to poprawne?
+        return $providerAdditionalConfiguration->getDataModel();
     }
 
     public function getByProviderId($id)

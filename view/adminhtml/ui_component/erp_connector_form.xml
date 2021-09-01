@@ -438,19 +438,6 @@
                     </settings>
                 </field>
                 <!--suppress XmlDefaultAttributeValue -->
-                <field name="port" formElement="input">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="default" xsi:type="number">22</item>
-                            <item name="fit" xsi:type="boolean">false</item>
-                        </item>
-                    </argument>
-                    <settings>
-                        <dataType>text</dataType>
-                        <label>Port</label>
-                    </settings>
-                </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="username" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -478,6 +465,18 @@
                         </validation>
                         <elementTmpl>MageSuite_ErpConnector/form/element/password</elementTmpl>
                         <label>Password</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="timeout" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="number">10</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Timeout</label>
                     </settings>
                 </field>
                 <!--suppress XmlDefaultAttributeValue -->
