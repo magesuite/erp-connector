@@ -20,24 +20,24 @@ interface ConnectorConfigurationRepositoryInterface
     public function getById($id);
 
     /**
-     * @param $id
-     * @return \MageSuite\ErpConnector\Model\ResourceModel\ConnectorConfiguration\Collection \\TODO: change to searchResult
+     * @param $providerId
+     * @return \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationSearchResultsInterface
      */
-    public function getListByProviderId($id);
+    public function getByProviderId($providerId);
 
     /**
-     * @param $id
-     * @return \MageSuite\ErpConnector\Model\ResourceModel\ConnectorConfiguration\Collection \\TODO: change to searchResult
+     * @param $connectorId
+     * @return \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationSearchResultsInterface
      */
-    public function getListByConnectorId($id);
+    public function getByConnectorId($connectorId);
 
     /**
-     * @param $id
+     * @param $connectorId
      * @param $name
      * @return \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getByConnectorIdAndName($id, $name);
+    public function getItemByConnectorIdAndName($connectorId, $name);
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria

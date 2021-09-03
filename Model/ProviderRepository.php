@@ -14,16 +14,6 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
     protected $resourceModel;
 
     /**
-     * @var \MageSuite\ErpConnector\Api\Data\ProviderSearchResultsInterfaceFactory
-     */
-    protected $searchResultsFactory;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
-     */
-    protected $collectionProcessor;
-
-    /**
      * @var \MageSuite\ErpConnector\Api\Data\ProviderInterfaceFactory
      */
     protected $providerFactory;
@@ -31,24 +21,34 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
     /**
      * @var \MageSuite\ErpConnector\Model\ResourceModel\Provider\CollectionFactory
      */
-    protected $providerCollectionFactory;
+    protected $collectionFactory;
+
+    /**
+     * @var \MageSuite\ErpConnector\Api\Data\ProviderSearchResultsInterfaceFactory
+     */
+    protected $searchResultsFactory;
 
     /**
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
+     */
+    protected $collectionProcessor;
+
     public function __construct(
         \MageSuite\ErpConnector\Model\ResourceModel\Provider $resourceModel,
         \MageSuite\ErpConnector\Api\Data\ProviderInterfaceFactory $providerFactory,
-        \MageSuite\ErpConnector\Model\ResourceModel\Provider\CollectionFactory $providerCollectionFactory,
+        \MageSuite\ErpConnector\Model\ResourceModel\Provider\CollectionFactory $collectionFactory,
         \MageSuite\ErpConnector\Api\Data\ProviderSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor
     ) {
         $this->resourceModel = $resourceModel;
         $this->providerFactory = $providerFactory;
-        $this->providerCollectionFactory = $providerCollectionFactory;
+        $this->collectionFactory = $collectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->collectionProcessor = $collectionProcessor;
@@ -97,7 +97,7 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
 
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria = null)
     {
-        $collection = $this->providerCollectionFactory->create();
+        $collection = $this->collectionFactory->create();
 
         if ($criteria === null) {
             $criteria = $this->searchCriteriaBuilder->create();
@@ -111,17 +111,6 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
         $searchResults->setTotalCount($collection->getSize());
 
         return $searchResults;
-    }
-
-    public function getFirst(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
-    {
-        $searchResults = $this->getList($searchCriteria);
-
-        if (!$searchResults->getTotalCount()) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(__('Provider was not found'));
-        }
-
-        return array_values($searchResults->getItems())[0];
     }
 
     public function delete(\MageSuite\ErpConnector\Api\Data\ProviderInterface $provider)

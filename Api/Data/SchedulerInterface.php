@@ -11,7 +11,9 @@ interface SchedulerInterface
      */
     public const SCHEDULER_ID = 'scheduler_id';
     public const PROVIDER_ID = 'provider_id';
+    public const CONNECTOR_ID = 'connector_id';
     public const NAME = 'name';
+    public const TYPE = 'type';
     public const CRON_EXPRESSION = 'cron_expression';
     public const TEMPLATE = 'template';
     public const FILE_NAME = 'file_name';
@@ -32,9 +34,19 @@ interface SchedulerInterface
     public function getProviderId();
 
     /**
+     * @return int|null
+     */
+    public function getConnectorId();
+
+    /**
      * @return string|null
      */
     public function getName();
+
+    /**
+     * @return string|null
+     */
+    public function getType();
 
     /**
      * @return string|null
@@ -63,16 +75,28 @@ interface SchedulerInterface
     public function setId($id);
 
     /**
-     * @param int $id
+     * @param int $providerId
      * @return self
      */
-    public function setProviderId($id);
+    public function setProviderId($providerId);
+
+    /**
+     * @param int $connectorId
+     * @return self
+     */
+    public function setConnectorId($connectorId);
 
     /**
      * @param $name
      * @return self
      */
     public function setName($name);
+
+    /**
+     * @param $type
+     * @return self
+     */
+    public function setType($type);
 
     /**
      * @param $cronExpression

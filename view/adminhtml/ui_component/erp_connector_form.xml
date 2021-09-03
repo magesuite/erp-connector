@@ -795,18 +795,6 @@
                         <label>Timeout</label>
                     </settings>
                 </field>
-                <!--todo implement http check-->
-                <!--<field name="check" formElement="input" component="MageSuite_ErpConnector/js/form/element/check">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="fit" xsi:type="boolean">false</item>
-                        </item>
-                    </argument>
-                    <settings>
-                        <elementTmpl>MageSuite_ErpConnector/form/element/check</elementTmpl>
-                        <label>Check connection</label>
-                    </settings>
-                </field>-->
                 <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">

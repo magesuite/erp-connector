@@ -20,27 +20,11 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
                 </field>
             </group>
-            <group id="connector" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Connectors</label>
-                <group id="email" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Email</label>
-                    <field id="name" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                        <label>Sender Name</label>
-                        <backend_model>Magento\Config\Model\Config\Backend\Email\Sender</backend_model>
-                        <validate>validate-emailSender</validate>
-                    </field>
-                    <field id="email" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
-                        <label>Sender Email</label>
-                        <validate>validate-email</validate>
-                        <backend_model>Magento\Config\Model\Config\Backend\Email\Address</backend_model>
-                    </field>
-                </group>
-            </group>
             <group id="scheduler" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Scheduler</label>
-                <field id="type" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Type</label>
-                    <source_model>MageSuite\ErpConnector\Model\Source\SchedulerType</source_model>
+                <field id="method" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Method</label>
+                    <source_model>MageSuite\ErpConnector\Model\Source\SchedulerMethod</source_model>
                 </field>
             </group>
         </section>

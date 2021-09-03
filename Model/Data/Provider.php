@@ -13,7 +13,7 @@ class Provider extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     public function getId()
     {
-        return $this->getDataByKey(self::ENTITY_ID);
+        return $this->getDataByKey(self::PROVIDER_ID);
     }
 
     public function getName()
@@ -33,7 +33,7 @@ class Provider extends \Magento\Framework\Model\AbstractExtensibleModel implemen
 
     public function setId($id)
     {
-        $this->setData(self::ENTITY_ID, $id);
+        $this->setData(self::PROVIDER_ID, $id);
         return $this;
     }
 

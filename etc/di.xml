@@ -29,7 +29,7 @@
 
     <type name="MageSuite\ErpConnector\Logger\Logger">
         <arguments>
-            <argument name="name" xsi:type="string">arcavisLogger</argument>
+            <argument name="name" xsi:type="string">erpConnectorLogger</argument>
             <argument name="handlers"  xsi:type="array">
                 <item name="system" xsi:type="object">MageSuite\ErpConnector\Logger\Handler</item>
             </argument>
@@ -88,6 +88,16 @@
                         <item name="email" xsi:type="string">email</item>
                         <item name="template" xsi:type="string">template</item>
                     </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="MageSuite\ErpConnector\Model\SchedulerPool">
+        <arguments>
+            <argument name="schedulerGroups" xsi:type="array">
+                <item name="general" xsi:type="array">
+                    <item name="general" xsi:type="object">\MageSuite\ErpConnector\Model\ProviderProcessor\General</item>
                 </item>
             </argument>
         </arguments>

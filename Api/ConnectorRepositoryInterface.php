@@ -21,11 +21,10 @@ interface ConnectorRepositoryInterface
     public function getById($id);
 
     /**
-     * @param $id
-     * @return \MageSuite\ErpConnector\Model\ResourceModel\Connector\Collection \\TODO: change to searchResult
-     * @deprecated Use getList with search criteria instead
+     * @param $providerId
+     * @return \MageSuite\ErpConnector\Model\ResourceModel\Connector\Collection
      */
-    public function getListByProviderId($id);
+    public function getByProviderId($providerId);
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria

@@ -26,6 +26,11 @@ class ConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\Co
     protected $searchResultsFactory;
 
     /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
+
+    /**
      * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
      */
     protected $collectionProcessor;
@@ -35,12 +40,14 @@ class ConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\Co
         \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterfaceFactory $connectorConfigurationFactory,
         \MageSuite\ErpConnector\Model\ResourceModel\ConnectorConfiguration\CollectionFactory $collectionFactory,
         \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationSearchResultsInterfaceFactory $searchResultsFactory,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor
     ) {
         $this->resourceModel = $resourceModel;
         $this->connectorConfigurationFactory = $connectorConfigurationFactory;
         $this->collectionFactory = $collectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->collectionProcessor = $collectionProcessor;
     }
 
@@ -87,38 +94,56 @@ class ConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\Co
         return $searchResults;
     }
 
-    public function getListByProviderId($id)
+    public function getByProviderId($providerId)
     {
-        $collection = $this->collectionFactory->create();
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(\MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface::PROVIDER_ID, $providerId)
+            ->create();
 
-        $collection->addFieldToFilter('provider_id', $id);
+        $list = $this->getList($searchCriteria);
 
-        return $collection;
+        if (!$list->getTotalCount()) {
+            return [];
+        }
+
+        return $list->getItems();
     }
 
-    public function getListByConnectorId($id)
+    public function getByConnectorId($connectorId)
     {
-        $collection = $this->collectionFactory->create();
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(\MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface::CONNECTOR_ID, $connectorId)
+            ->create();
 
-        $collection->addFieldToFilter('connector_id', $id);
+        $list = $this->getList($searchCriteria);
 
-        return $collection;
+        if (!$list->getTotalCount()) {
+            return [];
+        }
+
+        return $list->getItems();
     }
 
-    public function getByConnectorIdAndName($id, $name)
+    public function getItemByConnectorIdAndName($connectorId, $name)
     {
-        $collection = $this->collectionFactory->create();
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(\MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface::CONNECTOR_ID, $connectorId)
+            ->addFilter(\MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface::NAME, $name)
+            ->create();
 
-        $collection->addFieldToFilter('connector_id', $id);
-        $collection->addFieldToFilter('name', $name);
+        $searchCriteria
+            ->setPageSize(1)
+            ->setCurrentPage(1);
 
-        if (!$collection->getSize()) {
+        $list = $this->getList($searchCriteria);
+
+        if (!$list->getTotalCount()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(
                 __('The additional config with connector ID "%1" and name "%2" doesn\'t exist.', $id, $name)
             );
         }
 
-        return $collection->getFirstItem();
+        return current($list->getItems());
     }
 
     public function delete($model)

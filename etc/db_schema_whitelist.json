@@ -44,7 +44,25 @@
         },
         "constraint": {
             "PRIMARY": true,
-            "FK_0BA5A10947C9A57D32693670A226012F": true
+            "FK_0DF487222E8A3F5FBC9DC81484D32694": true
+        }
+    },
+    "erp_connector_scheduler": {
+        "column": {
+            "scheduler_id": true,
+            "provider_id": true,
+            "connector_id": true,
+            "name": true,
+            "type": true,
+            "cron_expression": true,
+            "template": true,
+            "file_name": true,
+            "additional_template": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_D4FCB0BEF52D140EE4D9C707E536B537": true,
+            "FK_F9EE496EF9D9AD01C5067CD256EC2AC1": true
         }
     }
 }

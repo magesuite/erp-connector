@@ -1,20 +1,20 @@
 <?php
 namespace MageSuite\ErpConnector\Model\Source;
 
-class SchedulerType implements \Magento\Framework\Data\OptionSourceInterface
+class SchedulerMethod implements \Magento\Framework\Data\OptionSourceInterface
 {
-    const TYPE_CRON = 'cron';
-    const TYPE_RABBITMQ = 'rabbitmq';
+    const METHOD_CRON = 'cron';
+    const METHOD_RABBITMQ = 'rabbitmq';
 
     public function getCollection()
     {
         return [
             [
-                'value' => self::TYPE_CRON,
+                'value' => self::METHOD_CRON,
                 'label' => __('Cron'),
             ],
             [
-                'value' => self::TYPE_RABBITMQ,
+                'value' => self::METHOD_RABBITMQ,
                 'label' => __('RabbitMQ'),
             ],
         ];

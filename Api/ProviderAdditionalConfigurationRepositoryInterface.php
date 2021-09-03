@@ -18,17 +18,11 @@ interface ProviderAdditionalConfigurationRepositoryInterface
     public function getById($id);
 
     /**
-     * @param $id
-     * @return \MageSuite\ErpConnector\Model\ResourceModel\ProviderAdditionalConfiguration\Collection \\TODO: change to searchResult
-     */
-    public function getCollectionByProviderId($id);
-
-    /**
-     * @param $id
+     * @param $providerId
      * @return \MageSuite\ErpConnector\Api\Data\ProviderAdditionalConfigurationInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getByProviderId($id);
+    public function getByProviderId($providerId);
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria

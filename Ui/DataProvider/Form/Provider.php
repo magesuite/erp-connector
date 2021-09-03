@@ -74,7 +74,7 @@ class Provider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 'connectors' => []
             ];
 
-            $connectors = $this->connectorRepository->getListByProviderId($providerId);
+            $connectors = $this->connectorRepository->getByProviderId($providerId);
             $connectorConfigurations = $this->prepareConnectorConfigurations($providerId);
 
             /** @var \MageSuite\ErpConnector\Api\Data\ConnectorInterface $connector */
@@ -102,7 +102,7 @@ class Provider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
     protected function prepareConnectorConfigurations($providerId)
     {
-        $connectorConfigurations = $this->connectorConfigurationRepository->getListByProviderId($providerId);
+        $connectorConfigurations = $this->connectorConfigurationRepository->getByProviderId($providerId);
 
         $result = [];
 
@@ -117,9 +117,9 @@ class Provider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function getProviderAdditionalConfigurationByProviderId($providerId)
     {
         $result = ['additional_configuration' => []];
-        $additionalConfiguration = $this->providerAdditionalConfigurationRepository->getCollectionByProviderId($providerId);
+        $additionalConfiguration = $this->providerAdditionalConfigurationRepository->getByProviderId($providerId);
 
-        if (!$additionalConfiguration->getSize()) {
+        if (empty($additionalConfiguration)) {
             return $result;
         }
 

@@ -1,7 +1,7 @@
 <?php
 namespace MageSuite\ErpConnector\Api\Data;
 
-interface ProviderAdditionalConfigurationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface ProviderAdditionalConfigurationInterface
 {
     public const ID = 'entity_id';
     public const PROVIDER_ID = 'provider_id';

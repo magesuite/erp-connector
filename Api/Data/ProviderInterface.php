@@ -9,7 +9,7 @@ interface ProviderInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    public const ENTITY_ID = 'provider_id';
+    public const PROVIDER_ID = 'provider_id';
     public const NAME = 'name';
     public const CODE = 'code';
     public const EMAIL = 'email';

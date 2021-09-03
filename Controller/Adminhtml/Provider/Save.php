@@ -168,8 +168,7 @@ class Save extends \Magento\Backend\App\Action implements \Magento\Framework\App
 
     protected function processProviderAdditionalConfig($provider, $formData)
     {
-        $providerAdditionalConfiguration = $this->providerAdditionalConfigurationRepository->getCollectionByProviderId($provider->getId());
-        $providerAdditionalConfiguration->load();
+        $providerAdditionalConfiguration = $this->providerAdditionalConfigurationRepository->getByProviderId($provider->getId());
 
         $configsData = [];
 
@@ -265,7 +264,7 @@ class Save extends \Magento\Backend\App\Action implements \Magento\Framework\App
 
             foreach ($connectorConfigurationFields as $configurationField) {
                 try {
-                    $configurationItem = $this->connectorConfigurationRepository->getByConnectorIdAndName($connector->getId(), $configurationField);
+                    $configurationItem = $this->connectorConfigurationRepository->getItemByConnectorIdAndName($connector->getId(), $configurationField);
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
                     $configurationItem = $this->connectorConfigurationFactory->create();
                     $configurationItem

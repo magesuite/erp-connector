@@ -26,6 +26,11 @@ class ConnectorRepository implements \MageSuite\ErpConnector\Api\ConnectorReposi
     protected $searchResultsFactory;
 
     /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
+
+    /**
      * @var \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface
      */
     protected $collectionProcessor;
@@ -35,12 +40,14 @@ class ConnectorRepository implements \MageSuite\ErpConnector\Api\ConnectorReposi
         \MageSuite\ErpConnector\Api\Data\ConnectorInterfaceFactory $connectorFactory,
         \MageSuite\ErpConnector\Model\ResourceModel\Connector\CollectionFactory $collectionFactory,
         \MageSuite\ErpConnector\Api\Data\ConnectorSearchResultsInterfaceFactory $searchResultsFactory,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor
     ) {
         $this->resourceModel = $resourceModel;
         $this->connectorFactory = $connectorFactory;
         $this->collectionFactory = $collectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->collectionProcessor = $collectionProcessor;
     }
 
@@ -87,12 +94,19 @@ class ConnectorRepository implements \MageSuite\ErpConnector\Api\ConnectorReposi
         return $searchResults;
     }
 
-    public function getListByProviderId($id)
+    public function getByProviderId($providerId)
     {
-        $collection = $this->collectionFactory->create();
-        $collection->addFieldToFilter('provider_id', $id);
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(\MageSuite\ErpConnector\Api\Data\ConnectorInterface::PROVIDER_ID, $providerId)
+            ->create();
 
-        return $collection;
+        $list = $this->getList($searchCriteria);
+
+        if (!$list->getTotalCount()) {
+            return [];
+        }
+
+        return $list->getItems();
     }
 
     public function delete($model)

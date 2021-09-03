@@ -21,6 +21,11 @@ class Scheduler extends \Magento\Framework\Model\AbstractModel implements \MageS
         return $this->getData(self::PROVIDER_ID);
     }
 
+    public function getConnectorId()
+    {
+        return $this->getData(self::CONNECTOR_ID);
+    }
+
     public function getName()
     {
         return $this->getData(self::NAME);
@@ -52,9 +57,15 @@ class Scheduler extends \Magento\Framework\Model\AbstractModel implements \MageS
         return $this;
     }
 
-    public function setProviderId($id)
+    public function setProviderId($providerId)
     {
-        $this->setData(self::PROVIDER_ID, $id);
+        $this->setData(self::PROVIDER_ID, $providerId);
+        return $this;
+    }
+
+    public function setConnectorId($connectorId)
+    {
+        $this->setData(self::CONNECTOR_ID, $connectorId);
         return $this;
     }
 

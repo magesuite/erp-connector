@@ -29,9 +29,9 @@ class ProviderAdditionalConfigurationRepository implements \MageSuite\ErpConnect
     protected $collectionProcessor;
 
     /**
-     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $extensionAttributesJoinProcessor;
+    protected $searchCriteriaBuilder;
 
     public function __construct(
         \MageSuite\ErpConnector\Model\ResourceModel\ProviderAdditionalConfiguration $resourceModel,
@@ -39,14 +39,14 @@ class ProviderAdditionalConfigurationRepository implements \MageSuite\ErpConnect
         \MageSuite\ErpConnector\Model\ResourceModel\ProviderAdditionalConfiguration\CollectionFactory $collectionFactory,
         \MageSuite\ErpConnector\Api\Data\ProviderAdditionalConfigurationSearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->resourceModel = $resourceModel;
         $this->providerAdditionalConfigurationFactory = $providerAdditionalConfigurationFactory;
         $this->collectionFactory = $collectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->collectionProcessor = $collectionProcessor;
-        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
 
     public function save($providerAdditionalConfiguration)
@@ -72,47 +72,34 @@ class ProviderAdditionalConfigurationRepository implements \MageSuite\ErpConnect
         return $providerAdditionalConfiguration->getDataModel();
     }
 
-    public function getByProviderId($id)
+    public function getByProviderId($providerId)
     {
-        $providerAdditionalConfiguration = $this->providerAdditionalConfigurationFactory->create();
-        $this->resourceModel->load($providerAdditionalConfiguration, $id, 'provider_id');
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(\MageSuite\ErpConnector\Api\Data\ProviderAdditionalConfigurationInterface::PROVIDER_ID, $providerId)
+            ->create();
 
-        if (!$providerAdditionalConfiguration->getId()) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(__('The configuration with the "%1" Provider ID doesn\'t exist.', $id));
+        $list = $this->getList($searchCriteria);
+
+        if (!$list->getTotalCount()) {
+            return [];
         }
 
-        return $providerAdditionalConfiguration;
-    }
-
-    public function getCollectionByProviderId($id)
-    {
-        $collection = $this->collectionFactory->create();
-        $collection->addFieldToFilter('provider_id', $id);
-
-        return $collection;
+        return $list->getItems();
     }
 
     public function getList($criteria)
     {
         $collection = $this->collectionFactory->create();
 
-        $this->extensionAttributesJoinProcessor->process(
-            $collection,
-            \MageSuite\ErpConnector\Api\Data\ProviderAdditionalConfigurationInterface::class
-        );
-
-        $this->collectionProcessor->process($criteria, $collection);
+        if ($criteria === null) {
+            $criteria = $this->searchCriteriaBuilder->create();
+        } else {
+            $this->collectionProcessor->process($criteria, $collection);
+        }
 
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($criteria);
-
-        $items = [];
-
-        foreach ($collection as $model) {
-            $items[] = $model->getDataModel();
-        }
-
-        $searchResults->setItems($items);
+        $searchResults->setItems($collection->getItems());
         $searchResults->setTotalCount($collection->getSize());
 
         return $searchResults;

@@ -6,7 +6,7 @@
                 <enabled>1</enabled>
             </general>
             <scheduler>
-                <type>cron</type>
+                <method>cron</method>
             </scheduler>
         </erp_connector>
     </default>
