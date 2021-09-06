@@ -34,8 +34,8 @@ class Connectors implements \Magento\Framework\Data\OptionSourceInterface
 
         $currentProvider = $this->getCurrentProvider();
 
-        if ($currentProvider && $currentProvider->getId()) {
-            $criteria->addFilter('provider_id', $currentProvider->getId());
+        if ($currentProvider && $currentProvider->getProviderId()()) {
+            $criteria->addFilter('provider_id', $currentProvider->getProviderId());
         }
 
         $connectors = $this->connectorRepository->getList($criteria->create());

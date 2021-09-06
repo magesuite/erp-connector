@@ -41,7 +41,7 @@ class Provider extends \Magento\Framework\View\Element\UiComponent\DataProvider\
             $result->getItems(),
             $result->getTotalCount(),
             $searchCriteria,
-            'id'
+            'provider_id'
         );
     }
 }

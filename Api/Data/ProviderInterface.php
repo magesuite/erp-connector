@@ -4,7 +4,7 @@ namespace MageSuite\ErpConnector\Api\Data;
 /**
  * @api
  */
-interface ProviderInterface extends \Magento\Framework\Api\CustomAttributesDataInterface, \Magento\Framework\DataObject\IdentityInterface
+interface ProviderInterface extends \Magento\Framework\Api\ExtensibleDataInterface, \Magento\Framework\DataObject\IdentityInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
@@ -21,7 +21,7 @@ interface ProviderInterface extends \Magento\Framework\Api\CustomAttributesDataI
     /**
      * @return int|null
      */
-    public function getId();
+    public function getProviderId();
 
     /**
      * @return string|null
@@ -39,10 +39,10 @@ interface ProviderInterface extends \Magento\Framework\Api\CustomAttributesDataI
     public function getCode();
 
     /**
-     * @param int $id
+     * @param int $providerId
      * @return ProviderInterface
      */
-    public function setId($id);
+    public function setProviderId($providerId);
 
     /**
      * @param $name
@@ -63,13 +63,13 @@ interface ProviderInterface extends \Magento\Framework\Api\CustomAttributesDataI
     public function setCode($code);
 
     /**
-     * @return \MageSuite\ErpConnector\Api\Data\ProviderExtensionInterface
+     * @return \MageSuite\ErpConnector\Api\Data\ProviderExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * @param \MageSuite\ErpConnector\Api\Data\ProviderExtensionInterface $extensionAttributes
-     * @return ProviderInterface
+     * @return $this
      */
-    public function setExtensionAttributes($extensionAttributes);
+    public function setExtensionAttributes(\MageSuite\ErpConnector\Api\Data\ProviderExtensionInterface $extensionAttributes);
 }

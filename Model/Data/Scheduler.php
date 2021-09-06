@@ -31,6 +31,11 @@ class Scheduler extends \Magento\Framework\Model\AbstractModel implements \MageS
         return $this->getData(self::NAME);
     }
 
+    public function getType()
+    {
+        return $this->getData(self::TYPE);
+    }
+
     public function getCronExpression()
     {
         return $this->getData(self::CRON_EXPRESSION);
@@ -72,6 +77,12 @@ class Scheduler extends \Magento\Framework\Model\AbstractModel implements \MageS
     public function setName($name)
     {
         $this->setData(self::NAME, $name);
+        return $this;
+    }
+
+    public function setType($type)
+    {
+        $this->setData(self::TYPE, $type);
         return $this;
     }
 

@@ -11,7 +11,7 @@ class Provider extends \Magento\Framework\Model\AbstractExtensibleModel implemen
         $this->_init(\MageSuite\ErpConnector\Model\ResourceModel\Provider::class);
     }
 
-    public function getId()
+    public function getProviderId()
     {
         return $this->getDataByKey(self::PROVIDER_ID);
     }
@@ -31,9 +31,9 @@ class Provider extends \Magento\Framework\Model\AbstractExtensibleModel implemen
         return $this->getDataByKey(self::CODE);
     }
 
-    public function setId($id)
+    public function setProviderId($providerId)
     {
-        $this->setData(self::PROVIDER_ID, $id);
+        $this->setData(self::PROVIDER_ID, $providerId);
         return $this;
     }
 
@@ -62,11 +62,12 @@ class Provider extends \Magento\Framework\Model\AbstractExtensibleModel implemen
         }
 
         return $this->_getExtensionAttributes();
+        ;
     }
 
-    public function setExtensionAttributes($extensionAttributes)
+    public function setExtensionAttributes(\MageSuite\ErpConnector\Api\Data\ProviderExtensionInterface $extensionAttributes)
     {
-        return $this->_setExtensionAttributes($extensionAttributes);
+        return $this->setData(self::EXTENSION_ATTRIBUTES_KEY, $extensionAttributes);
     }
 
     public function getIdentities()

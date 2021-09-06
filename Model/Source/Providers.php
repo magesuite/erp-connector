@@ -25,7 +25,7 @@ class Providers implements \Magento\Framework\Data\OptionSourceInterface
 
         foreach ($providers->getItems() as $provider) {
             $list[] = [
-                'value' => $provider->getId(),
+                'value' => $provider->getProviderId(),
                 'label' => $provider->getName()
             ];
         }

@@ -148,7 +148,7 @@ class Save extends \Magento\Backend\App\Action implements \Magento\Framework\App
                 $this->dataPersistor->clear('erp_connector_provider');
 
                 if ($this->getRequest()->getParam('back')) {
-                    return $resultRedirect->setPath('*/*/edit', ['provider_id' => $provider->getId()]);
+                    return $resultRedirect->setPath('*/*/edit', ['provider_id' => $provider->getProviderId()]);
                 }
 
                 return $resultRedirect->setPath('*/*/index');
@@ -168,13 +168,13 @@ class Save extends \Magento\Backend\App\Action implements \Magento\Framework\App
 
     protected function processProviderAdditionalConfig($provider, $formData)
     {
-        $providerAdditionalConfiguration = $this->providerAdditionalConfigurationRepository->getByProviderId($provider->getId());
+        $providerAdditionalConfiguration = $this->providerAdditionalConfigurationRepository->getByProviderId($provider->getProviderId());
 
         $configsData = [];
 
         if (!empty($formData)) {
             foreach ($formData as $configData) {
-                $configData['provider_id'] = $provider->getId();
+                $configData['provider_id'] = $provider->getProviderId();
 
                 if (isset($configData['entity_id'])) {
                     $configsData[$configData['entity_id']] = $configData;
@@ -202,7 +202,7 @@ class Save extends \Magento\Backend\App\Action implements \Magento\Framework\App
         $connectorsConfiguration = $this->connectorPool->getConnectorConfigurations();
 
         foreach ($connectorsConfiguration as $connectorType => $connectorConfigurationFields) {
-            $this->saveConnectors($provider->getId(), $connectorType, $connectorConfigurationFields);
+            $this->saveConnectors($provider->getProviderId(), $connectorType, $connectorConfigurationFields);
         }
     }
 

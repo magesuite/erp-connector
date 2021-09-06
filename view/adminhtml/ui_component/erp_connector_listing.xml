@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">erp_connector_listing.erp_connector_listing_data_source</item>
@@ -45,31 +44,31 @@
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="erp_connector_columns">
-        <column name="provider_id">
+        <column name="provider_id" sortOrder="10">
             <settings>
                 <filter>textRange</filter>
                 <label translate="true">ID</label>
                 <sorting>asc</sorting>
             </settings>
         </column>
-        <column name="name">
+        <column name="name" sortOrder="20">
             <settings>
                 <filter>text</filter>
                 <label translate="true">Name</label>
             </settings>
         </column>
-        <column name="code">
+        <column name="code" sortOrder="30">
             <settings>
                 <filter>text</filter>
                 <label translate="true">Code</label>
             </settings>
         </column>
-        <column name="connectors_count" class="MageSuite\ErpConnector\Ui\Component\Listing\Column\ConnectorsCount">
+        <column name="connectors_count" sortOrder="40" class="MageSuite\ErpConnector\Ui\Component\Listing\Column\ConnectorsCount">
             <settings>
                 <label translate="true">Connectors Count</label>
             </settings>
         </column>
-        <actionsColumn name="actions" class="MageSuite\ErpConnector\Ui\Component\Listing\Column\ProviderActions">
+        <actionsColumn name="actions" sortOrder="50" class="MageSuite\ErpConnector\Ui\Component\Listing\Column\ProviderActions">
             <settings>
                 <indexField>provider_id</indexField>
             </settings>

@@ -42,7 +42,7 @@ class Configuration
         $configurationCodes = $this->scopeConfig->getValue(self::XML_PATH_PROVIDER_CONFIGURATION_CODES);
 
         if (empty($configurationCodes)) {
-            return null;
+            return [];
         }
 
         return $this->serializer->unserialize($configurationCodes);

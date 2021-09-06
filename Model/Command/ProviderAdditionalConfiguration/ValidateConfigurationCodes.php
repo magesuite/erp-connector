@@ -28,7 +28,7 @@ class ValidateConfigurationCodes
         $changedCodes = $this->getChangedCodes($configurationCodes);
 
         if (empty($changedCodes)) {
-            return true;
+            return [];
         }
 
         $providerNames = $this->resourceModel->getProviderNamesWithSpecificAdditionalConfig($changedCodes);

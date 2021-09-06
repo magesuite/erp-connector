@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">erp_connector_form.provider_form_data_source</item>
@@ -56,7 +55,7 @@
             </settings>
         </field>
         <!--suppress XmlDefaultAttributeValue -->
-        <field name="name" sortOrder="20" formElement="input">
+        <field name="name" sortOrder="10" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">provider</item>
@@ -71,7 +70,7 @@
                 <label translate="true">Provider Name</label>
             </settings>
         </field>
-        <field name="email" sortOrder="30" formElement="input">
+        <field name="email" sortOrder="20" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">provider</item>
@@ -88,7 +87,7 @@
             </settings>
         </field>
         <!--suppress XmlDefaultAttributeValue -->
-        <field name="code" sortOrder="40" formElement="input">
+        <field name="code" sortOrder="30" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">provider</item>
@@ -96,7 +95,7 @@
             </argument>
             <settings>
                 <validation>
-                    <rule name="required-entry" xsi:type="boolean">false</rule>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
                     <rule name="max_text_length" xsi:type="number">255</rule>
                 </validation>
                 <dataType>text</dataType>

@@ -74,7 +74,7 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
         $provider = $this->providerFactory->create();
         $this->resourceModel->load($provider, $id);
 
-        if (!$provider->getId()) {
+        if (!$provider->getProviderId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(__('The provider with the "%1" ID doesn\'t exist.', $id));
         }
 
@@ -88,7 +88,7 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
         $provider = $this->providerFactory->create();
         $this->resourceModel->load($provider, $name, 'name');
 
-        if (!$provider->getId()) {
+        if (!$provider->getProviderId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(__('The provider with the name "%1" doesn\'t exist.', $name));
         }
 
