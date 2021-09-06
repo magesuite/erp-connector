@@ -9,7 +9,7 @@ class SchedulerHandler
     protected $schedulerRepository;
 
     /**
-     * @var \MageSuite\ErpConnector\Service\Processor
+     * @var \MageSuite\ErpConnector\Service\Scheduler\Processor
      */
     protected $schedulerProcessor;
 
@@ -20,7 +20,7 @@ class SchedulerHandler
 
     public function __construct(
         \MageSuite\ErpConnector\Api\SchedulerRepositoryInterface $schedulerRepository,
-        \MageSuite\ErpConnector\Service\Processor $schedulerProcessor,
+        \MageSuite\ErpConnector\Service\Scheduler\Processor $schedulerProcessor,
         \MageSuite\ErpConnector\Logger\Logger $logger
     ) {
         $this->schedulerRepository = $schedulerRepository;
