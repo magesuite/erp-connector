@@ -115,13 +115,14 @@ class Soap extends Client implements ClientInterface
         $soapLogin = $this->getData('login');
         $soapLocation = $this->getData('location');
 
-        $credentials = [
-            'login' => $soapLogin,
-            'password' => $this->getData('password')
-        ];
-
         try {
-            $soapClient = new \SoapClient($this->getData('wsdl'), $credentials);
+            $soapClient = new \SoapClient($this->getData('wsdl'), [
+                'soap_version' => $this->getData('version'),
+                'login' => $this->getData('login'),
+                'password' => $this->getData('password'),
+                'cache_wsdl' => WSDL_CACHE_NONE,
+                "trace" => 1
+            ]);
         } catch (\SoapFault $e) {
             $message = __('Unable to connect to a remote SOAP API "%1" as "%2"', $soapLocation, $soapLogin);
 
