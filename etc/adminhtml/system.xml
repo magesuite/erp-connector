@@ -17,7 +17,7 @@
                 <field id="provider_configuration_codes" translate="label" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Additional Code List</label>
                     <frontend_model>MageSuite\ErpConnector\Block\Adminhtml\System\Config\Form\Field\ProviderAdditionalConfiguration\ConfigurationCodes</frontend_model>
-                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                        <backend_model>MageSuite\ErpConnector\Model\Config\Backend\ProviderAdditionalConfiguration\ConfigurationCodes</backend_model>
                 </field>
             </group>
             <group id="scheduler" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
