@@ -1,9 +1,10 @@
 <?php
+namespace MageSuite\ErpConnector\Model\Command;
 
-namespace MageSuite\ErpConnector\Model\Client;
-
-class Client extends \Magento\Framework\DataObject
+class LogErrorMessage
 {
+    const MESSAGE_WITH_DATA_FORMAT = "%s\nData: %s";
+
     /**
      * @var \MageSuite\ErpConnector\Model\Command\AddAdminNotification
      */
@@ -16,23 +17,20 @@ class Client extends \Magento\Framework\DataObject
 
     public function __construct(
         \MageSuite\ErpConnector\Model\Command\AddAdminNotification $addAdminNotification,
-        \MageSuite\ErpConnector\Logger\Logger $logger,
-        array $data = []
+        \MageSuite\ErpConnector\Logger\Logger $logger
     ) {
-        parent::__construct($data);
-
         $this->addAdminNotification = $addAdminNotification;
         $this->logger = $logger;
     }
 
-    public function checkConnection()
+    public function execute($title, $message, $data = null)
     {
-        throw new \MageSuite\ErpConnector\Exception\ConnectionFailed(__('Not possible to test connection.'));
-    }
+        if ($data !== null) {
+            $message = sprintf(self::MESSAGE_WITH_DATA_FORMAT, $message, var_export($data, true));
+        }
 
-    public function logErrorMessage($title, $message)
-    {
         $this->logger->error($message);
         $this->addAdminNotification->execute($title, $message);
+
     }
 }

@@ -1,33 +1,52 @@
 <?php
 namespace MageSuite\ErpConnector\Model\Client;
 
-class Http extends Client implements ClientInterface
+class Http extends \Magento\Framework\DataObject implements ClientInterface
 {
     /**
      * @var \GuzzleHttp\ClientFactory
      */
     protected $clientFactory;
 
+    /**
+     * @var \MageSuite\ErpConnector\Model\Command\LogErrorMessage
+     */
+    protected $logErrorMessage;
+
     protected $client = null;
 
     public function __construct(
-        \MageSuite\ErpConnector\Model\Command\AddAdminNotification $addAdminNotification,
         \GuzzleHttp\ClientFactory $clientFactory,
-        \MageSuite\ErpConnector\Logger\Logger $logger,
+        \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
         array $data = []
     ) {
-        parent::__construct($addAdminNotification, $logger, $data);
+        parent::__construct($data);
 
         $this->clientFactory = $clientFactory;
+        $this->logErrorMessage = $logErrorMessage;
     }
 
     public function sendItem($provider, $data)
     {
         $content = $data['content'] ?? null;
+
+        if (!$content) {
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                'Missing content',
+                $data
+            );
+            return $this;
+        }
+
         $fileName = $data['file_name'] ?? null;
 
-        if (!$content || !$fileName) {
-            $this->logErrorMessage($provider->getName() . ' provider ERROR', 'Missing content or fileName');
+        if (!$fileName) {
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                'Missing file name',
+                $data
+            );
             return $this;
         }
 
@@ -35,7 +54,11 @@ class Http extends Client implements ClientInterface
             $response = $this->sendRequest($data);
             $this->validateResponse($response, $data);
         } catch (\Exception $e) {
-            $this->logErrorMessage($provider->getName() . ' provider ERROR', $e->getMessage());
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                $e->getMessage(),
+                $data
+            );
         }
 
         return $this;

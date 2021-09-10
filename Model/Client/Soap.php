@@ -1,24 +1,29 @@
 <?php
 namespace MageSuite\ErpConnector\Model\Client;
 
-class Soap extends Client implements ClientInterface
+class Soap extends \Magento\Framework\DataObject implements ClientInterface
 {
     /**
      * @var \Magento\Framework\DomDocument\DomDocumentFactory
      */
     protected $domDocumentFactory;
 
+    /**
+     * @var \MageSuite\ErpConnector\Model\Command\LogErrorMessage
+     */
+    protected $logErrorMessage;
+
     protected $soapClient = null;
 
     public function __construct(
-        \MageSuite\ErpConnector\Model\Command\AddAdminNotification $addAdminNotification,
         \Magento\Framework\DomDocument\DomDocumentFactory $domDocumentFactory,
-        \MageSuite\ErpConnector\Logger\Logger $logger,
+        \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
         array $data = []
     ) {
-        parent::__construct($addAdminNotification, $logger, $data);
+        parent::__construct($data);
 
         $this->domDocumentFactory = $domDocumentFactory;
+        $this->logErrorMessage = $logErrorMessage;
     }
 
     public function checkConnection()
@@ -38,13 +43,17 @@ class Soap extends Client implements ClientInterface
         $content = $data['content'] ?? null;
 
         if (!$content) {
-            $this->logErrorMessage($provider->getName() . ' provider ERROR', 'Missing content');
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                'Missing content',
+                $data
+            );
             return $this;
         }
 
-        $soapClient = $this->getSoapClient();
-
         try {
+            $soapClient = $this->getSoapClient();
+
             $response = $soapClient->__doRequest($content, $this->getData('location'), $this->getData('action'), $this->getData('version'));
             $this->processSoapApiResponse($response);
         } catch (\Exception $e) {
@@ -62,7 +71,11 @@ class Soap extends Client implements ClientInterface
 
             $mergedMessages = implode(' ', $messages);
 
-            $this->logErrorMessage($provider->getName() . ' provider ERROR', $mergedMessages);
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                $mergedMessages,
+                $data
+            );
         }
 
         return $this;
@@ -126,7 +139,11 @@ class Soap extends Client implements ClientInterface
         } catch (\SoapFault $e) {
             $message = __('Unable to connect to a remote SOAP API "%1" as "%2"', $soapLocation, $soapLogin);
 
-            $this->logErrorMessage('Unable to connect to a remote SOAP API', $message);
+            $this->logErrorMessage->execute(
+                'Unable to connect to a remote SOAP API',
+                $message,
+                $e->getMessage()
+            );
 
             throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed($message);
         }

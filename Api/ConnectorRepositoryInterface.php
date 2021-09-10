@@ -7,15 +7,15 @@ namespace MageSuite\ErpConnector\Api;
 interface ConnectorRepositoryInterface
 {
     /**
-     * @param \MageSuite\ErpConnector\Api\Data\ConnectorInterface $connector
-     * @return \MageSuite\ErpConnector\Api\Data\ConnectorInterface
+     * @param \MageSuite\ErpConnector\Model\Data\Connector $connector
+     * @return \MageSuite\ErpConnector\Model\Data\Connector
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function save($connector);
 
     /**
      * @param $id
-     * @return \MageSuite\ErpConnector\Api\Data\ConnectorInterface
+     * @return \MageSuite\ErpConnector\Model\Data\Connector
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById($id);
@@ -33,17 +33,17 @@ interface ConnectorRepositoryInterface
     public function getList($searchCriteria);
 
     /**
-     * @param \MageSuite\ErpConnector\Api\Data\ConnectorInterface $connector
+     * @param \MageSuite\ErpConnector\Model\Data\Connector $connector
      * @return bool true on success
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function delete($connector);
 
     /**
-     * @param int $entityId
+     * @param int $id
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteById($entityId);
+    public function deleteById($id);
 }

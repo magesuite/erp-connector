@@ -33,8 +33,8 @@
         </settings>
         <dataProvider class="MageSuite\ErpConnector\Ui\DataProvider\Form\Provider" name="provider_form_data_source">
             <settings>
-                <requestFieldName>provider_id</requestFieldName>
-                <primaryFieldName>provider_id</primaryFieldName>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>
@@ -43,7 +43,7 @@
             <label translate="true">General</label>
         </settings>
         <!--suppress XmlDefaultAttributeValue -->
-        <field name="provider_id" formElement="input">
+        <field name="id" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="source" xsi:type="string">provider</item>
@@ -109,7 +109,7 @@
                 <componentType>dynamicRows</componentType>
                 <deleteValue>true</deleteValue>
                 <deleteProperty>deleted</deleteProperty>
-                <identificationProperty>entity_id</identificationProperty>
+                <identificationProperty>id</identificationProperty>
                 <dndConfig>
                     <param name="enabled" xsi:type="boolean">false</param>
                 </dndConfig>
@@ -188,7 +188,7 @@
                 <componentType>dynamicRows</componentType>
                 <deleteValue>true</deleteValue>
                 <deleteProperty>deleted</deleteProperty>
-                <identificationProperty>connector_id</identificationProperty>
+                <identificationProperty>id</identificationProperty>
                 <dndConfig>
                     <param name="enabled" xsi:type="boolean">false</param>
                 </dndConfig>
@@ -388,7 +388,7 @@
                 <componentType>dynamicRows</componentType>
                 <deleteValue>true</deleteValue>
                 <deleteProperty>deleted</deleteProperty>
-                <identificationProperty>connector_id</identificationProperty>
+                <identificationProperty>id</identificationProperty>
                 <dndConfig>
                     <param name="enabled" xsi:type="boolean">false</param>
                 </dndConfig>
@@ -563,7 +563,7 @@
                 <componentType>dynamicRows</componentType>
                 <deleteValue>true</deleteValue>
                 <deleteProperty>deleted</deleteProperty>
-                <identificationProperty>connector_id</identificationProperty>
+                <identificationProperty>id</identificationProperty>
                 <dndConfig>
                     <param name="enabled" xsi:type="boolean">false</param>
                 </dndConfig>
@@ -731,7 +731,7 @@
                 <componentType>dynamicRows</componentType>
                 <deleteValue>true</deleteValue>
                 <deleteProperty>deleted</deleteProperty>
-                <identificationProperty>connector_id</identificationProperty>
+                <identificationProperty>id</identificationProperty>
                 <dndConfig>
                     <param name="enabled" xsi:type="boolean">false</param>
                 </dndConfig>
@@ -814,7 +814,7 @@
                 <componentType>dynamicRows</componentType>
                 <deleteValue>true</deleteValue>
                 <deleteProperty>deleted</deleteProperty>
-                <identificationProperty>connector_id</identificationProperty>
+                <identificationProperty>id</identificationProperty>
                 <dndConfig>
                     <param name="enabled" xsi:type="boolean">false</param>
                 </dndConfig>

@@ -22,7 +22,7 @@ class Delete extends \Magento\Backend\App\Action implements \Magento\Framework\A
     {
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        $id = (int) $this->getRequest()->getParam('provider_id');
+        $id = (int) $this->getRequest()->getParam('id');
 
         if ($id) {
             try {
@@ -33,7 +33,7 @@ class Delete extends \Magento\Backend\App\Action implements \Magento\Framework\A
             } catch (\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
 
-                return $resultRedirect->setPath('*/*/edit', ['provider_id' => $id]);
+                return $resultRedirect->setPath('*/*/edit', ['id' => $id]);
             }
         }
 

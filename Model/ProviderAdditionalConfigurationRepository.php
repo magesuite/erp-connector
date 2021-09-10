@@ -9,7 +9,7 @@ class ProviderAdditionalConfigurationRepository implements \MageSuite\ErpConnect
     protected $resourceModel;
 
     /**
-     * @var \MageSuite\ErpConnector\Api\Data\ProviderAdditionalConfigurationInterfaceFactory
+     * @var \MageSuite\ErpConnector\Model\Data\ProviderAdditionalConfigurationFactory
      */
     protected $providerAdditionalConfigurationFactory;
 
@@ -19,7 +19,7 @@ class ProviderAdditionalConfigurationRepository implements \MageSuite\ErpConnect
     protected $collectionFactory;
 
     /**
-     * @var \MageSuite\ErpConnector\Api\Data\ProviderAdditionalConfigurationSearchResultsInterfaceFactory
+     * @var \Magento\Framework\Api\SearchResultsInterfaceFactory
      */
     protected $searchResultsFactory;
 
@@ -35,9 +35,9 @@ class ProviderAdditionalConfigurationRepository implements \MageSuite\ErpConnect
 
     public function __construct(
         \MageSuite\ErpConnector\Model\ResourceModel\ProviderAdditionalConfiguration $resourceModel,
-        \MageSuite\ErpConnector\Api\Data\ProviderAdditionalConfigurationInterfaceFactory $providerAdditionalConfigurationFactory,
+        \MageSuite\ErpConnector\Model\Data\ProviderAdditionalConfigurationFactory $providerAdditionalConfigurationFactory,
         \MageSuite\ErpConnector\Model\ResourceModel\ProviderAdditionalConfiguration\CollectionFactory $collectionFactory,
-        \MageSuite\ErpConnector\Api\Data\ProviderAdditionalConfigurationSearchResultsInterfaceFactory $searchResultsFactory,
+        \Magento\Framework\Api\SearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
@@ -75,7 +75,7 @@ class ProviderAdditionalConfigurationRepository implements \MageSuite\ErpConnect
     public function getByProviderId($providerId)
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(\MageSuite\ErpConnector\Api\Data\ProviderAdditionalConfigurationInterface::PROVIDER_ID, $providerId)
+            ->addFilter(\MageSuite\ErpConnector\Model\Data\ProviderAdditionalConfiguration::PROVIDER_ID, $providerId)
             ->create();
 
         $list = $this->getList($searchCriteria);

@@ -1,8 +1,21 @@
 <?php
 namespace MageSuite\ErpConnector\Model\Data;
 
-class Scheduler extends \Magento\Framework\Model\AbstractModel implements \MageSuite\ErpConnector\Api\Data\SchedulerInterface
+class Scheduler extends \Magento\Framework\Model\AbstractModel
 {
+    const ID = 'id';
+    const PROVIDER_ID = 'provider_id';
+    const CONNECTOR_ID = 'connector_id';
+    const NAME = 'name';
+    const TYPE = 'type';
+    const CRON_EXPRESSION = 'cron_expression';
+    const TEMPLATE = 'template';
+    const FILE_NAME = 'file_name';
+    const ADDITIONAL_TEMPLATE = 'additional_template';
+
+    const CACHE_TAG = 'erp_connector_scheduler';
+    const EVENT_PREFIX = 'erp_connector_scheduler';
+
     protected $_cacheTag = self::CACHE_TAG; //phpcs:ignore
     protected $_eventPrefix = self::EVENT_PREFIX; //phpcs:ignore
 
@@ -13,7 +26,7 @@ class Scheduler extends \Magento\Framework\Model\AbstractModel implements \MageS
 
     public function getId()
     {
-        return $this->getData(self::SCHEDULER_ID);
+        return $this->getData(self::ID);
     }
 
     public function getProviderId()
@@ -58,7 +71,7 @@ class Scheduler extends \Magento\Framework\Model\AbstractModel implements \MageS
 
     public function setId($id)
     {
-        $this->setData(self::SCHEDULER_ID, $id);
+        $this->setData(self::ID, $id);
         return $this;
     }
 

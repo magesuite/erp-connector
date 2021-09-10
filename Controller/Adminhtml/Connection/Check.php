@@ -1,31 +1,20 @@
 <?php
 namespace MageSuite\ErpConnector\Controller\Adminhtml\Connection;
 
-class Check implements \Magento\Framework\App\ActionInterface
+class Check extends \Magento\Backend\App\Action implements \Magento\Framework\App\Action\HttpPostActionInterface
 {
     /**
-     * @var \Magento\Framework\Controller\ResultFactory
+     * @var \MageSuite\ErpConnector\Model\ConnectorResolver
      */
-    protected $resultFactory;
-
-    /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var \MageSuite\ErpConnector\Model\ConnectorPool
-     */
-    protected $connectorPool;
+    protected $connectorResolver;
 
     public function __construct(
-        \Magento\Framework\Controller\ResultFactory $resultFactory,
-        \Magento\Framework\App\RequestInterface $request,
-        \MageSuite\ErpConnector\Model\ConnectorPool $connectorPool
+        \Magento\Backend\App\Action\Context $context,
+        \MageSuite\ErpConnector\Model\ConnectorResolver $connectorResolver
     ) {
-        $this->resultFactory = $resultFactory;
-        $this->request = $request;
-        $this->connectorPool = $connectorPool;
+        parent::__construct($context);
+
+        $this->connectorResolver = $connectorResolver;
     }
 
     public function execute()
@@ -33,7 +22,7 @@ class Check implements \Magento\Framework\App\ActionInterface
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_JSON);
 
-        $connectorConfiguration = $this->request->getParams();
+        $connectorConfiguration = $this->getRequest()->getParams();
 
         if (!isset($connectorConfiguration['type'])) {
             $response = [
@@ -45,7 +34,7 @@ class Check implements \Magento\Framework\App\ActionInterface
             return $resultJson->setData($response);
         }
 
-        $connector = $this->connectorPool->getConnector($connectorConfiguration['type']);
+        $connector = $this->connectorResolver->getConnector($connectorConfiguration['type']);
 
         try {
             $response = [

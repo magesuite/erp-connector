@@ -37,7 +37,7 @@ class ProviderActions extends \Magento\Ui\Component\Listing\Columns\Column
         }
 
         foreach ($dataSource['data']['items'] as & $item) {
-            if (!isset($item['provider_id'])) {
+            if (!isset($item['id'])) {
                 continue;
             }
 
@@ -48,7 +48,7 @@ class ProviderActions extends \Magento\Ui\Component\Listing\Columns\Column
                     'href' => $this->urlBuilder->getUrl(
                         static::URL_PATH_EDIT,
                         [
-                            'provider_id' => $item['provider_id'],
+                            'id' => $item['id'],
                         ]
                     ),
                     'label' => __('Edit'),
@@ -58,7 +58,7 @@ class ProviderActions extends \Magento\Ui\Component\Listing\Columns\Column
                     'href' => $this->urlBuilder->getUrl(
                         static::URL_PATH_DELETE,
                         [
-                            'provider_id' => $item['provider_id'],
+                            'id' => $item['id'],
                         ]
                     ),
                     'label' => __('Delete'),

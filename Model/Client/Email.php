@@ -1,7 +1,7 @@
 <?php
 namespace MageSuite\ErpConnector\Model\Client;
 
-class Email extends Client implements ClientInterface
+class Email extends \Magento\Framework\DataObject implements ClientInterface
 {
     /**
      * @var \MageSuite\ErpConnector\Helper\Configuration
@@ -18,30 +18,43 @@ class Email extends Client implements ClientInterface
      */
     protected $transportBuilderFactory;
 
+    /**
+     * @var \MageSuite\ErpConnector\Model\Command\LogErrorMessage
+     */
+    protected $logErrorMessage;
+
     public function __construct(
-        \MageSuite\ErpConnector\Model\Command\AddAdminNotification $addAdminNotification,
         \MageSuite\ErpConnector\Helper\Configuration $configuration,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Framework\Mail\Template\TransportBuilderFactory $transportBuilderFactory,
-        \MageSuite\ErpConnector\Logger\Logger $logger,
+        \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
         array $data = []
     ) {
-        parent::__construct($addAdminNotification, $logger, $data);
+        parent::__construct($data);
 
         $this->configuration = $configuration;
         $this->inlineTranslation = $inlineTranslation;
         $this->transportBuilderFactory = $transportBuilderFactory;
+        $this->logErrorMessage = $logErrorMessage;
     }
 
     public function sendItem($provider, $data)
     {
         if (!isset($data['files']) || empty($data['files'])) {
-            $this->logErrorMessage($provider->getName() . ' provider ERROR', 'Missing files');
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                'Missing files',
+                $data
+            );
             return $this;
         }
 
         if (!isset($data['order']) || empty($data['order'])) {
-            $this->logErrorMessage($provider->getName() . ' provider ERROR', 'Missing order data');
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                'Missing order data',
+                $data
+            );
             return $this;
         }
 
@@ -52,7 +65,11 @@ class Email extends Client implements ClientInterface
             try {
                 $this->sendItemToRecipient($provider, $sender, $recipient, $data);
             } catch (\Exception $e) {
-                $this->logErrorMessage($provider->getName() . ' provider ERROR', $e->getMessage());
+                $this->logErrorMessage->execute(
+                    sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                    $e->getMessage(),
+                    $data
+                );
             }
         }
 
@@ -81,7 +98,11 @@ class Email extends Client implements ClientInterface
             $transport->getTransport();
             $transport->sendMessage();
         } catch (\Exception $e) {
-            $this->logErrorMessage('Can\'t send ' . $provider->getName() . ' item to recipient email ' . $recipient, $e->getMessage());
+            $this->logErrorMessage->execute(
+                sprintf('Can\'t send %s item to recipient email %s', $provider->getName(), $recipient),
+                $e->getMessage(),
+                $data
+            );
         }
 
         $this->inlineTranslation->resume();

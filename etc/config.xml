@@ -3,7 +3,7 @@
     <default>
         <erp_connector>
             <general>
-                <enabled>1</enabled>
+                <is_enabled>1</is_enabled>
             </general>
             <scheduler>
                 <method>cron</method>

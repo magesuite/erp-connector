@@ -13,7 +13,7 @@ class Providers implements \Magento\Framework\Data\OptionSourceInterface
         $this->providerRepository = $providerRepository;
     }
 
-    public function getCollection()
+    public function toOptionArray()
     {
         $providers = $this->providerRepository->getList();
 
@@ -25,16 +25,11 @@ class Providers implements \Magento\Framework\Data\OptionSourceInterface
 
         foreach ($providers->getItems() as $provider) {
             $list[] = [
-                'value' => $provider->getProviderId(),
+                'value' => $provider->getId(),
                 'label' => $provider->getName()
             ];
         }
 
         return $providers;
-    }
-
-    public function toOptionArray()
-    {
-        return $this->getCollection();
     }
 }

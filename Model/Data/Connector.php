@@ -1,8 +1,16 @@
 <?php
 namespace MageSuite\ErpConnector\Model\Data;
 
-class Connector extends \Magento\Framework\Model\AbstractModel implements \MageSuite\ErpConnector\Api\Data\ConnectorInterface
+class Connector extends \Magento\Framework\Model\AbstractModel
 {
+    const ID = 'id';
+    const PROVIDER_ID = 'provider_id';
+    const NAME = 'name';
+    const TYPE = 'type';
+
+    const CACHE_TAG = 'erp_connector';
+    const EVENT_PREFIX = 'erp_connector';
+
     protected $_cacheTag = self::CACHE_TAG; //phpcs:ignore
     protected $_eventPrefix = self::EVENT_PREFIX; //phpcs:ignore
 
@@ -13,12 +21,7 @@ class Connector extends \Magento\Framework\Model\AbstractModel implements \MageS
 
     public function getId()
     {
-        return $this->getData(self::CONNECTOR_ID);
-    }
-
-    public function getConnectorId()
-    {
-        return $this->getData(self::CONNECTOR_ID);
+        return $this->getData(self::ID);
     }
 
     public function getProviderId()
@@ -36,9 +39,9 @@ class Connector extends \Magento\Framework\Model\AbstractModel implements \MageS
         return $this->getData(self::TYPE);
     }
 
-    public function setConnectorId($id)
+    public function setId($id)
     {
-        $this->setData(self::CONNECTOR_ID, $id);
+        $this->setData(self::ID, $id);
         return $this;
     }
 

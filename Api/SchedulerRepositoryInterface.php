@@ -7,22 +7,22 @@ namespace MageSuite\ErpConnector\Api;
 interface SchedulerRepositoryInterface
 {
     /**
-     * @param \MageSuite\ErpConnector\Api\Data\SchedulerInterface $model
-     * @return \MageSuite\ErpConnector\Api\Data\SchedulerInterface
+     * @param \MageSuite\ErpConnector\Model\Data\Scheduler $scheduler
+     * @return \MageSuite\ErpConnector\Model\Data\Scheduler
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save($model);
+    public function save($scheduler);
 
     /**
      * @param $id
-     * @return \MageSuite\ErpConnector\Api\Data\SchedulerInterface
+     * @return \MageSuite\ErpConnector\Model\Data\Scheduler
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById($id);
 
     /**
      * @param $providerId
-     * @return \MageSuite\ErpConnector\Api\Data\SchedulerInterface
+     * @return \MageSuite\ErpConnector\Model\Data\Scheduler
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @deprecated Use getList with search criteria instead
      */
@@ -30,16 +30,16 @@ interface SchedulerRepositoryInterface
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
-     * @return \MageSuite\ErpConnector\Api\Data\SchedulerSearchResultsInterface
+     * @return \Magento\Framework\Api\SearchResultsInterface
      */
     public function getList($searchCriteria = null);
 
     /**
-     * @param \MageSuite\ErpConnector\Api\Data\SchedulerInterface $model
+     * @param \MageSuite\ErpConnector\Model\Data\Scheduler $scheduler
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function delete($model);
+    public function delete($scheduler);
 
     /**
      * @param int $id

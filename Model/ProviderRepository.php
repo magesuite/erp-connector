@@ -14,7 +14,7 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
     protected $resourceModel;
 
     /**
-     * @var \MageSuite\ErpConnector\Api\Data\ProviderInterfaceFactory
+     * @var \MageSuite\ErpConnector\Model\Data\ProviderFactory
      */
     protected $providerFactory;
 
@@ -24,7 +24,7 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
     protected $collectionFactory;
 
     /**
-     * @var \MageSuite\ErpConnector\Api\Data\ProviderSearchResultsInterfaceFactory
+     * @var \Magento\Framework\Api\SearchResultsInterfaceFactory
      */
     protected $searchResultsFactory;
 
@@ -40,9 +40,9 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
 
     public function __construct(
         \MageSuite\ErpConnector\Model\ResourceModel\Provider $resourceModel,
-        \MageSuite\ErpConnector\Api\Data\ProviderInterfaceFactory $providerFactory,
+        \MageSuite\ErpConnector\Model\Data\ProviderFactory $providerFactory,
         \MageSuite\ErpConnector\Model\ResourceModel\Provider\CollectionFactory $collectionFactory,
-        \MageSuite\ErpConnector\Api\Data\ProviderSearchResultsInterfaceFactory $searchResultsFactory,
+        \Magento\Framework\Api\SearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor
     ) {
@@ -54,7 +54,7 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
         $this->collectionProcessor = $collectionProcessor;
     }
 
-    public function save(\MageSuite\ErpConnector\Api\Data\ProviderInterface $provider)
+    public function save($provider)
     {
         try {
             $this->resourceModel->save($provider);
@@ -74,7 +74,7 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
         $provider = $this->providerFactory->create();
         $this->resourceModel->load($provider, $id);
 
-        if (!$provider->getProviderId()) {
+        if (!$provider->getId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(__('The provider with the "%1" ID doesn\'t exist.', $id));
         }
 
@@ -88,7 +88,7 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
         $provider = $this->providerFactory->create();
         $this->resourceModel->load($provider, $name, 'name');
 
-        if (!$provider->getProviderId()) {
+        if (!$provider->getId()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(__('The provider with the name "%1" doesn\'t exist.', $name));
         }
 
@@ -113,7 +113,7 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
         return $searchResults;
     }
 
-    public function delete(\MageSuite\ErpConnector\Api\Data\ProviderInterface $provider)
+    public function delete($provider)
     {
         try {
             $this->resourceModel->delete($provider);

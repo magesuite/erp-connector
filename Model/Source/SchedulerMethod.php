@@ -6,7 +6,7 @@ class SchedulerMethod implements \Magento\Framework\Data\OptionSourceInterface
     const METHOD_CRON = 'cron';
     const METHOD_RABBITMQ = 'rabbitmq';
 
-    public function getCollection()
+    public function toOptionArray()
     {
         return [
             [
@@ -18,10 +18,5 @@ class SchedulerMethod implements \Magento\Framework\Data\OptionSourceInterface
                 'label' => __('RabbitMQ'),
             ],
         ];
-    }
-
-    public function toOptionArray()
-    {
-        return $this->getCollection();
     }
 }

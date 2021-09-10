@@ -3,6 +3,8 @@ namespace MageSuite\ErpConnector\Model\Command;
 
 class AddAdminNotification
 {
+    const MESSAGE_WITH_DATA_FORMAT = "%s\nData: %s";
+
     /**
      * @var \Magento\AdminNotification\Model\Inbox
      */

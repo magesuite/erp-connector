@@ -8,54 +8,54 @@ namespace MageSuite\ErpConnector\Api;
 interface ConnectorConfigurationRepositoryInterface
 {
     /**
-     * @param \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface $model
-     * @return \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface
+     * @param \MageSuite\ErpConnector\Model\Data\ConnectorConfiguration $connectorConfiguration
+     * @return \MageSuite\ErpConnector\Model\Data\ConnectorConfiguration
      */
-    public function save($model);
+    public function save($connectorConfiguration);
 
     /**
      * @param $id
-     * @return \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface
+     * @return \MageSuite\ErpConnector\Model\Data\ConnectorConfiguration
      */
     public function getById($id);
 
     /**
      * @param $providerId
-     * @return \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationSearchResultsInterface
+     * @return \Magento\Framework\Api\SearchResultsInterface
      */
     public function getByProviderId($providerId);
 
     /**
      * @param $connectorId
-     * @return \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationSearchResultsInterface
+     * @return \Magento\Framework\Api\SearchResultsInterface
      */
     public function getByConnectorId($connectorId);
 
     /**
      * @param $connectorId
      * @param $name
-     * @return \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface
+     * @return \MageSuite\ErpConnector\Model\Data\ConnectorConfiguration
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getItemByConnectorIdAndName($connectorId, $name);
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationSearchResultsInterface
+     * @return \Magento\Framework\Api\SearchResultsInterface
      */
     public function getList($searchCriteria);
 
     /**
-     * @param \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface $model
+     * @param \MageSuite\ErpConnector\Model\Data\ConnectorConfiguration $connectorConfiguration
      * @return bool true on success
      */
-    public function delete($model);
+    public function delete($connectorConfiguration);
 
     /**
-     * @param int $entityId
+     * @param int $id
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function deleteById($entityId);
+    public function deleteById($id);
 }

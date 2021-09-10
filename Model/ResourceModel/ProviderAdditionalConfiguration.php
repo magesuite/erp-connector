@@ -5,7 +5,7 @@ class ProviderAdditionalConfiguration extends \Magento\Framework\Model\ResourceM
 {
     protected function _construct(): void
     {
-        $this->_init('erp_connector_provider_additional_configuration', \MageSuite\ErpConnector\Api\Data\ProviderAdditionalConfigurationInterface::ID);
+        $this->_init('erp_connector_provider_additional_configuration', \MageSuite\ErpConnector\Model\Data\ProviderAdditionalConfiguration::ID);
     }
 
     public function getProviderNamesWithSpecificAdditionalConfig($codes)
@@ -14,8 +14,8 @@ class ProviderAdditionalConfiguration extends \Magento\Framework\Model\ResourceM
 
         $query = $connection
             ->select()
-            ->from(['pac' => $connection->getTableName('erp_connector_provider_additional_configuration')], ['entity_id', 'key'])
-            ->joinLeft(['p' => $connection->getTableName('erp_connector_provider')], 'pac.provider_id = p.provider_id', 'name')
+            ->from(['pac' => $connection->getTableName('erp_connector_provider_additional_configuration')], ['id', 'key'])
+            ->joinLeft(['p' => $connection->getTableName('erp_connector_provider')], 'pac.provider_id = p.id', 'name')
             ->where('pac.key in (?)', $codes);
 
         try {

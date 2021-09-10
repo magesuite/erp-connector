@@ -62,7 +62,7 @@ class Provider extends \Magento\Ui\DataProvider\AbstractDataProvider
 
         $items = $this->collection->getItems();
 
-        /** @var \MageSuite\ErpConnector\Api\Data\ProviderInterface $provider */
+        /** @var \MageSuite\ErpConnector\Model\Data\Provider $provider */
         foreach ($items as $provider) {
             $providerId = $provider->getId();
 
@@ -77,11 +77,11 @@ class Provider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $connectors = $this->connectorRepository->getByProviderId($providerId);
             $connectorConfigurations = $this->prepareConnectorConfigurations($providerId);
 
-            /** @var \MageSuite\ErpConnector\Api\Data\ConnectorInterface $connector */
+            /** @var \MageSuite\ErpConnector\Model\Data\Connector $connector */
             foreach ($connectors as $connector) {
 
-                if (isset($connectorConfigurations[$connector->getConnectorId()])) {
-                    $connector->addData($connectorConfigurations[$connector->getConnectorId()]);
+                if (isset($connectorConfigurations[$connector->getId()])) {
+                    $connector->addData($connectorConfigurations[$connector->getId()]);
                 }
 
                 $this->loadedData[$providerId]['connectors'][$connector->getType()][$connector->getType()][] = $connector->getData();

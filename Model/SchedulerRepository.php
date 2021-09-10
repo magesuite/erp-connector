@@ -11,7 +11,7 @@ class SchedulerRepository implements \MageSuite\ErpConnector\Api\SchedulerReposi
     protected $resourceModel;
 
     /**
-     * @var \MageSuite\ErpConnector\Api\Data\SchedulerInterfaceFactory
+     * @var \MageSuite\ErpConnector\Model\Data\SchedulerFactory
      */
     protected $schedulerFactory;
 
@@ -21,7 +21,7 @@ class SchedulerRepository implements \MageSuite\ErpConnector\Api\SchedulerReposi
     protected $collectionFactory;
 
     /**
-     * @var \MageSuite\ErpConnector\Api\Data\SchedulerSearchResultsInterfaceFactory
+     * @var \Magento\Framework\Api\SearchResultsInterfaceFactory
      */
     protected $searchResultsFactory;
 
@@ -37,9 +37,9 @@ class SchedulerRepository implements \MageSuite\ErpConnector\Api\SchedulerReposi
 
     public function __construct(
         \MageSuite\ErpConnector\Model\ResourceModel\Scheduler $resourceModel,
-        \MageSuite\ErpConnector\Api\Data\SchedulerInterfaceFactory $schedulerFactory,
+        \MageSuite\ErpConnector\Model\Data\SchedulerFactory $schedulerFactory,
         \MageSuite\ErpConnector\Model\ResourceModel\Scheduler\CollectionFactory $collectionFactory,
-        \MageSuite\ErpConnector\Api\Data\SchedulerSearchResultsInterfaceFactory $searchResultsFactory,
+        \Magento\Framework\Api\SearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
@@ -51,14 +51,15 @@ class SchedulerRepository implements \MageSuite\ErpConnector\Api\SchedulerReposi
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
-    public function save($model)
+    public function save($scheduler)
     {
         try {
-            $this->resourceModel->save($model);
+            $this->resourceModel->save($scheduler);
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(__($exception->getMessage()));
         }
-        return $model;
+
+        return $scheduler;
     }
 
     public function getById($id)
@@ -109,18 +110,18 @@ class SchedulerRepository implements \MageSuite\ErpConnector\Api\SchedulerReposi
         return $searchResults;
     }
 
-    public function delete($model)
+    public function delete($scheduler)
     {
         try {
-            $this->resourceModel->delete($model);
+            $this->resourceModel->delete($scheduler);
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\CouldNotDeleteException(__($exception->getMessage()));
         }
         return true;
     }
 
-    public function deleteById($entityId)
+    public function deleteById($id)
     {
-        return $this->delete($this->getById($entityId));
+        return $this->delete($this->getById($id));
     }
 }

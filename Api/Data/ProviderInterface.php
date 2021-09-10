@@ -1,15 +1,12 @@
 <?php
 namespace MageSuite\ErpConnector\Api\Data;
 
-/**
- * @api
- */
-interface ProviderInterface extends \Magento\Framework\Api\ExtensibleDataInterface, \Magento\Framework\DataObject\IdentityInterface
+interface ProviderInterface extends \Magento\Framework\DataObject\IdentityInterface, \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    public const PROVIDER_ID = 'provider_id';
+    public const ID = 'id';
     public const NAME = 'name';
     public const CODE = 'code';
     public const EMAIL = 'email';
@@ -21,7 +18,7 @@ interface ProviderInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * @return int|null
      */
-    public function getProviderId();
+    public function getId();
 
     /**
      * @return string|null
@@ -39,26 +36,26 @@ interface ProviderInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     public function getCode();
 
     /**
-     * @param int $providerId
-     * @return ProviderInterface
+     * @param int $id
+     * @return self
      */
-    public function setProviderId($providerId);
+    public function setId($id);
 
     /**
      * @param $name
-     * @return ProviderInterface
+     * @return self
      */
     public function setName($name);
 
     /**
      * @param string|null $email
-     * @return ProviderInterface
+     * @return self
      */
     public function setEmail($email);
 
     /**
      * @param $code
-     * @return ProviderInterface
+     * @return self
      */
     public function setCode($code);
 
@@ -69,7 +66,7 @@ interface ProviderInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
 
     /**
      * @param \MageSuite\ErpConnector\Api\Data\ProviderExtensionInterface $extensionAttributes
-     * @return $this
+     * @return self
      */
-    public function setExtensionAttributes(\MageSuite\ErpConnector\Api\Data\ProviderExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes($extensionAttributes);
 }

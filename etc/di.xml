@@ -1,24 +1,10 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <preference for="MageSuite\ErpConnector\Api\Data\ProviderSearchResultsInterface" type="MageSuite\ErpConnector\Model\Data\ProviderSearchResults"/>
-    <preference for="MageSuite\ErpConnector\Api\Data\ProviderInterface" type="MageSuite\ErpConnector\Model\Data\Provider"/>
     <preference for="MageSuite\ErpConnector\Api\ProviderRepositoryInterface" type="MageSuite\ErpConnector\Model\ProviderRepository"/>
-
-    <preference for="MageSuite\ErpConnector\Api\Data\ConnectorSearchResultsInterface" type="MageSuite\ErpConnector\Model\Data\ConnectorSearchResults"/>
-    <preference for="MageSuite\ErpConnector\Api\Data\ConnectorInterface" type="MageSuite\ErpConnector\Model\Data\Connector"/>
     <preference for="MageSuite\ErpConnector\Api\ConnectorRepositoryInterface" type="MageSuite\ErpConnector\Model\ConnectorRepository"/>
-
-    <preference for="MageSuite\ErpConnector\Api\Data\ConnectorConfigurationSearchResultsInterface" type="MageSuite\ErpConnector\Model\Data\ConnectorConfigurationSearchResults"/>
-    <preference for="MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface" type="MageSuite\ErpConnector\Model\Data\ConnectorConfiguration"/>
     <preference for="MageSuite\ErpConnector\Api\ConnectorConfigurationRepositoryInterface" type="MageSuite\ErpConnector\Model\ConnectorConfigurationRepository"/>
-
-    <preference for="MageSuite\ErpConnector\Api\Data\ProviderAdditionalConfigurationSearchResultsInterface" type="MageSuite\ErpConnector\Model\Data\ProviderAdditionalConfigurationSearchResults"/>
-    <preference for="MageSuite\ErpConnector\Api\Data\ProviderAdditionalConfigurationInterface" type="MageSuite\ErpConnector\Model\Data\ProviderAdditionalConfiguration"/>
     <preference for="MageSuite\ErpConnector\Api\ProviderAdditionalConfigurationRepositoryInterface" type="MageSuite\ErpConnector\Model\ProviderAdditionalConfigurationRepository"/>
-
-    <preference for="MageSuite\ErpConnector\Api\Data\SchedulerSearchResultsInterface" type="MageSuite\ErpConnector\Model\Data\SchedulerSearchResults"/>
-    <preference for="MageSuite\ErpConnector\Api\Data\SchedulerInterface" type="MageSuite\ErpConnector\Model\Data\Scheduler"/>
     <preference for="MageSuite\ErpConnector\Api\SchedulerRepositoryInterface" type="MageSuite\ErpConnector\Model\SchedulerRepository"/>
 
     <type name="MageSuite\ErpConnector\Logger\Handler">
@@ -36,11 +22,11 @@
         </arguments>
     </type>
 
-    <type name="MageSuite\ErpConnector\Model\ConnectorPool">
+    <type name="MageSuite\ErpConnector\Model\ConnectorResolver">
         <arguments>
-            <argument name="connectors" xsi:type="array">
+            <argument name="connectorsConfiguration" xsi:type="array">
                 <item name="ftp" xsi:type="array">
-                    <item name="class" xsi:type="object">\MageSuite\ErpConnector\Model\Connector\Ftp</item>
+                    <item name="client" xsi:type="object">\MageSuite\ErpConnector\Model\Client\Ftp</item>
                     <item name="configuration" xsi:type="array">
                         <item name="host" xsi:type="string">host</item>
                         <item name="port" xsi:type="string">port</item>
@@ -53,7 +39,7 @@
                     </item>
                 </item>
                 <item name="sftp" xsi:type="array">
-                    <item name="class" xsi:type="object">\MageSuite\ErpConnector\Model\Connector\Sftp</item>
+                    <item name="client" xsi:type="object">\MageSuite\ErpConnector\Model\Client\Sftp</item>
                     <item name="configuration" xsi:type="array">
                         <item name="host" xsi:type="string">host</item>
                         <item name="username" xsi:type="string">username</item>
@@ -65,7 +51,7 @@
                     </item>
                 </item>
                 <item name="soap" xsi:type="array">
-                    <item name="class" xsi:type="object">\MageSuite\ErpConnector\Model\Connector\Soap</item>
+                    <item name="client" xsi:type="object">\MageSuite\ErpConnector\Model\Client\Soap</item>
                     <item name="configuration" xsi:type="array">
                         <item name="wsdl" xsi:type="string">wsdl</item>
                         <item name="version" xsi:type="string">version</item>
@@ -76,14 +62,14 @@
                     </item>
                 </item>
                 <item name="http" xsi:type="array">
-                    <item name="class" xsi:type="object">\MageSuite\ErpConnector\Model\Connector\Http</item>
+                    <item name="client" xsi:type="object">\MageSuite\ErpConnector\Model\Client\Http</item>
                     <item name="configuration" xsi:type="array">
                         <item name="url" xsi:type="string">url</item>
                         <item name="timeout" xsi:type="string">timeout</item>
                     </item>
                 </item>
                 <item name="email" xsi:type="array">
-                    <item name="class" xsi:type="object">\MageSuite\ErpConnector\Model\Connector\Email</item>
+                    <item name="client" xsi:type="object">\MageSuite\ErpConnector\Model\Client\Email</item>
                     <item name="configuration" xsi:type="array">
                         <item name="email" xsi:type="string">email</item>
                         <item name="template" xsi:type="string">template</item>

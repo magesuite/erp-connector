@@ -1,8 +1,16 @@
 <?php
 namespace MageSuite\ErpConnector\Model\Data;
 
-class ProviderAdditionalConfiguration extends \Magento\Framework\Model\AbstractModel implements \MageSuite\ErpConnector\Api\Data\ProviderAdditionalConfigurationInterface
+class ProviderAdditionalConfiguration extends \Magento\Framework\Model\AbstractModel
 {
+    const ID = 'id';
+    const PROVIDER_ID = 'provider_id';
+    const KEY = 'key';
+    const VALUE = 'value';
+
+    const CACHE_TAG = 'erp_connector_provider_additional_configuration';
+    const EVENT_PREFIX = 'erp_connector_provider_additional_configuration';
+
     protected $_cacheTag = self::CACHE_TAG; //phpcs:ignore
     protected $_eventPrefix = self::EVENT_PREFIX; //phpcs:ignore
 
@@ -12,9 +20,19 @@ class ProviderAdditionalConfiguration extends \Magento\Framework\Model\AbstractM
         $this->_init(\MageSuite\ErpConnector\Model\ResourceModel\ProviderAdditionalConfiguration::class);
     }
 
+    public function getId()
+    {
+        return $this->getData(self::ID);
+    }
+
+    public function setId($id)
+    {
+        return $this->setData(self::ID, $id);
+    }
+
     public function getProviderId()
     {
-        return (int) $this->_getData(self::PROVIDER_ID);
+        return (int) $this->getData(self::PROVIDER_ID);
     }
 
     public function setProviderId($id)
@@ -24,7 +42,7 @@ class ProviderAdditionalConfiguration extends \Magento\Framework\Model\AbstractM
 
     public function getKey()
     {
-        return $this->_getData(self::KEY);
+        return $this->getData(self::KEY);
     }
 
     public function setKey($key)
@@ -34,7 +52,7 @@ class ProviderAdditionalConfiguration extends \Magento\Framework\Model\AbstractM
 
     public function getValue()
     {
-        return $this->_getData(self::VALUE);
+        return $this->getData(self::VALUE);
     }
 
     public function setValue($value)

@@ -28,14 +28,14 @@ class Connectors implements \Magento\Framework\Data\OptionSourceInterface
         $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
     }
 
-    public function getCollection()
+    public function toOptionArray()
     {
         $criteria = $this->searchCriteriaBuilderFactory->create();
 
         $currentProvider = $this->getCurrentProvider();
 
-        if ($currentProvider && $currentProvider->getProviderId()()) {
-            $criteria->addFilter('provider_id', $currentProvider->getProviderId());
+        if ($currentProvider && $currentProvider->getId()) {
+            $criteria->addFilter('provider_id', $currentProvider->getId());
         }
 
         $connectors = $this->connectorRepository->getList($criteria->create());
@@ -45,10 +45,7 @@ class Connectors implements \Magento\Framework\Data\OptionSourceInterface
         }
 
         $list = [
-            [
-                'value' => '-',
-                'label' => '-'
-            ]
+            ['value' => '-', 'label' => '-']
         ];
 
         foreach ($connectors->getItems() as $connector) {
@@ -59,11 +56,6 @@ class Connectors implements \Magento\Framework\Data\OptionSourceInterface
         }
 
         return $list;
-    }
-
-    public function toOptionArray()
-    {
-        return $this->getCollection();
     }
 
     private function getCurrentProvider()

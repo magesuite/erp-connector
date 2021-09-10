@@ -21,7 +21,7 @@
     <dataSource name="erp_connector_listing_data_source" component="Magento_Ui/js/grid/provider">
         <settings>
             <storageConfig>
-                <param name="indexField" xsi:type="string">provider_id</param>
+                <param name="indexField" xsi:type="string">id</param>
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
@@ -29,7 +29,7 @@
         <dataProvider class="\MageSuite\ErpConnector\Ui\DataProvider\Listing\Provider" name="erp_connector_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
-                <primaryFieldName>provider_id</primaryFieldName>
+                <primaryFieldName>id</primaryFieldName>
             </settings>
         </dataProvider>
     </dataSource>
@@ -44,7 +44,7 @@
         <paging name="listing_paging"/>
     </listingToolbar>
     <columns name="erp_connector_columns">
-        <column name="provider_id" sortOrder="10">
+        <column name="id" sortOrder="10">
             <settings>
                 <filter>textRange</filter>
                 <label translate="true">ID</label>
@@ -70,7 +70,7 @@
         </column>
         <actionsColumn name="actions" sortOrder="50" class="MageSuite\ErpConnector\Ui\Component\Listing\Column\ProviderActions">
             <settings>
-                <indexField>provider_id</indexField>
+                <indexField>id</indexField>
             </settings>
         </actionsColumn>
     </columns>

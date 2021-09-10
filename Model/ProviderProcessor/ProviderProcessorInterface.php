@@ -5,7 +5,7 @@ namespace MageSuite\ErpConnector\Model\ProviderProcessor;
 interface ProviderProcessorInterface
 {
     /**
-     * @param \MageSuite\ErpConnector\Api\Data\SchedulerInterface $scheduler
+     * @param \MageSuite\ErpConnector\Model\Data\Scheduler $scheduler
      * @return void
      */
     public function setScheduler($scheduler);

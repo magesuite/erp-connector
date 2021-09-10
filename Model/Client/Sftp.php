@@ -1,30 +1,35 @@
 <?php
 namespace MageSuite\ErpConnector\Model\Client;
 
-class Sftp extends Client implements ClientInterface
+class Sftp extends \Magento\Framework\DataObject implements ClientInterface
 {
     /**
      * @var \Magento\Framework\Filesystem\Io\SftpFactory;
      */
     protected $sftpFactory;
 
+    /**
+     * @var \MageSuite\ErpConnector\Model\Command\LogErrorMessage
+     */
+    protected $logErrorMessage;
+
     protected $connection = null;
 
     public function __construct(
-        \MageSuite\ErpConnector\Model\Command\AddAdminNotification $addAdminNotification,
         \Magento\Framework\Filesystem\Io\SftpFactory $sftpFactory,
-        \MageSuite\ErpConnector\Logger\Logger $logger,
+        \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
         array $data = []
     ) {
-        parent::__construct($addAdminNotification, $logger, $data);
+        parent::__construct($data);
 
         $this->sftpFactory = $sftpFactory;
+        $this->logErrorMessage = $logErrorMessage;
     }
 
     public function checkConnection()
     {
         $connection = $this->getConnection();
-        $location = $this->getData('user') . '@' . $this->getData('host');
+        $location = sprintf(self::LOCATION_FORMAT, $this->getData('user'), $this->getData('host'));
 
         if (!$connection->cd($this->getData('destination_dir'))) {
             throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to detect a directory "%1" at a remote SFTP location %2.', $this->getData('destination_dir'), $location));
@@ -40,19 +45,34 @@ class Sftp extends Client implements ClientInterface
     public function sendItem($provider, $data)
     {
         $content = $data['content'] ?? null;
-        $fileName = $data['file_name'] ?? null;
 
-        if (!$content || !$fileName) {
-            $this->logErrorMessage($provider->getName() . ' provider ERROR', 'Missing content or fileName');
+        if (!$content) {
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                'Missing content',
+                $data
+            );
             return $this;
         }
 
-        $connection = $this->getConnection();
-        $location = $this->getData('user') . '@' . $this->getData('host');
+        $fileName = $data['file_name'] ?? null;
+
+        if (!$fileName) {
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                'Missing file name',
+                $data
+            );
+            return $this;
+        }
+
+        $location = sprintf(self::LOCATION_FORMAT, $this->getData('user'), $this->getData('host'));
         $sourceDir = $this->getData('source_dir');
 
         try {
-            $this->validateFileOnExternalServerDirectory($this->getData('source_dir'), $fileName, $content, $provider->getName());
+            $connection = $this->getConnection();
+
+            $this->validateFileOnExternalServerDirectory($sourceDir, $fileName, $content, $provider->getName());
             $this->validateFileOnExternalServerDirectory($this->getData('destination_dir'), $fileName, $content, $provider->getName());
 
             $connection->cd($sourceDir);
@@ -66,19 +86,24 @@ class Sftp extends Client implements ClientInterface
                 return $result;
             }
 
-            $feedbackContent = $connection->read($fileName);
+            $exportedFileContent = $connection->read($fileName);
 
-            if (!$feedbackContent || $feedbackContent !== $content) {
+            if (!$exportedFileContent || $exportedFileContent !== $content) {
                 $connection->rm($fileName);
                 $connection->close();
 
                 throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to write a content to a file "%1" at a "%2" remote SFTP location %3.', $sourceDir, $provider->getName(), $location));
             }
+
+            $connection->close();
         } catch (\Exception $e) {
-            $this->logErrorMessage($provider->getName() . ' provider ERROR', $e->getMessage());
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                $e->getMessage(),
+                $data
+            );
         }
 
-        $connection->close();
         return $this;
     }
 
@@ -86,12 +111,11 @@ class Sftp extends Client implements ClientInterface
     {
         $connection = $this->getConnection();
 
-        $location = $this->getData('user') . '@' . $this->getData('host');
+        $location = sprintf(self::LOCATION_FORMAT, $this->getData('user'), $this->getData('host'));
 
         if ($connection->cd($directory)) {
             $files = $connection->ls();
 
-            //Directory is empty, file doesn't exist on remote server
             if (!is_array($files)) {
                 return true;
             }

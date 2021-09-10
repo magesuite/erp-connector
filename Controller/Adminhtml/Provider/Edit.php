@@ -35,19 +35,19 @@ class Edit extends \Magento\Backend\App\Action implements \Magento\Framework\App
 
     public function execute()
     {
-        $id = (int)$this->getRequest()->getParam('provider_id');
+        $id = (int)$this->getRequest()->getParam('id');
 
         if ($id) {
-            $model = $this->providerRepository->getById($id);
+            $provider = $this->providerRepository->getById($id);
 
-            if (!$model->getId()) {
+            if (!$provider->getId()) {
                 $this->messageManager->addErrorMessage(__('This provider no longer exists.'));
                 /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
                 return $resultRedirect->setPath('*/*/');
             }
 
-            $this->registry->register('current_provider', $model);
+            $this->registry->register('current_provider', $provider);
         }
 
         $resultPage = $this->resultPageFactory->create();

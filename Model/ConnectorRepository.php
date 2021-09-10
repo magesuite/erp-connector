@@ -11,7 +11,7 @@ class ConnectorRepository implements \MageSuite\ErpConnector\Api\ConnectorReposi
     protected $resourceModel;
 
     /**
-     * @var \MageSuite\ErpConnector\Api\Data\ConnectorInterfaceFactory
+     * @var \MageSuite\ErpConnector\Model\Data\ConnectorFactory
      */
     protected $connectorFactory;
 
@@ -21,7 +21,7 @@ class ConnectorRepository implements \MageSuite\ErpConnector\Api\ConnectorReposi
     protected $collectionFactory;
 
     /**
-     * @var \MageSuite\ErpConnector\Api\Data\ConnectorSearchResultsInterfaceFactory
+     * @var \Magento\Framework\Api\SearchResultsInterfaceFactory
      */
     protected $searchResultsFactory;
 
@@ -37,9 +37,9 @@ class ConnectorRepository implements \MageSuite\ErpConnector\Api\ConnectorReposi
 
     public function __construct(
         \MageSuite\ErpConnector\Model\ResourceModel\Connector $resourceModel,
-        \MageSuite\ErpConnector\Api\Data\ConnectorInterfaceFactory $connectorFactory,
+        \MageSuite\ErpConnector\Model\Data\ConnectorFactory $connectorFactory,
         \MageSuite\ErpConnector\Model\ResourceModel\Connector\CollectionFactory $collectionFactory,
-        \MageSuite\ErpConnector\Api\Data\ConnectorSearchResultsInterfaceFactory $searchResultsFactory,
+        \Magento\Framework\Api\SearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor
     ) {
@@ -51,15 +51,15 @@ class ConnectorRepository implements \MageSuite\ErpConnector\Api\ConnectorReposi
         $this->collectionProcessor = $collectionProcessor;
     }
 
-    public function save($model)
+    public function save($connector)
     {
         try {
-            $this->resourceModel->save($model);
+            $this->resourceModel->save($connector);
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(__($exception->getMessage()));
         }
 
-        return $model;
+        return $connector;
     }
 
     public function getById($id)
@@ -97,7 +97,7 @@ class ConnectorRepository implements \MageSuite\ErpConnector\Api\ConnectorReposi
     public function getByProviderId($providerId)
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(\MageSuite\ErpConnector\Api\Data\ConnectorInterface::PROVIDER_ID, $providerId)
+            ->addFilter(\MageSuite\ErpConnector\Model\Data\Connector::PROVIDER_ID, $providerId)
             ->create();
 
         $list = $this->getList($searchCriteria);
@@ -109,10 +109,10 @@ class ConnectorRepository implements \MageSuite\ErpConnector\Api\ConnectorReposi
         return $list->getItems();
     }
 
-    public function delete($model)
+    public function delete($connector)
     {
         try {
-            $this->resourceModel->delete($model);
+            $this->resourceModel->delete($connector);
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\CouldNotDeleteException(__($exception->getMessage()));
         }
@@ -120,8 +120,8 @@ class ConnectorRepository implements \MageSuite\ErpConnector\Api\ConnectorReposi
         return true;
     }
 
-    public function deleteById($entityId)
+    public function deleteById($id)
     {
-        return $this->delete($this->getById($entityId));
+        return $this->delete($this->getById($id));
     }
 }

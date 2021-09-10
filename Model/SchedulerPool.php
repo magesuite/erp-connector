@@ -47,7 +47,7 @@ class SchedulerPool
             $schedulersByType = $this->getSchedulersByType($type);
             return $schedulersByType[$providerCode];
         } catch (\Exception $e) {
-            $this->logger->error('Provider processor for scheduler type ' . $type . ' and provider code ' . $providerCode . ' doesn\'t exist');
+            $this->logger->error(sprintf('Provider processor for scheduler type %s and provider code %s doesn\'t exist', $type, $providerCode));
             return $this->schedulerGroups[self::DEFAULT_SCHEDULER_TYPE][self::DEFAULT_PROVIDER_PROCESSOR];
         }
     }

@@ -28,7 +28,7 @@ class Processor
         $this->logger = $logger;
     }
 
-    public function execute(\MageSuite\ErpConnector\Api\Data\SchedulerInterface $scheduler)
+    public function execute(\MageSuite\ErpConnector\Model\Data\Scheduler $scheduler)
     {
         try {
             /** @var \MageSuite\ErpConnector\Model\ProviderProcessor\ProviderProcessorInterface $providerProcessor */
@@ -43,12 +43,12 @@ class Processor
         }
     }
 
-    protected function getProviderProcessor(\MageSuite\ErpConnector\Api\Data\SchedulerInterface $scheduler)
+    protected function getProviderProcessor(\MageSuite\ErpConnector\Model\Data\Scheduler $scheduler)
     {
         try {
             $provider = $this->providerRepository->getById($scheduler->getProviderId());
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-            $this->logger->critical('Can`t found provider with id: ' . $scheduler->getProviderId());
+            $this->logger->critical(sprintf('Can`t found provider with id: %s', $scheduler->getProviderId()));
             return null;
         }
 

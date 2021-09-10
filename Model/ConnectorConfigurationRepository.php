@@ -11,7 +11,7 @@ class ConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\Co
     protected $resourceModel;
 
     /**
-     * @var \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterfaceFactory
+     * @var \MageSuite\ErpConnector\Model\Data\ConnectorConfigurationFactory
      */
     protected $connectorConfigurationFactory;
 
@@ -21,7 +21,7 @@ class ConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\Co
     protected $collectionFactory;
 
     /**
-     * @var \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationSearchResultsInterfaceFactory
+     * @var \Magento\Framework\Api\SearchResultsInterfaceFactory
      */
     protected $searchResultsFactory;
 
@@ -37,9 +37,9 @@ class ConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\Co
 
     public function __construct(
         \MageSuite\ErpConnector\Model\ResourceModel\ConnectorConfiguration $resourceModel,
-        \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterfaceFactory $connectorConfigurationFactory,
+        \MageSuite\ErpConnector\Model\Data\ConnectorConfigurationFactory $connectorConfigurationFactory,
         \MageSuite\ErpConnector\Model\ResourceModel\ConnectorConfiguration\CollectionFactory $collectionFactory,
-        \MageSuite\ErpConnector\Api\Data\ConnectorConfigurationSearchResultsInterfaceFactory $searchResultsFactory,
+        \Magento\Framework\Api\SearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor
     ) {
@@ -97,7 +97,7 @@ class ConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\Co
     public function getByProviderId($providerId)
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(\MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface::PROVIDER_ID, $providerId)
+            ->addFilter(\MageSuite\ErpConnector\Model\Data\ConnectorConfiguration::PROVIDER_ID, $providerId)
             ->create();
 
         $list = $this->getList($searchCriteria);
@@ -112,7 +112,7 @@ class ConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\Co
     public function getByConnectorId($connectorId)
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(\MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface::CONNECTOR_ID, $connectorId)
+            ->addFilter(\MageSuite\ErpConnector\Model\Data\ConnectorConfiguration::CONNECTOR_ID, $connectorId)
             ->create();
 
         $list = $this->getList($searchCriteria);
@@ -127,8 +127,8 @@ class ConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\Co
     public function getItemByConnectorIdAndName($connectorId, $name)
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(\MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface::CONNECTOR_ID, $connectorId)
-            ->addFilter(\MageSuite\ErpConnector\Api\Data\ConnectorConfigurationInterface::NAME, $name)
+            ->addFilter(\MageSuite\ErpConnector\Model\Data\ConnectorConfiguration::CONNECTOR_ID, $connectorId)
+            ->addFilter(\MageSuite\ErpConnector\Model\Data\ConnectorConfiguration::NAME, $name)
             ->create();
 
         $searchCriteria
@@ -139,17 +139,17 @@ class ConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\Co
 
         if (!$list->getTotalCount()) {
             throw new \Magento\Framework\Exception\NoSuchEntityException(
-                __('The additional config with connector ID "%1" and name "%2" doesn\'t exist.', $id, $name)
+                __('The additional config with connector ID "%1" and name "%2" doesn\'t exist.', $connectorId, $name)
             );
         }
 
         return current($list->getItems());
     }
 
-    public function delete($model)
+    public function delete($connectorConfiguration)
     {
         try {
-            $this->resourceModel->delete($model);
+            $this->resourceModel->delete($connectorConfiguration);
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\CouldNotDeleteException(__($exception->getMessage()));
         }
@@ -157,8 +157,8 @@ class ConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\Co
         return true;
     }
 
-    public function deleteById($entityId)
+    public function deleteById($id)
     {
-        return $this->delete($this->getById($entityId));
+        return $this->delete($this->getById($id));
     }
 }
