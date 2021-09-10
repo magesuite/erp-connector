@@ -3,6 +3,8 @@ namespace MageSuite\ErpConnector\Controller\Adminhtml\Connection;
 
 class Check extends \Magento\Backend\App\Action implements \Magento\Framework\App\Action\HttpPostActionInterface
 {
+    const ADMIN_RESOURCE = 'MageSuite_ErpConnector::erp_connector';
+    
     /**
      * @var \MageSuite\ErpConnector\Model\ConnectorResolver
      */
