@@ -35,7 +35,6 @@ interface ConnectorConfigurationRepositoryInterface
      * @param $connectorId
      * @param $name
      * @return \MageSuite\ErpConnector\Model\Data\ConnectorConfiguration
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getItemByConnectorIdAndName($connectorId, $name);
 

@@ -6,6 +6,7 @@ class ConnectorConfiguration extends \Magento\Framework\Model\AbstractModel
     const ID = 'id';
     const PROVIDER_ID = 'provider_id';
     const CONNECTOR_ID = 'connector_id';
+    const MODIFIER_CLASS = 'modifier_class';
     const NAME = 'name';
     const VALUE = 'value';
 
@@ -36,6 +37,11 @@ class ConnectorConfiguration extends \Magento\Framework\Model\AbstractModel
         return $this->getData(self::CONNECTOR_ID);
     }
 
+    public function getModifierClass()
+    {
+        return $this->getData(self::MODIFIER_CLASS);
+    }
+
     public function getName()
     {
         return $this->getData(self::NAME);
@@ -64,6 +70,12 @@ class ConnectorConfiguration extends \Magento\Framework\Model\AbstractModel
         return $this;
     }
 
+    public function setModifierClass($modifierClass)
+    {
+        $this->setData(self::MODIFIER_CLASS, $modifierClass);
+        return $this;
+    }
+
     public function setName($name)
     {
         $this->setData(self::NAME, $name);
@@ -74,5 +86,34 @@ class ConnectorConfiguration extends \Magento\Framework\Model\AbstractModel
     {
         $this->setData(self::VALUE, $type);
         return $this;
+    }
+
+    public function beforeSave()
+    {
+        $modifierClass = $this->getModifierClass();
+
+        if (empty($modifierClass)) {
+            return parent::beforeSave();
+        }
+
+        $modifiedValue = $modifierClass->beforeSave($this);
+
+        if ($modifiedValue) {
+            $this->setValue($modifiedValue);
+        }
+
+        return parent::beforeSave();
+    }
+
+    public function isSaveAllowed()
+    {
+        $isSaveAllowed = parent::isSaveAllowed();
+        $modifierClass = $this->getModifierClass();
+
+        if (empty($modifierClass)) {
+            return $isSaveAllowed;
+        }
+
+        return $modifierClass->isSaveAllowed($this, $isSaveAllowed);
     }
 }

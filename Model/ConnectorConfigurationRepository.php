@@ -68,7 +68,7 @@ class ConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\Co
             return $this->connectorConfigurations[$id];
         }
 
-        $connectorConfiguration = $this->factory->create();
+        $connectorConfiguration = $this->connectorConfigurationFactory->create();
         $this->resourceModel->load($connectorConfiguration, $id);
 
         if (!$connectorConfiguration->getId()) {
@@ -138,9 +138,7 @@ class ConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\Co
         $list = $this->getList($searchCriteria);
 
         if (!$list->getTotalCount()) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(
-                __('The additional config with connector ID "%1" and name "%2" doesn\'t exist.', $connectorId, $name)
-            );
+            return null;
         }
 
         return current($list->getItems());

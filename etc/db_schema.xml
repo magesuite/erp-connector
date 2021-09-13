@@ -25,12 +25,25 @@
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
         <column xsi:type="int" name="provider_id" padding="10" unsigned="true" nullable="false"/>
         <column xsi:type="int" name="connector_id" padding="10" unsigned="true" nullable="false"/>
+        <column xsi:type="varchar" name="modifier_class" nullable="true" length="100"/>
         <column xsi:type="varchar" name="name" nullable="true" length="50"/>
         <column xsi:type="text" name="value" nullable="true"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
         <constraint xsi:type="foreign" referenceId="erp_connector_connector_configuration_connector" table="erp_connector_connector_configuration"
+                    column="connector_id" referenceTable="erp_connector_connector" referenceColumn="id"
+                    onDelete="CASCADE"/>
+    </table>
+    <table name="erp_connector_vault" resource="default" engine="innodb">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="connector_id" padding="10" unsigned="true" nullable="false"/>
+        <column xsi:type="varchar" name="identifier" nullable="false" length="100"/>
+        <column xsi:type="varchar" name="value" nullable="false" length="100"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="erp_connector_vault_configuration_id" table="erp_connector_vault"
                     column="connector_id" referenceTable="erp_connector_connector" referenceColumn="id"
                     onDelete="CASCADE"/>
     </table>

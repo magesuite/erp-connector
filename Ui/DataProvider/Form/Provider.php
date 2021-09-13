@@ -33,6 +33,11 @@ class Provider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     protected $providerAdditionalConfigurationRepository;
 
+    /**
+     * @var \MageSuite\ErpConnector\Model\ConnectorResolver
+     */
+    protected $connectorResolver;
+
     public function __construct(
         $name,
         $primaryFieldName,
@@ -42,6 +47,7 @@ class Provider extends \Magento\Ui\DataProvider\AbstractDataProvider
         \MageSuite\ErpConnector\Api\ConnectorRepositoryInterface $connectorRepository,
         \MageSuite\ErpConnector\Api\ConnectorConfigurationRepositoryInterface $connectorConfigurationRepository,
         \MageSuite\ErpConnector\Api\ProviderAdditionalConfigurationRepositoryInterface $providerAdditionalRepository,
+        \MageSuite\ErpConnector\Model\ConnectorResolver $connectorResolver,
         array $meta = [],
         array $data = []
     ) {
@@ -52,6 +58,7 @@ class Provider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->connectorRepository = $connectorRepository;
         $this->connectorConfigurationRepository = $connectorConfigurationRepository;
         $this->providerAdditionalConfigurationRepository = $providerAdditionalRepository;
+        $this->connectorResolver = $connectorResolver;
     }
 
     public function getData()
@@ -61,6 +68,7 @@ class Provider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
 
         $items = $this->collection->getItems();
+        $connectorConfigurationFields = $this->connectorResolver->getConnectorConfigurationFields();
 
         /** @var \MageSuite\ErpConnector\Model\Data\Provider $provider */
         foreach ($items as $provider) {
@@ -80,9 +88,10 @@ class Provider extends \Magento\Ui\DataProvider\AbstractDataProvider
             /** @var \MageSuite\ErpConnector\Model\Data\Connector $connector */
             foreach ($connectors as $connector) {
 
-                if (isset($connectorConfigurations[$connector->getId()])) {
-                    $connector->addData($connectorConfigurations[$connector->getId()]);
-                }
+                $connectorData = $connectorConfigurations[$connector->getId()] ?? [];
+                $connectorData = $this->prepareConnectorData($connector, $connectorData, $connectorConfigurationFields);
+
+                $connector->addData($connectorData);
 
                 $this->loadedData[$providerId]['connectors'][$connector->getType()][$connector->getType()][] = $connector->getData();
             }
@@ -128,5 +137,20 @@ class Provider extends \Magento\Ui\DataProvider\AbstractDataProvider
         }
 
         return $result;
+    }
+
+    private function prepareConnectorData($connector, $connectorData, $connectorConfigurationFields)
+    {
+        foreach ($connectorData as $key => $value) {
+            $modifierClass = $connectorConfigurationFields[$connector->getType()][$key]['modifier_class'] ?? null;
+
+            if (empty($modifierClass)) {
+                continue;
+            }
+
+            $connectorData[$key] = $modifierClass->getDataForDataProvider($value);
+        }
+
+        return $connectorData;
     }
 }

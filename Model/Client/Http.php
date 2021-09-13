@@ -78,12 +78,32 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
 
     public function getParameters($data)
     {
-        return [
-            'headers' => [
-                'Content-Type' => 'text/xml'
-            ],
+        $headers = [
+            'Content-Type' => $this->getData('content_type')
+        ];
+
+        if ($headers['Content-Type'] == \MageSuite\ErpConnector\Model\Source\ContentType::CONTENT_TYPE_JSON) {
+            $headers['Accept'] = $headers['Content-Type'];
+        }
+
+        $customHeadersGroup = $this->getData('custom_headers');
+
+        if (!empty($customHeadersGroup)) {
+            foreach ($customHeadersGroup['custom_headers'] as $customHeader) {
+                $headers[$customHeader['key']] = $customHeader['value'];
+            }
+        }
+
+        $parameters = [
+            'headers' => $headers,
             'body' => $data
         ];
+
+        if ($this->getData('username') && $this->getData('password')) {
+            $parameters['auth'] = [$this->getData('username'), $this->getData('password')];
+        }
+
+        return $parameters;
     }
 
     protected function validateResponse($response, $data)

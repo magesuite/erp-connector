@@ -4,19 +4,26 @@ namespace MageSuite\ErpConnector\Controller\Adminhtml\Connection;
 class Check extends \Magento\Backend\App\Action implements \Magento\Framework\App\Action\HttpPostActionInterface
 {
     const ADMIN_RESOURCE = 'MageSuite_ErpConnector::erp_connector';
-    
+
     /**
      * @var \MageSuite\ErpConnector\Model\ConnectorResolver
      */
     protected $connectorResolver;
 
+    /**
+     * @var \MageSuite\ErpConnector\Api\ConnectorConfigurationRepositoryInterface
+     */
+    protected $connectorConfigurationRepository;
+
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \MageSuite\ErpConnector\Model\ConnectorResolver $connectorResolver
+        \MageSuite\ErpConnector\Model\ConnectorResolver $connectorResolver,
+        \MageSuite\ErpConnector\Api\ConnectorConfigurationRepositoryInterface $connectorConfigurationRepository
     ) {
         parent::__construct($context);
 
         $this->connectorResolver = $connectorResolver;
+        $this->connectorConfigurationRepository = $connectorConfigurationRepository;
     }
 
     public function execute()
@@ -25,17 +32,6 @@ class Check extends \Magento\Backend\App\Action implements \Magento\Framework\Ap
         $resultJson = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_JSON);
 
         $connectorConfiguration = $this->getRequest()->getParams();
-
-        if (!isset($connectorConfiguration['type'])) {
-            $response = [
-                'status' => 'error',
-                'code' => 'missing_connector_id',
-                'message' => __('Please save the provider with this connector first.')
-            ];
-
-            return $resultJson->setData($response);
-        }
-
         $connector = $this->connectorResolver->getConnector($connectorConfiguration['type']);
 
         try {
@@ -44,6 +40,8 @@ class Check extends \Magento\Backend\App\Action implements \Magento\Framework\Ap
                 'code' => 'success',
                 'message' => __('Connection Success.')
             ];
+
+            $connectorConfiguration = $this->prepareConnectorConfiguration($connector, $connectorConfiguration);
 
             /** @var \MageSuite\ErpConnector\Model\Client\ClientInterface $client */
             $client = $connector->getClient();
@@ -60,5 +58,23 @@ class Check extends \Magento\Backend\App\Action implements \Magento\Framework\Ap
                 ]
             );
         }
+    }
+
+    public function prepareConnectorConfiguration($connector, $connectorConfiguration)
+    {
+        if (!isset($connectorConfiguration['id'])) {
+            return $connectorConfiguration;
+        }
+
+        foreach ($connectorConfiguration as $key => $value) {
+            if ($value != \MageSuite\ErpConnector\Model\Data\VaultItem::VAULT_VALUE_PLACEHOLDER) {
+                continue;
+            }
+
+            $connectorConfigurationItem = $this->connectorConfigurationRepository->getItemByConnectorIdAndName($connectorConfiguration['id'], $key);
+            $connectorConfiguration[$key] = $connectorConfigurationItem ? $connectorConfigurationItem->getValue() : $value;
+        }
+
+        return $connectorConfiguration;
     }
 }

@@ -9,9 +9,9 @@ class SaveConnectors
     protected $connectorResolver;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilderFactory
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilderFactory;
+    protected $searchCriteriaBuilder;
 
     /**
      * @var \MageSuite\ErpConnector\Model\Data\ConnectorFactory
@@ -35,14 +35,14 @@ class SaveConnectors
 
     public function __construct(
         \MageSuite\ErpConnector\Model\ConnectorResolver $connectorResolver,
-        \Magento\Framework\Api\SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \MageSuite\ErpConnector\Model\Data\ConnectorFactory $connectorFactory,
         \MageSuite\ErpConnector\Api\ConnectorRepositoryInterface $connectorRepository,
         \MageSuite\ErpConnector\Model\Data\ConnectorConfigurationFactory $connectorConfigurationFactory,
         \MageSuite\ErpConnector\Api\ConnectorConfigurationRepositoryInterface $connectorConfigurationRepository
     ) {
         $this->connectorResolver = $connectorResolver;
-        $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->connectorFactory = $connectorFactory;
         $this->connectorRepository = $connectorRepository;
         $this->connectorConfigurationFactory = $connectorConfigurationFactory;
@@ -51,53 +51,53 @@ class SaveConnectors
 
     public function execute($providerId, $formData)
     {
-        $connectorsConfiguration = $this->connectorResolver->getConnectorConfigurations();
+        $connectorsConfigurationFields = $this->connectorResolver->getConnectorConfigurationFields();
 
-        foreach ($connectorsConfiguration as $connectorType => $connectorConfigurationFields) {
+        foreach ($connectorsConfigurationFields as $connectorType => $connectorConfigurationFields) {
             $this->saveConnectors($providerId, $connectorType, $connectorConfigurationFields, $formData);
         }
     }
 
     protected function saveConnectors($providerId, $connectorType, $connectorConfigurationFields, $formData) //phpcs:ignore
     {
-        $criteria = $this->searchCriteriaBuilderFactory
-            ->create()
+        $criteria = $this->searchCriteriaBuilder
             ->addFilter('provider_id', $providerId)
             ->addFIlter('type', $connectorType);
 
         $connectors = $this->connectorRepository->getList($criteria->create());
 
         $connectorsData = [];
+        $connectorItemsData = $formData[$connectorType][$connectorType] ?? [];
 
-        if (isset($formData[$connectorType][$connectorType])) {
+        foreach ($connectorItemsData as $connectorData) {
 
-            foreach ($formData[$connectorType][$connectorType] as $connectorData) {
+            if (isset($connectorData['id'])) {
+                $connectorsData[$connectorData['id']] = $connectorData;
+                continue;
+            }
 
-                if (isset($connectorData['connector_id'])) {
-                    $connectorsData[$connectorData['connector_id']] = $connectorData;
-                    continue;
-                }
+            $connector = $this->connectorFactory->create();
+            $connectorData['provider_id'] = $providerId;
 
-                $connector = $this->connectorFactory->create();
-                $connectorData['provider_id'] = $providerId;
+            $connector
+                ->setProviderId($providerId)
+                ->setName($connectorData['name'])
+                ->setType($connectorType);
 
-                $connector
+            $this->connectorRepository->save($connector);
+
+            foreach ($connectorConfigurationFields as $configurationField => $fieldConfig) {
+                $modifierClass = $fieldConfig['modifier_class'] ?? null;
+
+                $configurationItem = $this->connectorConfigurationFactory->create();
+                $configurationItem
                     ->setProviderId($providerId)
-                    ->setName($connectorData['name'])
-                    ->setType($connectorType);
+                    ->setConnectorId($connector->getId())
+                    ->setModifierClass($modifierClass)
+                    ->setName($configurationField)
+                    ->setValue($connectorData[$configurationField]);
 
-                $this->connectorRepository->save($connector);
-
-                foreach ($connectorConfigurationFields as $configurationField) {
-                    $configurationItem = $this->connectorConfigurationFactory->create();
-                    $configurationItem
-                        ->setProviderId($providerId)
-                        ->setConnectorId($connector->getId())
-                        ->setName($configurationField)
-                        ->setValue($connectorData[$configurationField]);
-
-                    $this->connectorConfigurationRepository->save($configurationItem);
-                }
+                $this->connectorConfigurationRepository->save($configurationItem);
             }
         }
 
@@ -113,10 +113,12 @@ class SaveConnectors
 
             $this->connectorRepository->save($connector);
 
-            foreach ($connectorConfigurationFields as $configurationField) {
-                try {
-                    $configurationItem = $this->connectorConfigurationRepository->getItemByConnectorIdAndName($connector->getId(), $configurationField);
-                } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            foreach ($connectorConfigurationFields as $configurationField => $fieldConfig) {
+                $modifierClass = $fieldConfig['modifier_class'] ?? null;
+
+                $configurationItem = $this->connectorConfigurationRepository->getItemByConnectorIdAndName($connector->getId(), $configurationField);
+
+                if ($configurationItem === null) {
                     $configurationItem = $this->connectorConfigurationFactory->create();
                     $configurationItem
                         ->setProviderId($providerId)
@@ -124,6 +126,7 @@ class SaveConnectors
                 }
 
                 $configurationItem
+                    ->setModifierClass($modifierClass)
                     ->setName($configurationField)
                     ->setValue($connectorData[$configurationField]);
 

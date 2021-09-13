@@ -19,12 +19,12 @@ class ConnectorResolver
         $this->connectorsConfiguration = $connectorsConfiguration;
     }
 
-    public function getConnectorConfigurations()
+    public function getConnectorConfigurationFields()
     {
         $result = [];
 
         foreach ($this->connectorsConfiguration as $connectorType => $connectorConfiguration) {
-            $result[$connectorType] = $connectorConfiguration['configuration'];
+            $result[$connectorType] = $connectorConfiguration['fields'];
         }
 
         return $result;

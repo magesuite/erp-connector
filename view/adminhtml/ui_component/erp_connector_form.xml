@@ -206,6 +206,13 @@
                         <item name="componentType" xsi:type="string">container</item>
                     </item>
                 </argument>
+                <hidden name="type">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="value" xsi:type="string">ftp</item>
+                        </item>
+                    </argument>
+                </hidden>
                 <!--suppress XmlDefaultAttributeValue -->
                 <field name="name" formElement="input">
                     <argument name="data" xsi:type="array">
@@ -406,6 +413,13 @@
                         <item name="componentType" xsi:type="string">container</item>
                     </item>
                 </argument>
+                <hidden name="type">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="value" xsi:type="string">sftp</item>
+                        </item>
+                    </argument>
+                </hidden>
                 <!--suppress XmlDefaultAttributeValue -->
                 <field name="name" formElement="input">
                     <argument name="data" xsi:type="array">
@@ -614,7 +628,7 @@
                             <rule name="required-entry" xsi:type="boolean">true</rule>
                         </validation>
                         <dataType>text</dataType>
-                        <label>Type</label>
+                        <label>Version</label>
                     </settings>
                     <formElements>
                         <select>
@@ -764,7 +778,6 @@
                         <label>Name</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="url" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -778,6 +791,60 @@
                         <dataType>text</dataType>
                         <label>URL</label>
                     </settings>
+                </field>
+                <field name="login" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Login</label>
+                    </settings>
+                </field>
+                <field name="password" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Password</label>
+                    </settings>
+                </field>
+                <field name="authorization_bearer" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Authorization Bearer</label>
+                    </settings>
+                </field>
+                <field name="content_type" formElement="select">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="string">2</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Content Type</label>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="MageSuite\ErpConnector\Model\Source\ContentType"/>
+                            </settings>
+                        </select>
+                    </formElements>
                 </field>
                 <!--suppress XmlDefaultAttributeValue -->
                 <field name="timeout" formElement="input">
@@ -794,6 +861,70 @@
                         <label>Timeout</label>
                     </settings>
                 </field>
+                <dynamicRows name="custom_headers" component="Magento_Ui/js/dynamic-rows/dynamic-rows" template="MageSuite_ErpConnector/dynamic-rows/custom_headers">
+                    <settings>
+                        <addButtonLabel translate="true">Add custom header</addButtonLabel>
+                        <componentType>dynamicRows</componentType>
+                        <deleteValue>true</deleteValue>
+                        <deleteProperty>deleted</deleteProperty>
+                        <identificationProperty>custom_headers</identificationProperty>
+                        <dndConfig>
+                            <param name="enabled" xsi:type="boolean">false</param>
+                        </dndConfig>
+                        <headerLabel>Customer</headerLabel>
+                        <label>Custom Headers</label>
+                        <columnsHeader>false</columnsHeader>
+                    </settings>
+                    <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="isTemplate" xsi:type="boolean">true</item>
+                                <item name="is_collection" xsi:type="boolean">true</item>
+                                <item name="componentType" xsi:type="string">container</item>
+                            </item>
+                        </argument>
+                        <field name="key" formElement="input">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="fit" xsi:type="boolean">false</item>
+                                </item>
+                            </argument>
+                            <settings>
+                                <validation>
+                                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                                </validation>
+                                <dataType>text</dataType>
+                                <label>Key</label>
+                            </settings>
+                        </field>
+                        <field name="value" formElement="input">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="fit" xsi:type="boolean">false</item>
+                                </item>
+                            </argument>
+                            <settings>
+                                <validation>
+                                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                                </validation>
+                                <dataType>text</dataType>
+                                <label>Value</label>
+                            </settings>
+                        </field>
+                        <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="fit" xsi:type="boolean">false</item>
+                                </item>
+                            </argument>
+                            <settings>
+                                <dataType>text</dataType>
+                                <label>Actions</label>
+                                <componentType>actionDelete</componentType>
+                            </settings>
+                        </actionDelete>
+                    </container>
+                </dynamicRows>
                 <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
