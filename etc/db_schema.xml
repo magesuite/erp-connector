@@ -66,9 +66,8 @@
         <column xsi:type="varchar" name="name" nullable="true" length="32"/>
         <column xsi:type="varchar" name="type" nullable="true" length="32"/>
         <column xsi:type="varchar" name="cron_expression" nullable="true" length="50"/>
-        <column xsi:type="varchar" name="template" nullable="true" length="255"/>
+        <column xsi:type="varchar" name="templates" nullable="true" length="255"/>
         <column xsi:type="text" name="file_name" nullable="true"/>
-        <column xsi:type="varchar" name="additional_template" nullable="true" length="255"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>

@@ -11,121 +11,65 @@ class Process
     protected $configuration;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
-     */
-    protected $dateTime;
-
-    /**
-     * @var \MageSuite\ErpConnector\Api\SchedulerRepositoryInterface
-     */
-    protected $schedulerRepository;
-
-    /**
      * @var \MageSuite\Queue\Service\Publisher
      */
     protected $queuePublisher;
-
-    /**
-     * \Magento\Cron\Model\ScheduleFactory;
-     */
-    protected $magentoScheduleFactory;
 
     /**
      * @var \MageSuite\ErpConnector\Service\Scheduler\Processor
      */
     protected $schedulerProcessor;
 
-    /**
-     * @var \MageSuite\ErpConnector\Logger\Logger
-     */
-    protected $logger;
-
     public function __construct(
         \MageSuite\ErpConnector\Helper\Configuration $configuration,
-        \MageSuite\ErpConnector\Api\SchedulerRepositoryInterface $schedulerRepository,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        \Magento\Cron\Model\ScheduleFactory $magentoScheduleFactory,
         \MageSuite\Queue\Service\Publisher $queuePublisher,
-        \MageSuite\ErpConnector\Service\Scheduler\Processor $schedulerProcessor,
-        \MageSuite\ErpConnector\Logger\Logger $logger
+        \MageSuite\ErpConnector\Service\Scheduler\Processor $schedulerProcessor
     ) {
         $this->configuration = $configuration;
-        $this->schedulerRepository = $schedulerRepository;
-        $this->dateTime = $dateTime;
-        $this->magentoScheduleFactory = $magentoScheduleFactory;
         $this->queuePublisher = $queuePublisher;
         $this->schedulerProcessor = $schedulerProcessor;
-        $this->logger = $logger;
     }
 
-    public function execute()
+    /**
+     * etc/crontab.xml does not allow passing arguments to invoked methods
+     * so for executing scheduler logic we use part of invoked method name as scheduler identifier
+     * calling erp_connector_scheduler_2 will invoke scheduler with id: 2
+     * @param $name
+     * @param array $arguments
+     */
+    public function __call($name, array $arguments)
     {
         if (!$this->configuration->isEnabled()) {
             return;
         }
 
-        $schedulersToProcess = $this->getSchedulersToProcess();
-
-        foreach ($schedulersToProcess as $scheduler) {
-            $this->process($scheduler);
+        if (preg_match('/scheduler_([0-9+])/', $name)) {
+            $schedulerId = $this->getSchedulerId($name);
+            $this->process($schedulerId);
         }
     }
 
-    protected function getSchedulersToProcess()
+    protected function getSchedulerId($name)
     {
-        $schedulers = $this->schedulerRepository->getList();
-
-        if (!$schedulers->getTotalCount()) {
-            throw new \RuntimeException(__('Export schedulers not exist'));
-        }
-
-        $currentTimestamp = $this->dateTime->gmtTimestamp();
-
-        $schedulersToProcess = [];
-
-        foreach ($schedulers->getItems() as $scheduler) {
-            try {
-                $isValid = $this->validateScheduler($scheduler, $currentTimestamp);
-
-                if (!$isValid) {
-                    $this->logger->error('Not valid cron expression in schedule, id: ' . $scheduler->getId());
-                    continue;
-                }
-            } catch (\Exception $e) {
-                $this->logger->error($e->getMessage());
-                continue;
-            }
-
-            $schedulersToProcess[] = $scheduler;
-        }
-
-        return $schedulersToProcess;
+        $jobCodeParts = explode('_', $name);
+        return end($jobCodeParts);
     }
 
-    protected function validateScheduler($scheduler, $currentTimestamp)
-    {
-        /** @var \Magento\Cron\Model\Schedule $schedule */
-        $schedule = $this->magentoScheduleFactory->create()
-            ->setCronExpr($scheduler->getCronExpression())
-            ->setJobCode('test_for_check_valid_time_execution')
-            ->setStatus(\Magento\Cron\Model\Schedule::STATUS_PENDING)
-            ->setCreatedAt(strftime('%Y-%m-%d %H:%M:%S', $this->dateTime->gmtTimestamp()))
-            ->setScheduledAt(strftime('%Y-%m-%d %H:%M', $currentTimestamp));
-
-        return $schedule->trySchedule();
-    }
-
-    protected function process($scheduler)
+    protected function process($schedulerId)
     {
         $method = $this->configuration->getSchedulerMethod();
 
         switch ($method) {
             case \MageSuite\ErpConnector\Model\Source\SchedulerMethod::METHOD_RABBITMQ:
-                $this->queuePublisher->publish($this->handlerClass, $scheduler->getId());
+                $this->queuePublisher->publish($this->handlerClass, $schedulerId);
                 break;
             default:
-                $this->schedulerProcessor->execute($scheduler);
+                $this->schedulerProcessor->execute($schedulerId);
                 break;
         }
+    }
+
+    public function execute() //phpcs:ignore
+    {
     }
 }

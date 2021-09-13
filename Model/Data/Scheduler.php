@@ -9,15 +9,32 @@ class Scheduler extends \Magento\Framework\Model\AbstractModel
     const NAME = 'name';
     const TYPE = 'type';
     const CRON_EXPRESSION = 'cron_expression';
-    const TEMPLATE = 'template';
+    const TEMPLATES = 'templates';
     const FILE_NAME = 'file_name';
-    const ADDITIONAL_TEMPLATE = 'additional_template';
 
     const CACHE_TAG = 'erp_connector_scheduler';
     const EVENT_PREFIX = 'erp_connector_scheduler';
 
     protected $_cacheTag = self::CACHE_TAG; //phpcs:ignore
     protected $_eventPrefix = self::EVENT_PREFIX; //phpcs:ignore
+
+    /**
+     * @var \Magento\Framework\Serialize\SerializerInterface
+     */
+    protected $serializer;
+
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Serialize\SerializerInterface $serializer,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+
+        $this->serializer = $serializer;
+    }
 
     protected function _construct()
     {
@@ -54,19 +71,20 @@ class Scheduler extends \Magento\Framework\Model\AbstractModel
         return $this->getData(self::CRON_EXPRESSION);
     }
 
-    public function getTemplate()
+    public function getTemplates()
     {
-        return $this->getData(self::TEMPLATE);
+        $templates = $this->getData(self::TEMPLATES);
+
+        if (empty($templates)) {
+            return $templates;
+        }
+
+        return $this->serializer->unserialize($templates);
     }
 
     public function getFileName()
     {
         return $this->getData(self::FILE_NAME);
-    }
-
-    public function getAdditionalTemplate()
-    {
-        return $this->getData(self::ADDITIONAL_TEMPLATE);
     }
 
     public function setId($id)
@@ -105,21 +123,22 @@ class Scheduler extends \Magento\Framework\Model\AbstractModel
         return $this;
     }
 
-    public function setTemplate($template)
+    public function setTemplates($templates)
     {
-        $this->setData(self::TEMPLATE, $template);
+        if (empty($templates)) {
+            $this->setData(self::TEMPLATES, $templates);
+            return $this;
+        }
+
+        $serializedTemplates = $this->serializer->serialize($templates);
+
+        $this->setData(self::TEMPLATES, $serializedTemplates);
         return $this;
     }
 
     public function setFileName($fileName)
     {
         $this->setData(self::FILE_NAME, $fileName);
-        return $this;
-    }
-
-    public function setAdditionalTemplate($template)
-    {
-        $this->setData(self::ADDITIONAL_TEMPLATE, $template);
         return $this;
     }
 }

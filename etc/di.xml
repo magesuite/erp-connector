@@ -106,4 +106,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\Cron\Model\Config">
+        <plugin name="add_erp_connector_jobs" type="MageSuite\ErpConnector\Plugin\Cron\Model\Config\AddErpConnectorJobs" sortOrder="10" />
+    </type>
+
+    <type name="Magento\Cron\Observer\ProcessCronQueueObserver">
+        <plugin name="add_pending_erp_connector_jobs" type="MageSuite\ErpConnector\Plugin\Cron\Observer\ProcessCronQueueObserver\AddPendingJobs" sortOrder="10" />
+    </type>
 </config>

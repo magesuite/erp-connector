@@ -38,17 +38,26 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
         }
     }
 
-    public function sendItem($provider, $data)
+    public function sendItems($provider, $items)
     {
-        $content = $data['content'] ?? null;
+        foreach ($items as $item) {
+            $this->sendItem($provider, $item);
+        }
+
+        return $this;
+    }
+
+    protected function sendItem($provider, $item)
+    {
+        $content = $item['content'] ?? null;
 
         if (!$content) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
                 'Missing content',
-                $data
+                $item
             );
-            return $this;
+            return false;
         }
 
         try {
@@ -74,11 +83,11 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
                 $mergedMessages,
-                $data
+                $item
             );
         }
 
-        return $this;
+        return true;
     }
 
     public function processSoapApiResponse($response)

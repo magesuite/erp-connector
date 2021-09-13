@@ -26,57 +26,66 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
         $this->logErrorMessage = $logErrorMessage;
     }
 
-    public function sendItem($provider, $data)
+    public function sendItems($provider, $items)
     {
-        $content = $data['content'] ?? null;
-
-        if (!$content) {
-            $this->logErrorMessage->execute(
-                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                'Missing content',
-                $data
-            );
-            return $this;
-        }
-
-        $fileName = $data['file_name'] ?? null;
-
-        if (!$fileName) {
-            $this->logErrorMessage->execute(
-                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                'Missing file name',
-                $data
-            );
-            return $this;
-        }
-
-        try {
-            $response = $this->sendRequest($data);
-            $this->validateResponse($response, $data);
-        } catch (\Exception $e) {
-            $this->logErrorMessage->execute(
-                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                $e->getMessage(),
-                $data
-            );
+        foreach ($items as $item) {
+            $this->sendItem($provider, $item);
         }
 
         return $this;
     }
 
-    public function sendRequest($data, $requestMethod = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST)
+    protected function sendItem($provider, $item)
+    {
+        $content = $item['content'] ?? null;
+
+        if (!$content) {
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                'Missing content',
+                $item
+            );
+            return false;
+        }
+
+        $fileName = $item['file_name'] ?? null;
+
+        if (!$fileName) {
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                'Missing file name',
+                $item
+            );
+            return false;
+        }
+
+        try {
+            $response = $this->sendRequest($item);
+            $this->validateResponse($response, $item);
+        } catch (\Exception $e) {
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                $e->getMessage(),
+                $item
+            );
+        }
+
+        return true;
+    }
+
+    public function sendRequest($item, $requestMethod = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST)
     {
         try {
             $client = $this->getClient();
-            $params = $this->getParameters($data['content']);
+            $params = $this->getParameters($item['content']);
 
             return $client->request($requestMethod, '', $params);
         } catch (\Exception $e) {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to send a content %1 file to %2 http location. Error: %3', $data['file_name'], $this->getData('url'), $e->getMessage()));
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to send a content %1 file to %2 http location. Error: %3', $item['file_name'], $this->getData('url'), $e->getMessage()));
         }
     }
 
-    public function getParameters($data)
+    public function getParameters($content)
     {
         $headers = [
             'Content-Type' => $this->getData('content_type')
@@ -96,7 +105,7 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
 
         $parameters = [
             'headers' => $headers,
-            'body' => $data
+            'body' => $content
         ];
 
         if ($this->getData('username') && $this->getData('password')) {
@@ -106,14 +115,14 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
         return $parameters;
     }
 
-    protected function validateResponse($response, $data)
+    protected function validateResponse($response, $item)
     {
         if (empty($response)) {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Empty response for a send request of content %1 file to %2 http location.', $data['file_name'], $this->getData('url')));
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Empty response for a send request of content %1 file to %2 http location.', $item['file_name'], $this->getData('url')));
         }
 
         if ($response->getStatusCode() != \Symfony\Component\HttpFoundation\Response::HTTP_OK) {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Wrong response status code for a send request of content %1 file to %2 http location.', $data['file_name'], $this->getData('url')));
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Wrong response status code for a send request of content %1 file to %2 http location.', $item['file_name'], $this->getData('url')));
         }
 
         return true;

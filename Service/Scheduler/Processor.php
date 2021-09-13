@@ -4,6 +4,11 @@ namespace MageSuite\ErpConnector\Service\Scheduler;
 class Processor
 {
     /**
+     * @var \MageSuite\ErpConnector\Api\SchedulerRepositoryInterface
+     */
+    protected $schedulerRepository;
+
+    /**
      * @var \MageSuite\ErpConnector\Api\ProviderRepositoryInterface
      */
     protected $providerRepository;
@@ -19,18 +24,22 @@ class Processor
     protected $logger;
 
     public function __construct(
+        \MageSuite\ErpConnector\Api\SchedulerRepositoryInterface $schedulerRepository,
         \MageSuite\ErpConnector\Api\ProviderRepositoryInterface $providerRepository,
         \MageSuite\ErpConnector\Model\SchedulerPool $schedulerPool,
         \MageSuite\ErpConnector\Logger\Logger $logger
     ) {
+        $this->schedulerRepository = $schedulerRepository;
         $this->providerRepository = $providerRepository;
         $this->schedulerPool = $schedulerPool;
         $this->logger = $logger;
     }
 
-    public function execute(\MageSuite\ErpConnector\Model\Data\Scheduler $scheduler)
+    public function execute($schedulerId)
     {
         try {
+            $scheduler = $this->schedulerRepository->getById($schedulerId);
+
             /** @var \MageSuite\ErpConnector\Model\ProviderProcessor\ProviderProcessorInterface $providerProcessor */
             $providerProcessor = $this->getProviderProcessor($scheduler);
 

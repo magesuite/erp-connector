@@ -42,30 +42,38 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
         $connection->close();
     }
 
-    public function sendItem($provider, $data)
+    public function sendItems($provider, $items)
     {
-        $content = $data['content'] ?? null;
+        foreach ($items as $item) {
+            $this->sendItem($provider, $item);
+        }
+
+        return $this;
+    }
+
+    protected function sendItem($provider, $item)
+    {
+        $content = $item['content'] ?? null;
 
         if (!$content) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
                 'Missing content',
-                $data
+                $item
             );
-            return $this;
+            return false;
         }
 
-        $fileName = $data['file_name'] ?? null;
+        $fileName = $item['file_name'] ?? null;
 
         if (!$fileName) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
                 'Missing file name',
-                $data
+                $item
             );
-            return $this;
+            return false;
         }
-
 
         $location = sprintf(self::LOCATION_FORMAT, $this->getData('user'), $this->getData('host'));
         $sourceDir = $this->getData('source_dir');
@@ -101,11 +109,11 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
                 $e->getMessage(),
-                $data
+                $item
             );
         }
 
-        return $this;
+        return true;
     }
 
     protected function validateFileOnExternalServerDirectory($directory, $fileName, $content, $providerName) //phpcs:ignore

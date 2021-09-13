@@ -38,47 +38,59 @@ class Email extends \Magento\Framework\DataObject implements ClientInterface
         $this->logErrorMessage = $logErrorMessage;
     }
 
-    public function sendItem($provider, $data)
+    public function sendItems($provider, $items)
     {
-        if (!isset($data['files']) || empty($data['files'])) {
-            $this->logErrorMessage->execute(
-                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                'Missing files',
-                $data
-            );
-            return $this;
-        }
-
-        if (!isset($data['order']) || empty($data['order'])) {
-            $this->logErrorMessage->execute(
-                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                'Missing order data',
-                $data
-            );
-            return $this;
-        }
-
         $sender = $this->configuration->getEmailSenderInfo();
         $recipients = explode(',', $this->getData('email'));
 
-        foreach ($recipients as $recipient) {
-            try {
-                $this->sendItemToRecipient($provider, $sender, $recipient, $data);
-            } catch (\Exception $e) {
-                $this->logErrorMessage->execute(
-                    sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                    $e->getMessage(),
-                    $data
-                );
-            }
+        foreach ($items as $item) {
+            $item['sender'] = $sender;
+            $item['recipients'] = $recipients;
+
+            $this->sendItem($provider, $item);
         }
 
         return $this;
     }
 
-    protected function sendItemToRecipient($provider, $sender, $data, $recipient) //phpcs:ignore
+    protected function sendItem($provider, $item)
     {
-        $emailTemplateVariables = $this->getEmailTemplateVariables($provider, $data);
+        if (!isset($item['files']) || empty($item['files'])) {
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                'Missing files',
+                $item
+            );
+            return false;
+        }
+
+        if (!isset($item['order']) || empty($item['order'])) {
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                'Missing order data',
+                $item
+            );
+            return false;
+        }
+
+        foreach ($item['recipients'] as $recipient) {
+            try {
+                $this->sendItemToRecipient($provider, $item, $recipient);
+            } catch (\Exception $e) {
+                $this->logErrorMessage->execute(
+                    sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                    $e->getMessage(),
+                    $item
+                );
+            }
+        }
+
+        return true;
+    }
+
+    protected function sendItemToRecipient($provider, $item, $recipient) //phpcs:ignore
+    {
+        $emailTemplateVariables = $this->getEmailTemplateVariables($provider, $item);
 
         try {
             $this->inlineTranslation->suspend();
@@ -86,12 +98,12 @@ class Email extends \Magento\Framework\DataObject implements ClientInterface
             $transport = $this->transportBuilderFactory
                 ->create()
                 ->setTemplateIdentifier($this->getData('template'))
-                ->setTemplateOptions(['area' => 'frontend', 'store' => $data['order']->getStoreId()])
+                ->setTemplateOptions(['area' => 'frontend', 'store' => $item['order']->getStoreId()])
                 ->setTemplateVars($emailTemplateVariables)
-                ->setFromByScope($sender)
+                ->setFromByScope($item['sender'])
                 ->addTo($recipient);
 
-            foreach ($data['files'] as $fileName => $content) {
+            foreach ($item['files'] as $fileName => $content) {
                 $transport->addAttachmentFromContent($content, $fileName, \Zend_Mime::TYPE_OCTETSTREAM);
             }
 
@@ -101,19 +113,19 @@ class Email extends \Magento\Framework\DataObject implements ClientInterface
             $this->logErrorMessage->execute(
                 sprintf('Can\'t send %s item to recipient email %s', $provider->getName(), $recipient),
                 $e->getMessage(),
-                $data
+                $item
             );
         }
 
         $this->inlineTranslation->resume();
     }
 
-    public function getEmailTemplateVariables($provider, $data)
+    public function getEmailTemplateVariables($provider, $item)
     {
         return [
-            'file_name' => current(array_keys($data['files'])),
+            'file_name' => current(array_keys($item['files'])),
             'provider' => $provider,
-            'order' => $data['order']
+            'order' => $item['order']
         ];
     }
 }

@@ -1,10 +1,7 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="erp_connector">
-        <job name="erp_connector_cron_processor" instance="MageSuite\ErpConnector\Cron\Processor" method="execute">
-            <schedule>* * * * *</schedule>
-        </job>
-        <job name="erp_connector_feedback" instance="MageSuite\ErpConnector\Cron\Feedback" method="execute">
+        <job name="erp_connector_cron_processor" instance="MageSuite\ErpConnector\Cron\Process" method="execute">
             <schedule>* * * * *</schedule>
         </job>
     </group>
