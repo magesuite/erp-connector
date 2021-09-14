@@ -810,7 +810,7 @@
                         </item>
                     </argument>
                     <settings>
-                        <dataType>text</dataType>
+                        <elementTmpl>MageSuite_ErpConnector/form/element/password</elementTmpl>
                         <label>Password</label>
                     </settings>
                 </field>
@@ -821,7 +821,7 @@
                         </item>
                     </argument>
                     <settings>
-                        <dataType>text</dataType>
+                        <elementTmpl>MageSuite_ErpConnector/form/element/password</elementTmpl>
                         <label>Authorization Bearer</label>
                     </settings>
                 </field>
