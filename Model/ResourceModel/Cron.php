@@ -14,7 +14,16 @@ class Cron
         $this->connection = $resourceConnection->getConnection();
     }
 
-    public function getJobs()
+    public function getAllSchedulerJobs()
+    {
+        $select = $this->connection
+            ->select()
+            ->from(['ecs' => $this->connection->getTableName('erp_connector_scheduler')], ['id', 'cron_expression']);
+
+        return $this->connection->fetchAll($select);
+    }
+
+    public function getSchedulerPendingCronJobCodes()
     {
         $select = $this->connection
             ->select()
