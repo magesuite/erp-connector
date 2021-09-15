@@ -1,7 +1,7 @@
 <?php
 namespace MageSuite\ErpConnector\Model\Source;
 
-class SchedulerMethod implements \Magento\Framework\Data\OptionSourceInterface
+class SchedulingMethod implements \Magento\Framework\Data\OptionSourceInterface
 {
     const METHOD_CRON = 'cron';
     const METHOD_RABBITMQ = 'rabbitmq';

@@ -14,9 +14,9 @@ class Processor
     protected $providerRepository;
 
     /**
-     * @var \MageSuite\ErpConnector\Model\SchedulerPool
+     * @var \MageSuite\ErpConnector\Model\SchedulersPool
      */
-    protected $schedulerPool;
+    protected $schedulersPool;
 
     /**
      * @var \MageSuite\ErpConnector\Logger\Logger
@@ -26,12 +26,12 @@ class Processor
     public function __construct(
         \MageSuite\ErpConnector\Api\SchedulerRepositoryInterface $schedulerRepository,
         \MageSuite\ErpConnector\Api\ProviderRepositoryInterface $providerRepository,
-        \MageSuite\ErpConnector\Model\SchedulerPool $schedulerPool,
+        \MageSuite\ErpConnector\Model\SchedulersPool $schedulersPool,
         \MageSuite\ErpConnector\Logger\Logger $logger
     ) {
         $this->schedulerRepository = $schedulerRepository;
         $this->providerRepository = $providerRepository;
-        $this->schedulerPool = $schedulerPool;
+        $this->schedulersPool = $schedulersPool;
         $this->logger = $logger;
     }
 
@@ -61,6 +61,6 @@ class Processor
             return null;
         }
 
-        return $this->schedulerPool->getProviderProcessorBySchedulerTypeAndProviderCode($scheduler->getType(), $provider->getCode());
+        return $this->schedulersPool->getProviderProcessorBySchedulerTypeAndProviderCode($scheduler->getType(), $provider->getCode());
     }
 }

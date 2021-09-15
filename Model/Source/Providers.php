@@ -30,6 +30,6 @@ class Providers implements \Magento\Framework\Data\OptionSourceInterface
             ];
         }
 
-        return $providers;
+        return $list;
     }
 }

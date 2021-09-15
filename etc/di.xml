@@ -7,6 +7,7 @@
     <preference for="MageSuite\ErpConnector\Api\ConnectorConfigurationRepositoryInterface" type="MageSuite\ErpConnector\Model\ConnectorConfigurationRepository"/>
     <preference for="MageSuite\ErpConnector\Api\ProviderAdditionalConfigurationRepositoryInterface" type="MageSuite\ErpConnector\Model\ProviderAdditionalConfigurationRepository"/>
     <preference for="MageSuite\ErpConnector\Api\SchedulerRepositoryInterface" type="MageSuite\ErpConnector\Model\SchedulerRepository"/>
+    <preference for="MageSuite\ErpConnector\Api\SchedulerConnectorConfigurationRepositoryInterface" type="MageSuite\ErpConnector\Model\SchedulerConnectorConfigurationRepository"/>
 
     <type name="MageSuite\ErpConnector\Logger\Handler">
         <arguments>
@@ -97,7 +98,7 @@
         </arguments>
     </type>
 
-    <type name="MageSuite\ErpConnector\Model\SchedulerPool">
+    <type name="MageSuite\ErpConnector\Model\SchedulersPool">
         <arguments>
             <argument name="schedulerGroups" xsi:type="array">
                 <item name="general" xsi:type="array">

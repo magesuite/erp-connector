@@ -46,5 +46,4 @@ class ConfigurationCodes extends \Magento\Config\Model\Config\Backend\Serialized
 
         return parent::beforeSave();
     }
-
 }

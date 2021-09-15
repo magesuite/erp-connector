@@ -8,7 +8,7 @@ class Configuration
     const CRON_JOB_METHOD_FORMAT = 'erp_connector_scheduler_%s';
 
     const XML_PATH_IS_ENABLED = 'erp_connector/general/is_enabled';
-    const XML_PATH_SCHEDULER_METHOD = 'erp_connector/scheduler/method';
+    const XML_PATH_SCHEDULING_METHOD = 'erp_connector/scheduler/method';
     const XML_PATH_PROVIDER_CONFIGURATION_CODES = 'erp_connector/general/provider_configuration_codes';
     const XML_PATH_EMAIL_GENERAL_NAME = 'trans_email/ident_general/name';
     const XML_PATH_EMAIL_GENERAL_EMAIL = 'trans_email/ident_general/email';
@@ -36,9 +36,9 @@ class Configuration
         return $this->scopeConfig->isSetFlag(self::XML_PATH_IS_ENABLED);
     }
 
-    public function getSchedulerMethod()
+    public function getSchedulingMethod()
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_SCHEDULER_METHOD);
+        return $this->scopeConfig->getValue(self::XML_PATH_SCHEDULING_METHOD);
     }
 
     public function getProviderAdditionalConfigurationCodes()

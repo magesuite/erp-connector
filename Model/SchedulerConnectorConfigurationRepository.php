@@ -1,22 +1,22 @@
 <?php
 namespace MageSuite\ErpConnector\Model;
 
-class SchedulerRepository implements \MageSuite\ErpConnector\Api\SchedulerRepositoryInterface
+class SchedulerConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\SchedulerConnectorConfigurationRepositoryInterface
 {
-    protected $schedulers = [];
+    protected $schedulerConnectorConfigurations = [];
 
     /**
-     * @var \MageSuite\ErpConnector\Model\ResourceModel\Scheduler
+     * @var \MageSuite\ErpConnector\Model\ResourceModel\SchedulerConnectorConfiguration
      */
     protected $resourceModel;
 
     /**
-     * @var \MageSuite\ErpConnector\Model\Data\SchedulerFactory
+     * @var \MageSuite\ErpConnector\Model\Data\SchedulerConnectorConfigurationFactory
      */
-    protected $schedulerFactory;
+    protected $schedulerConnectorConfigurationFactory;
 
     /**
-     * @var \MageSuite\ErpConnector\Model\ResourceModel\Scheduler\CollectionFactory
+     * @var \MageSuite\ErpConnector\Model\ResourceModel\SchedulerConnectorConfiguration\CollectionFactory
      */
     protected $collectionFactory;
 
@@ -36,54 +36,69 @@ class SchedulerRepository implements \MageSuite\ErpConnector\Api\SchedulerReposi
     protected $searchCriteriaBuilder;
 
     public function __construct(
-        \MageSuite\ErpConnector\Model\ResourceModel\Scheduler $resourceModel,
-        \MageSuite\ErpConnector\Model\Data\SchedulerFactory $schedulerFactory,
-        \MageSuite\ErpConnector\Model\ResourceModel\Scheduler\CollectionFactory $collectionFactory,
+        \MageSuite\ErpConnector\Model\ResourceModel\SchedulerConnectorConfiguration $resourceModel,
+        \MageSuite\ErpConnector\Model\Data\SchedulerConnectorConfigurationFactory $schedulerConnectorConfigurationFactory,
+        \MageSuite\ErpConnector\Model\ResourceModel\SchedulerConnectorConfiguration\CollectionFactory $collectionFactory,
         \Magento\Framework\Api\SearchResultsInterfaceFactory $searchResultsFactory,
         \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface $collectionProcessor,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->resourceModel = $resourceModel;
-        $this->schedulerFactory = $schedulerFactory;
+        $this->schedulerConnectorConfigurationFactory = $schedulerConnectorConfigurationFactory;
         $this->collectionFactory = $collectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->collectionProcessor = $collectionProcessor;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
-    public function save($scheduler)
+    public function save($schedulerConnectorConfiguration)
     {
         try {
-            $this->resourceModel->save($scheduler);
+            $this->resourceModel->save($schedulerConnectorConfiguration);
         } catch (\Exception $exception) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(__($exception->getMessage()));
         }
 
-        return $scheduler;
+        return $schedulerConnectorConfiguration;
     }
 
     public function getById($id)
     {
-        if (isset($this->schedulers[$id])) {
-            return $this->schedulers[$id];
+        if (isset($this->schedulerConnectorConfigurations[$id])) {
+            return $this->schedulerConnectorConfigurations[$id];
         }
 
-        $scheduler = $this->schedulerFactory->create();
-        $this->resourceModel->load($scheduler, $id);
+        $schedulerConnectorConfiguration = $this->schedulerConnectorConfigurationFactory->create();
+        $this->resourceModel->load($schedulerConnectorConfiguration, $id);
 
-        if (!$scheduler->getId()) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException(__('The scheduler with the "%1" ID doesn\'t exist.', $id));
+        if (!$schedulerConnectorConfiguration->getId()) {
+            throw new \Magento\Framework\Exception\NoSuchEntityException(__('The scheduler connector configuration with the "%1" ID doesn\'t exist.', $id));
         }
 
-        $this->schedulers[$id] = $scheduler;
+        $this->schedulerConnectorConfigurations[$id] = $schedulerConnectorConfiguration;
 
-        return $this->schedulers[$id];
+        return $this->schedulerConnectorConfigurations[$id];
+    }
+
+    public function getBySchedulerId($schedulerId)
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(\MageSuite\ErpConnector\Model\Data\SchedulerConnectorConfiguration::SCHEDULER_ID, $schedulerId)
+            ->create();
+
+        $list = $this->getList($searchCriteria);
+
+        if (!$list->getTotalCount()) {
+            return [];
+        }
+
+        return $list->getItems();
     }
 
     public function getByProviderId($providerId)
     {
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter(\MageSuite\ErpConnector\Model\Data\Scheduler::PROVIDER_ID, $providerId)
+            ->addFilter(\MageSuite\ErpConnector\Model\Data\SchedulerConnectorConfiguration::PROVIDER_ID, $providerId)
             ->create();
 
         $list = $this->getList($searchCriteria);

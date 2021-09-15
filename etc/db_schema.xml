@@ -9,6 +9,7 @@
             <column name="id"/>
         </constraint>
     </table>
+
     <table name="erp_connector_connector" resource="default" engine="innodb">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
         <column xsi:type="int" name="provider_id" padding="10" unsigned="true" nullable="false"/>
@@ -21,6 +22,7 @@
                     column="provider_id" referenceTable="erp_connector_provider" referenceColumn="id"
                     onDelete="CASCADE"/>
     </table>
+
     <table name="erp_connector_connector_configuration" resource="default" engine="innodb">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
         <column xsi:type="int" name="provider_id" padding="10" unsigned="true" nullable="false"/>
@@ -35,6 +37,7 @@
                     column="connector_id" referenceTable="erp_connector_connector" referenceColumn="id"
                     onDelete="CASCADE"/>
     </table>
+
     <table name="erp_connector_vault" resource="default" engine="innodb">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
         <column xsi:type="int" name="connector_id" padding="10" unsigned="true" nullable="false"/>
@@ -47,6 +50,7 @@
                     column="connector_id" referenceTable="erp_connector_connector" referenceColumn="id"
                     onDelete="CASCADE"/>
     </table>
+
     <table name="erp_connector_provider_additional_configuration" resource="default" engine="innodb">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
         <column xsi:type="int" name="provider_id" padding="10" unsigned="true" nullable="false"/>
@@ -59,14 +63,14 @@
                     column="provider_id" referenceTable="erp_connector_provider" referenceColumn="id"
                     onDelete="CASCADE"/>
     </table>
+
     <table name="erp_connector_scheduler" resource="default" engine="innodb">
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
         <column xsi:type="int" name="provider_id" padding="10" unsigned="true" nullable="false"/>
-        <column xsi:type="int" name="connector_id" padding="10" unsigned="true" nullable="false"/>
         <column xsi:type="varchar" name="name" nullable="true" length="32"/>
         <column xsi:type="varchar" name="type" nullable="true" length="32"/>
         <column xsi:type="varchar" name="cron_expression" nullable="true" length="50"/>
-        <column xsi:type="varchar" name="templates" nullable="true" length="255"/>
+        <column xsi:type="text" name="templates" nullable="true"/>
         <column xsi:type="text" name="file_name" nullable="true"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
@@ -74,7 +78,23 @@
         <constraint xsi:type="foreign" referenceId="erp_connector_scheduler_provider_id" table="erp_connector_scheduler"
                     column="provider_id" referenceTable="erp_connector_provider" referenceColumn="id"
                     onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" referenceId="erp_connector_scheduler_connector_id" table="erp_connector_scheduler"
+    </table>
+
+    <table name="erp_connector_scheduler_connector_configuration" resource="default" engine="innodb">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
+        <column xsi:type="int" name="scheduler_id" padding="10" unsigned="true" nullable="false"/>
+        <column xsi:type="int" name="provider_id" padding="10" unsigned="true" nullable="false"/>
+        <column xsi:type="int" name="connector_id" padding="10" unsigned="true" nullable="false"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="erp_connector_scheduler_connector_configuration_scheduler_id" table="erp_connector_scheduler_connector_configuration"
+                    column="scheduler_id" referenceTable="erp_connector_scheduler" referenceColumn="id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="erp_connector_scheduler_connector_configuration_provider_id" table="erp_connector_scheduler_connector_configuration"
+                    column="provider_id" referenceTable="erp_connector_provider" referenceColumn="id"
+                    onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="erp_connector_scheduler_connector_configuration_connector_id" table="erp_connector_scheduler_connector_configuration"
                     column="connector_id" referenceTable="erp_connector_connector" referenceColumn="id"
                     onDelete="CASCADE"/>
     </table>

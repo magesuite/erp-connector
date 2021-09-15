@@ -3,8 +3,8 @@ namespace MageSuite\ErpConnector\Ui\Component\Listing\Column;
 
 class ProviderActions extends \Magento\Ui\Component\Listing\Columns\Column
 {
-    public const URL_PATH_EDIT = 'erp_connector/provider/edit';
-    public const URL_PATH_DELETE = 'erp_connector/provider/delete';
+    const URL_PATH_EDIT = 'erp_connector/provider/edit';
+    const URL_PATH_DELETE = 'erp_connector/provider/delete';
 
     /**
      * @var \Magento\Framework\UrlInterface

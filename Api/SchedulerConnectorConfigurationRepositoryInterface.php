@@ -4,25 +4,32 @@ namespace MageSuite\ErpConnector\Api;
 /**
  * @api
  */
-interface SchedulerRepositoryInterface
+interface SchedulerConnectorConfigurationRepositoryInterface
 {
     /**
-     * @param \MageSuite\ErpConnector\Model\Data\Scheduler $scheduler
-     * @return \MageSuite\ErpConnector\Model\Data\Scheduler
+     * @param \MageSuite\ErpConnector\Model\Data\SchedulerConnectorConfiguration $schedulerConnectorConfiguration
+     * @return \MageSuite\ErpConnector\Model\Data\SchedulerConnectorConfiguration
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save($scheduler);
+    public function save($schedulerConnectorConfiguration);
 
     /**
      * @param $id
-     * @return \MageSuite\ErpConnector\Model\Data\Scheduler
+     * @return \MageSuite\ErpConnector\Model\Data\SchedulerConnectorConfiguration
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById($id);
 
     /**
+     * @param $schedulerId
+     * @return \MageSuite\ErpConnector\Model\Data\SchedulerConnectorConfiguration
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getBySchedulerId($schedulerId);
+
+    /**
      * @param $providerId
-     * @return \MageSuite\ErpConnector\Model\Data\Scheduler
+     * @return \MageSuite\ErpConnector\Model\Data\SchedulerConnectorConfiguration
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getByProviderId($providerId);
@@ -34,11 +41,11 @@ interface SchedulerRepositoryInterface
     public function getList($searchCriteria = null);
 
     /**
-     * @param \MageSuite\ErpConnector\Model\Data\Scheduler $scheduler
+     * @param \MageSuite\ErpConnector\Model\Data\SchedulerConnectorConfiguration $schedulerConnectorConfiguration
      * @return bool true on success
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function delete($scheduler);
+    public function delete($schedulerConnectorConfiguration);
 
     /**
      * @param int $id

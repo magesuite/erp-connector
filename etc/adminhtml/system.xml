@@ -15,16 +15,19 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="provider_configuration_codes" translate="label" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Additional Code List</label>
+                    <label>Additional configuration codes list</label>
                     <frontend_model>MageSuite\ErpConnector\Block\Adminhtml\System\Config\Form\Field\ProviderAdditionalConfiguration\ConfigurationCodes</frontend_model>
-                        <backend_model>MageSuite\ErpConnector\Model\Config\Backend\ProviderAdditionalConfiguration\ConfigurationCodes</backend_model>
+                    <backend_model>MageSuite\ErpConnector\Model\Config\Backend\ProviderAdditionalConfiguration\ConfigurationCodes</backend_model>
+                    <comment>
+                        <![CDATA[Codes provided here will be used as keys in additional configuration section in provider entity.]]>
+                    </comment>
                 </field>
             </group>
             <group id="scheduler" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Scheduler</label>
                 <field id="method" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Method</label>
-                    <source_model>MageSuite\ErpConnector\Model\Source\SchedulerMethod</source_model>
+                    <source_model>MageSuite\ErpConnector\Model\Source\SchedulingMethod</source_model>
                 </field>
             </group>
         </section>

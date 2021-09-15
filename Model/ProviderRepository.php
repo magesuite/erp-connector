@@ -65,7 +65,7 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
         return $provider;
     }
 
-    public function getById(int $id)
+    public function getById($id)
     {
         if (isset($this->providers[$id])) {
             return $this->providers[$id];

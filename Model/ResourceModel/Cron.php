@@ -33,5 +33,4 @@ class Cron
 
         return $this->connection->fetchCol($select);
     }
-
 }

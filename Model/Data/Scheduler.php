@@ -5,7 +5,6 @@ class Scheduler extends \Magento\Framework\Model\AbstractModel
 {
     const ID = 'id';
     const PROVIDER_ID = 'provider_id';
-    const CONNECTOR_ID = 'connector_id';
     const NAME = 'name';
     const TYPE = 'type';
     const CRON_EXPRESSION = 'cron_expression';
@@ -51,11 +50,6 @@ class Scheduler extends \Magento\Framework\Model\AbstractModel
         return $this->getData(self::PROVIDER_ID);
     }
 
-    public function getConnectorId()
-    {
-        return $this->getData(self::CONNECTOR_ID);
-    }
-
     public function getName()
     {
         return $this->getData(self::NAME);
@@ -96,12 +90,6 @@ class Scheduler extends \Magento\Framework\Model\AbstractModel
     public function setProviderId($providerId)
     {
         $this->setData(self::PROVIDER_ID, $providerId);
-        return $this;
-    }
-
-    public function setConnectorId($connectorId)
-    {
-        $this->setData(self::CONNECTOR_ID, $connectorId);
         return $this;
     }
 

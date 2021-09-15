@@ -30,7 +30,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         );
     }
 
-    public function _afterLoad()
+    protected function _afterLoad()
     {
         foreach ($this->getItems() as $item) {
 

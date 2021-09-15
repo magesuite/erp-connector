@@ -20,13 +20,12 @@ interface ProviderRepositoryInterface
      * @return \MageSuite\ErpConnector\Model\Data\Provider
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function getById(int $id);
+    public function getById($id);
 
     /**
      * @param $name
      * @return \MageSuite\ErpConnector\Model\Data\Provider
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @deprecated Use getList with search criteria instead
      */
     public function getByName($name);
 

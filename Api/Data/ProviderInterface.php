@@ -6,10 +6,10 @@ interface ProviderInterface extends \Magento\Framework\DataObject\IdentityInterf
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case
      */
-    public const ID = 'id';
-    public const NAME = 'name';
-    public const CODE = 'code';
-    public const EMAIL = 'email';
+    const ID = 'id';
+    const NAME = 'name';
+    const CODE = 'code';
+    const EMAIL = 'email';
     /**#@-*/
 
     const CACHE_TAG = 'erp_connector_provider';

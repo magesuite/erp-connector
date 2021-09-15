@@ -1,7 +1,7 @@
 <?php
 namespace MageSuite\ErpConnector\Model;
 
-class SchedulerPool
+class SchedulersPool
 {
     const DEFAULT_SCHEDULER_TYPE = 'general';
     const DEFAULT_PROVIDER_PROCESSOR = 'general';

@@ -57,10 +57,10 @@ class Process
 
     protected function process($schedulerId)
     {
-        $method = $this->configuration->getSchedulerMethod();
+        $method = $this->configuration->getSchedulingMethod();
 
         switch ($method) {
-            case \MageSuite\ErpConnector\Model\Source\SchedulerMethod::METHOD_RABBITMQ:
+            case \MageSuite\ErpConnector\Model\Source\SchedulingMethod::METHOD_RABBITMQ:
                 $this->queuePublisher->publish($this->handlerClass, $schedulerId);
                 break;
             default:

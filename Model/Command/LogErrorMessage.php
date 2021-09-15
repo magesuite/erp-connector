@@ -31,6 +31,5 @@ class LogErrorMessage
 
         $this->logger->error($message);
         $this->addAdminNotification->execute($title, $message);
-
     }
 }
