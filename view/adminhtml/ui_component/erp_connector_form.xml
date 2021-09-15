@@ -103,7 +103,7 @@
                 <notice>Value used for found class for process providers data in export etc. Used default class if not exist or not found</notice>
             </settings>
         </field>
-        <dynamicRows name="additional_configuration">
+        <dynamicRows name="additional_configuration" sortOrder="500">
             <settings>
                 <addButtonLabel translate="true">Add Config</addButtonLabel>
                 <componentType>dynamicRows</componentType>

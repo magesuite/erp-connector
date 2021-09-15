@@ -37,27 +37,27 @@ class Edit extends \Magento\Backend\App\Action implements \Magento\Framework\App
     {
         $id = (int)$this->getRequest()->getParam('id');
 
+        $title = __('New Provider');
+
         if ($id) {
             $provider = $this->providerRepository->getById($id);
 
             if (!$provider->getId()) {
                 $this->messageManager->addErrorMessage(__('This provider no longer exists.'));
+
                 /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
                 $resultRedirect = $this->resultRedirectFactory->create();
                 return $resultRedirect->setPath('*/*/');
             }
 
             $this->registry->register('current_provider', $provider);
+            $title = __('Edit Provider %1', $provider->getName());
         }
 
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->addBreadcrumb(
-            $id ? __('Edit Provider') : __('New Provider'),
-            $id ? __('Edit Provider') : __('New Provider')
-        );
+        $resultPage->addBreadcrumb($title, $title);
         $resultPage->getConfig()->getTitle()->prepend(__('Providers'));
-        $resultPage->getConfig()->getTitle()
-            ->prepend($id ?  __('Edit Provider') : __('New Provider'));
+        $resultPage->getConfig()->getTitle()->prepend($title);
 
         return $resultPage;
     }
