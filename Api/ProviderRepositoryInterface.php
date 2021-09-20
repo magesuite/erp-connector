@@ -7,8 +7,6 @@ namespace MageSuite\ErpConnector\Api;
 interface ProviderRepositoryInterface
 {
     /**
-     * Save.
-     *
      * @param \MageSuite\ErpConnector\Model\Data\Provider $provider
      * @return \MageSuite\ErpConnector\Model\Data\Provider
      * @throws \Magento\Framework\Exception\CouldNotSaveException

@@ -23,13 +23,13 @@ class LogErrorMessage
         $this->logger = $logger;
     }
 
-    public function execute($title, $message, $data = null)
+    public function execute($title, $message, $data = null, $severity = \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL) //phpcs:ignore
     {
         if ($data !== null) {
             $message = sprintf(self::MESSAGE_WITH_DATA_FORMAT, $message, var_export($data, true));
         }
 
         $this->logger->error($message);
-        $this->addAdminNotification->execute($title, $message);
+        $this->addAdminNotification->execute($title, $message, $severity);
     }
 }

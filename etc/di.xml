@@ -28,7 +28,7 @@
         <arguments>
             <argument name="connectorsConfiguration" xsi:type="array">
                 <item name="ftp" xsi:type="array">
-                    <item name="client" xsi:type="object">\MageSuite\ErpConnector\Model\Client\Ftp</item>
+                    <item name="client" xsi:type="object">MageSuite\ErpConnector\Model\Client\Ftp</item>
                     <item name="fields" xsi:type="array">
                         <item name="host" xsi:type="null"></item>
                         <item name="port" xsi:type="null"></item>
@@ -43,7 +43,7 @@
                     </item>
                 </item>
                 <item name="sftp" xsi:type="array">
-                    <item name="client" xsi:type="object">\MageSuite\ErpConnector\Model\Client\Sftp</item>
+                    <item name="client" xsi:type="object">MageSuite\ErpConnector\Model\Client\Sftp</item>
                     <item name="fields" xsi:type="array">
                         <item name="host" xsi:type="null"></item>
                         <item name="username" xsi:type="null"></item>
@@ -57,7 +57,7 @@
                     </item>
                 </item>
                 <item name="soap" xsi:type="array">
-                    <item name="client" xsi:type="object">\MageSuite\ErpConnector\Model\Client\Soap</item>
+                    <item name="client" xsi:type="object">MageSuite\ErpConnector\Model\Client\Soap</item>
                     <item name="fields" xsi:type="array">
                         <item name="wsdl" xsi:type="null"></item>
                         <item name="version" xsi:type="null"></item>
@@ -70,7 +70,7 @@
                     </item>
                 </item>
                 <item name="http" xsi:type="array">
-                    <item name="client" xsi:type="object">\MageSuite\ErpConnector\Model\Client\Http</item>
+                    <item name="client" xsi:type="object">MageSuite\ErpConnector\Model\Client\Http</item>
                     <item name="fields" xsi:type="array">
                         <item name="url" xsi:type="null"></item>
                         <item name="login" xsi:type="null"></item>
@@ -88,7 +88,7 @@
                     </item>
                 </item>
                 <item name="email" xsi:type="array">
-                    <item name="client" xsi:type="object">\MageSuite\ErpConnector\Model\Client\Email</item>
+                    <item name="client" xsi:type="object">MageSuite\ErpConnector\Model\Client\Email</item>
                     <item name="fields" xsi:type="array">
                         <item name="email" xsi:type="null"></item>
                         <item name="template" xsi:type="null"></item>
@@ -102,7 +102,7 @@
         <arguments>
             <argument name="schedulerGroups" xsi:type="array">
                 <item name="general" xsi:type="array">
-                    <item name="general" xsi:type="object">\MageSuite\ErpConnector\Model\ProviderProcessor\General</item>
+                    <item name="general" xsi:type="object">MageSuite\ErpConnector\Model\ProviderProcessor\General</item>
                 </item>
             </argument>
         </arguments>

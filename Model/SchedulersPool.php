@@ -21,20 +21,19 @@ class SchedulersPool
         $this->logger = $logger;
     }
 
-    public function getSchedulerNamesByType($type)
+    public function getSchedulersByType($type)
     {
         if (!isset($this->schedulerGroups[$type])) {
             throw new \Exception('Scheduler group for type %1 doesn\'t exist', $type); //phpcs:ignore
         }
 
-        $schedulerNames = array_keys($this->schedulerGroups[$type]);
-
         $result = [];
 
-        foreach ($schedulerNames as $schedulerName) {
-            $result[] = [
+        foreach ($this->schedulerGroups[$type] as $schedulerName => $class) {
+            $result[$schedulerName] = [
                 'label' => ucfirst($schedulerName),
-                'code' => $schedulerName
+                'code' => $schedulerName,
+                'class' => $class
             ];
         }
 
@@ -45,7 +44,8 @@ class SchedulersPool
     {
         try {
             $schedulersByType = $this->getSchedulersByType($type);
-            return $schedulersByType[$providerCode];
+            $scheduler = $schedulersByType[$providerCode] ?? $schedulersByType[self::DEFAULT_PROVIDER_PROCESSOR];
+            return $scheduler['class'];
         } catch (\Exception $e) {
             $this->logger->error(sprintf('Provider processor for scheduler type %s and provider code %s doesn\'t exist', $type, $providerCode));
             return $this->schedulerGroups[self::DEFAULT_SCHEDULER_TYPE][self::DEFAULT_PROVIDER_PROCESSOR];
