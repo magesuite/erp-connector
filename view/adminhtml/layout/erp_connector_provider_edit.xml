@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" layout="admin-2columns-left">
+    <update handle="styles"/>
+    <update handle="editor"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="MageSuite\ErpConnector\Block\Adminhtml\Connection\Check" template="MageSuite_ErpConnector::connection/check.phtml"/>
+            <uiComponent name="erp_connector_form"/>
+        </referenceContainer>
+    </body>
+</page>

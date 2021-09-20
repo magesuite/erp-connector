@@ -1,0 +1,92 @@
+{
+    "erp_connector_provider": {
+        "column": {
+            "id": true,
+            "name": true,
+            "code": true,
+            "email": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "erp_connector_connector": {
+        "column": {
+            "id": true,
+            "provider_id": true,
+            "name": true,
+            "type": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ERP_CONNECTOR_CONNECTOR_PROVIDER_ID_ERP_CONNECTOR_PROVIDER_ID": true
+        }
+    },
+    "erp_connector_connector_configuration": {
+        "column": {
+            "id": true,
+            "provider_id": true,
+            "connector_id": true,
+            "modifier_class": true,
+            "name": true,
+            "value": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_89BB4D4E74DA6809F8CC090D0130CE25": true
+        }
+    },
+    "erp_connector_vault": {
+        "column": {
+            "id": true,
+            "connector_id": true,
+            "identifier": true,
+            "value": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ERP_CONNECTOR_VAULT_CONNECTOR_ID_ERP_CONNECTOR_CONNECTOR_ID": true
+        }
+    },
+    "erp_connector_provider_additional_configuration": {
+        "column": {
+            "id": true,
+            "provider_id": true,
+            "key": true,
+            "value": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_39B3BEF883AB5613D7C4EA97AD308C19": true
+        }
+    },
+    "erp_connector_scheduler": {
+        "column": {
+            "id": true,
+            "provider_id": true,
+            "name": true,
+            "type": true,
+            "cron_expression": true,
+            "templates": true,
+            "file_name": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ERP_CONNECTOR_SCHEDULER_PROVIDER_ID_ERP_CONNECTOR_PROVIDER_ID": true
+        }
+    },
+    "erp_connector_scheduler_connector_configuration": {
+        "column": {
+            "id": true,
+            "scheduler_id": true,
+            "provider_id": true,
+            "connector_id": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_FCA873A4C3590F551B8D48322FEADE16": true,
+            "FK_A633A92BFBFD39F0E2E5C25962043450": true,
+            "FK_E5DA8692612D10A448858766DA9F8E9B": true
+        }
+    }
+}

@@ -1,0 +1,1040 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">erp_connector_form.provider_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Provider Information</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="save" class="MageSuite\ErpConnector\Block\Adminhtml\Provider\Edit\SaveButton"/>
+            <button name="delete" class="MageSuite\ErpConnector\Block\Adminhtml\Provider\Edit\DeleteButton"/>
+            <button name="back" class="MageSuite\ErpConnector\Block\Adminhtml\Provider\Edit\BackButton"/>
+        </buttons>
+        <namespace>erp_connector_form</namespace>
+        <dataScope>data</dataScope>
+        <layout>
+            <navContainerName>left</navContainerName>
+            <type>tabs</type>
+        </layout>
+        <deps>
+            <dep>erp_connector_form.provider_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="provider_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="erp_connector/provider/save"/>
+        </settings>
+        <dataProvider class="MageSuite\ErpConnector\Ui\DataProvider\Form\Provider" name="provider_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="general">
+        <settings>
+            <label translate="true">General</label>
+        </settings>
+        <!--suppress XmlDefaultAttributeValue -->
+        <field name="id" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">provider</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <visible>false</visible>
+            </settings>
+        </field>
+        <!--suppress XmlDefaultAttributeValue -->
+        <field name="name" sortOrder="10" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">provider</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="max_text_length" xsi:type="number">50</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Provider Name</label>
+            </settings>
+        </field>
+        <field name="email" sortOrder="20" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">provider</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">false</rule>
+                    <rule name="validate-email" xsi:type="boolean">true</rule>
+                    <rule name="max_text_length" xsi:type="number">255</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Provider Email</label>
+            </settings>
+        </field>
+        <!--suppress XmlDefaultAttributeValue -->
+        <field name="code" sortOrder="30" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">provider</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="max_text_length" xsi:type="number">255</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Provider Code</label>
+                <notice>Value used for found class for process providers data in export etc. Used default class if not exist or not found</notice>
+            </settings>
+        </field>
+        <dynamicRows name="additional_configuration" sortOrder="500">
+            <settings>
+                <addButtonLabel translate="true">Add Config</addButtonLabel>
+                <componentType>dynamicRows</componentType>
+                <deleteValue>true</deleteValue>
+                <deleteProperty>deleted</deleteProperty>
+                <identificationProperty>id</identificationProperty>
+                <dndConfig>
+                    <param name="enabled" xsi:type="boolean">false</param>
+                </dndConfig>
+                <dataScope>additional_configuration</dataScope>
+                <label>Additional Configuration</label>
+                <notice>Add additional configuration for used in provider models or other custom functional</notice>
+            </settings>
+            <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                    </item>
+                </argument>
+                <field name="key" formElement="select">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label translate="true">Name</label>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="MageSuite\ErpConnector\Model\Source\ProviderAdditionalConfiguration\ConfigurationCodes"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+                <field name="value" formElement="textarea">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="rows" xsi:type="number">5</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Value</label>
+                    </settings>
+                </field>
+
+                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Actions</label>
+                        <componentType>actionDelete</componentType>
+                    </settings>
+                </actionDelete>
+            </container>
+        </dynamicRows>
+    </fieldset>
+    <fieldset name="connectors">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Connectors</item>
+            </item>
+        </argument>
+        <dynamicRows name="ftp">
+            <settings>
+                <addButtonLabel translate="true">Add FTP Connector</addButtonLabel>
+                <componentType>dynamicRows</componentType>
+                <deleteValue>true</deleteValue>
+                <deleteProperty>deleted</deleteProperty>
+                <identificationProperty>id</identificationProperty>
+                <dndConfig>
+                    <param name="enabled" xsi:type="boolean">false</param>
+                </dndConfig>
+                <label>FTP Connectors</label>
+                <dataScope>ftp</dataScope>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                </additionalClasses>
+            </settings>
+            <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                    </item>
+                </argument>
+                <hidden name="type">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="value" xsi:type="string">ftp</item>
+                        </item>
+                    </argument>
+                </hidden>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="name" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                            <item name="validation" xsi:type="array">
+                                <item name="required-entry" xsi:type="boolean">true</item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Name</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="host" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Host</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="port" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="number">21</item>
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Port</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="username" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>User Name</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="password" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <elementTmpl>MageSuite_ErpConnector/form/element/password</elementTmpl>
+                        <label>Password</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="passive_mode" formElement="checkbox">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">true</item>
+                            <item name="default" xsi:type="number">1</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label>Passive mode</label>
+                        <dataType>boolean</dataType>
+                    </settings>
+                    <formElements>
+                        <checkbox>
+                            <settings>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                                <prefer>toggle</prefer>
+                            </settings>
+                        </checkbox>
+                    </formElements>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="source_dir" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Source Directory</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="destination_dir" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Destination Directory</label>
+                    </settings>
+                </field>
+                <field name="skip_validation" formElement="checkbox">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                            <item name="default" xsi:type="number">0</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label>Skip Exported File Validation</label>
+                        <dataType>boolean</dataType>
+                    </settings>
+                    <formElements>
+                        <checkbox>
+                            <settings>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                                <prefer>toggle</prefer>
+                            </settings>
+                        </checkbox>
+                    </formElements>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="check" formElement="input" component="MageSuite_ErpConnector/js/form/element/check">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <elementTmpl>MageSuite_ErpConnector/form/element/check</elementTmpl>
+                        <label>Check connection</label>
+                    </settings>
+                </field>
+                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Actions</label>
+                        <componentType>actionDelete</componentType>
+                    </settings>
+                </actionDelete>
+            </container>
+        </dynamicRows>
+        <dynamicRows name="sftp">
+            <settings>
+                <addButtonLabel translate="true">Add SFTP Connector</addButtonLabel>
+                <componentType>dynamicRows</componentType>
+                <deleteValue>true</deleteValue>
+                <deleteProperty>deleted</deleteProperty>
+                <identificationProperty>id</identificationProperty>
+                <dndConfig>
+                    <param name="enabled" xsi:type="boolean">false</param>
+                </dndConfig>
+                <label>SFTP Connectors</label>
+                <dataScope>sftp</dataScope>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                </additionalClasses>
+            </settings>
+            <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                    </item>
+                </argument>
+                <hidden name="type">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="value" xsi:type="string">sftp</item>
+                        </item>
+                    </argument>
+                </hidden>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="name" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                            <item name="validation" xsi:type="array">
+                                <item name="required-entry" xsi:type="boolean">true</item>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Name</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="host" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Host</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="username" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>User Name</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="password" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <elementTmpl>MageSuite_ErpConnector/form/element/password</elementTmpl>
+                        <label>Password</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="timeout" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="default" xsi:type="number">10</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Timeout</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="source_dir" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Source Directory</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="destination_dir" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Destination Directory</label>
+                    </settings>
+                </field>
+                <field name="skip_validation" formElement="checkbox">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                            <item name="default" xsi:type="number">0</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label>Skip Exported File Validation</label>
+                        <dataType>boolean</dataType>
+                    </settings>
+                    <formElements>
+                        <checkbox>
+                            <settings>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                                <prefer>toggle</prefer>
+                            </settings>
+                        </checkbox>
+                    </formElements>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="check" formElement="input" component="MageSuite_ErpConnector/js/form/element/check">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <elementTmpl>MageSuite_ErpConnector/form/element/check</elementTmpl>
+                        <label>Check connection</label>
+                    </settings>
+                </field>
+                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Actions</label>
+                        <componentType>actionDelete</componentType>
+                    </settings>
+                </actionDelete>
+            </container>
+        </dynamicRows>
+        <dynamicRows name="soap">
+            <settings>
+                <addButtonLabel translate="true">Add Soap Connector</addButtonLabel>
+                <componentType>dynamicRows</componentType>
+                <deleteValue>true</deleteValue>
+                <deleteProperty>deleted</deleteProperty>
+                <identificationProperty>id</identificationProperty>
+                <dndConfig>
+                    <param name="enabled" xsi:type="boolean">false</param>
+                </dndConfig>
+                <label>SOAP Connectors</label>
+                <dataScope>soap</dataScope>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                </additionalClasses>
+            </settings>
+            <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                    </item>
+                </argument>
+                <hidden name="type">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="value" xsi:type="string">soap</item>
+                        </item>
+                    </argument>
+                </hidden>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="name" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Name</label>
+                    </settings>
+                </field>
+                <field name="version" formElement="select">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="string">2</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Version</label>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="MageSuite\ErpConnector\Model\Source\SoapVersion"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="wsdl" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <!--<validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>-->
+                        <dataType>text</dataType>
+                        <label>WSDL</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="login" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Login</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="password" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <elementTmpl>MageSuite_ErpConnector/form/element/password</elementTmpl>
+                        <label>Password</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="location" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Location</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="action" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Soap Action</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="check" formElement="input" component="MageSuite_ErpConnector/js/form/element/check">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <elementTmpl>MageSuite_ErpConnector/form/element/check</elementTmpl>
+                        <label>Check connection</label>
+                    </settings>
+                </field>
+                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Actions</label>
+                        <componentType>actionDelete</componentType>
+                    </settings>
+                </actionDelete>
+            </container>
+        </dynamicRows>
+        <dynamicRows name="http">
+            <settings>
+                <addButtonLabel translate="true">Add Http Connector</addButtonLabel>
+                <componentType>dynamicRows</componentType>
+                <deleteValue>true</deleteValue>
+                <deleteProperty>deleted</deleteProperty>
+                <identificationProperty>id</identificationProperty>
+                <dndConfig>
+                    <param name="enabled" xsi:type="boolean">false</param>
+                </dndConfig>
+                <label>HTTP Connectors</label>
+                <dataScope>http</dataScope>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                </additionalClasses>
+            </settings>
+            <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                    </item>
+                </argument>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="name" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Name</label>
+                    </settings>
+                </field>
+                <field name="url" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>URL</label>
+                    </settings>
+                </field>
+                <field name="login" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Login</label>
+                    </settings>
+                </field>
+                <field name="password" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <elementTmpl>MageSuite_ErpConnector/form/element/password</elementTmpl>
+                        <label>Password</label>
+                    </settings>
+                </field>
+                <field name="authorization_bearer" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <elementTmpl>MageSuite_ErpConnector/form/element/password</elementTmpl>
+                        <label>Authorization Bearer</label>
+                    </settings>
+                </field>
+                <field name="content_type" formElement="select">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="string">2</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Content Type</label>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="MageSuite\ErpConnector\Model\Source\ContentType"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="timeout" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Timeout</label>
+                    </settings>
+                </field>
+                <dynamicRows name="custom_headers" component="Magento_Ui/js/dynamic-rows/dynamic-rows" template="MageSuite_ErpConnector/dynamic-rows/custom_headers">
+                    <settings>
+                        <addButtonLabel translate="true">Add custom header</addButtonLabel>
+                        <componentType>dynamicRows</componentType>
+                        <deleteValue>true</deleteValue>
+                        <deleteProperty>deleted</deleteProperty>
+                        <identificationProperty>custom_headers</identificationProperty>
+                        <dndConfig>
+                            <param name="enabled" xsi:type="boolean">false</param>
+                        </dndConfig>
+                        <headerLabel>Customer</headerLabel>
+                        <label>Custom Headers</label>
+                        <columnsHeader>false</columnsHeader>
+                    </settings>
+                    <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="isTemplate" xsi:type="boolean">true</item>
+                                <item name="is_collection" xsi:type="boolean">true</item>
+                                <item name="componentType" xsi:type="string">container</item>
+                            </item>
+                        </argument>
+                        <field name="key" formElement="input">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="fit" xsi:type="boolean">false</item>
+                                </item>
+                            </argument>
+                            <settings>
+                                <validation>
+                                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                                </validation>
+                                <dataType>text</dataType>
+                                <label>Key</label>
+                            </settings>
+                        </field>
+                        <field name="value" formElement="input">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="fit" xsi:type="boolean">false</item>
+                                </item>
+                            </argument>
+                            <settings>
+                                <validation>
+                                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                                </validation>
+                                <dataType>text</dataType>
+                                <label>Value</label>
+                            </settings>
+                        </field>
+                        <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="fit" xsi:type="boolean">false</item>
+                                </item>
+                            </argument>
+                            <settings>
+                                <dataType>text</dataType>
+                                <label>Actions</label>
+                                <componentType>actionDelete</componentType>
+                            </settings>
+                        </actionDelete>
+                    </container>
+                </dynamicRows>
+                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Actions</label>
+                        <componentType>actionDelete</componentType>
+                    </settings>
+                </actionDelete>
+            </container>
+        </dynamicRows>
+        <dynamicRows name="email">
+            <settings>
+                <addButtonLabel translate="true">Add Email Connector</addButtonLabel>
+                <componentType>dynamicRows</componentType>
+                <deleteValue>true</deleteValue>
+                <deleteProperty>deleted</deleteProperty>
+                <identificationProperty>id</identificationProperty>
+                <dndConfig>
+                    <param name="enabled" xsi:type="boolean">false</param>
+                </dndConfig>
+                <label>Email Connectors</label>
+                <dataScope>email</dataScope>
+                <additionalClasses>
+                    <class name="admin__field-wide">true</class>
+                </additionalClasses>
+            </settings>
+            <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                    </item>
+                </argument>
+                <hidden name="type">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="value" xsi:type="string">email</item>
+                        </item>
+                    </argument>
+                </hidden>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="name" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Name</label>
+                    </settings>
+                </field>
+                <!--suppress XmlDefaultAttributeValue -->
+                <field name="email" formElement="input">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Email</label>
+                    </settings>
+                </field>
+                <field name="template" formElement="select">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Template</label>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="Magento\Email\Model\ResourceModel\Template\Collection"/>
+                                <!--<options class="Magento\Config\Model\Config\Source\Email\Template"/>-->
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
+                <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <dataType>text</dataType>
+                        <label>Actions</label>
+                        <componentType>actionDelete</componentType>
+                    </settings>
+                </actionDelete>
+            </container>
+        </dynamicRows>
+    </fieldset>
+</form>
