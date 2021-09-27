@@ -109,8 +109,7 @@ class Email extends \Magento\Framework\DataObject implements ClientInterface
                 $transport->addAttachmentFromContent($content, $fileName, \Zend_Mime::TYPE_OCTETSTREAM);
             }
 
-            $transport->getTransport();
-            $transport->sendMessage();
+            $transport->getTransport()->sendMessage();
         } catch (\Exception $e) {
             $this->logErrorMessage->execute(
                 sprintf('Can\'t send %s item to recipient email %s', $provider->getName(), $recipient),
