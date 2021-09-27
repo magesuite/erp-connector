@@ -47,4 +47,18 @@ class ConnectorResolver
 
         return null;
     }
+
+    public function getClient($type)
+    {
+        foreach ($this->connectorsConfiguration as $connectorType => $connectorConfiguration) {
+
+            if ($connectorType != $type) {
+                continue;
+            }
+
+            return $connectorConfiguration['client'];
+        }
+
+        return null;
+    }
 }

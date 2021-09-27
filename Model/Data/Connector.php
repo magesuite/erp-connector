@@ -14,6 +14,31 @@ class Connector extends \Magento\Framework\Model\AbstractModel
     protected $_cacheTag = self::CACHE_TAG; //phpcs:ignore
     protected $_eventPrefix = self::EVENT_PREFIX; //phpcs:ignore
 
+    /**
+     * @var \MageSuite\ErpConnector\Model\ConnectorResolver
+     */
+    protected $connectorResolver;
+
+    /**
+     * @var \MageSuite\ErpConnector\Api\ConnectorConfigurationRepositoryInterface
+     */
+    protected $connectorConfigurationRepository;
+
+    public function __construct(
+        \Magento\Framework\Model\Context $context,
+        \Magento\Framework\Registry $registry,
+        \MageSuite\ErpConnector\Model\ConnectorResolver $connectorResolver,
+        \MageSuite\ErpConnector\Api\ConnectorConfigurationRepositoryInterface $connectorConfigurationRepository,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $data = []
+    ) {
+        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+
+        $this->connectorResolver = $connectorResolver;
+        $this->connectorConfigurationRepository = $connectorConfigurationRepository;
+    }
+
     protected function _construct()
     {
         $this->_init(\MageSuite\ErpConnector\Model\ResourceModel\Connector::class);
@@ -61,5 +86,18 @@ class Connector extends \Magento\Framework\Model\AbstractModel
     {
         $this->setData(self::TYPE, $type);
         return $this;
+    }
+
+    public function getClient()
+    {
+        $client = $this->connectorResolver->getClient($this->getType());
+
+        $connectorConfiguration = $this->connectorConfigurationRepository->getByConnectorId($this->getId());
+
+        foreach ($connectorConfiguration as $item) {
+            $client->setData($item->getKey(), $item->getValue());
+        }
+
+        return $client;
     }
 }

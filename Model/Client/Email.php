@@ -55,10 +55,12 @@ class Email extends \Magento\Framework\DataObject implements ClientInterface
 
     protected function sendItem($provider, $item)
     {
-        if (!isset($item['files']) || empty($item['files'])) {
+        $files = $item['files'] ?? null;
+
+        if (empty($files)) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                'Missing files',
+                'Missing files data',
                 $item
             );
             return false;
@@ -88,7 +90,7 @@ class Email extends \Magento\Framework\DataObject implements ClientInterface
         return true;
     }
 
-    protected function sendItemToRecipient($provider, $item, $recipient) //phpcs:ignore
+    protected function sendItemToRecipient($provider, $item, $recipient)
     {
         $emailTemplateVariables = $this->getEmailTemplateVariables($provider, $item);
 

@@ -49,12 +49,12 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
 
     protected function sendItem($provider, $item)
     {
-        $content = $item['content'] ?? null;
+        $files = $item['files'] ?? null;
 
-        if (!$content) {
+        if (empty($files)) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                'Missing content',
+                'Missing files data',
                 $item
             );
             return false;
@@ -63,8 +63,11 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
         try {
             $soapClient = $this->getSoapClient();
 
-            $response = $soapClient->__doRequest($content, $this->getData('location'), $this->getData('action'), $this->getData('version'));
-            $this->processSoapApiResponse($response);
+            foreach ($files as $fileName => $content) {
+                $response = $soapClient->__doRequest($content, $this->getData('location'), $this->getData('action'), $this->getData('version'));
+                $this->processSoapApiResponse($response);
+            }
+
         } catch (\Exception $e) {
             $messages = [
                 __('%1 provider ERROR.', $provider->getName()),
