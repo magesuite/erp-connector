@@ -95,7 +95,7 @@ class Connector extends \Magento\Framework\Model\AbstractModel
         $connectorConfiguration = $this->connectorConfigurationRepository->getByConnectorId($this->getId());
 
         foreach ($connectorConfiguration as $item) {
-            $client->setData($item->getKey(), $item->getValue());
+            $client->setData($item->getName(), $item->getValue());
         }
 
         return $client;
