@@ -71,6 +71,6 @@ class ProviderProcessor extends \Magento\Framework\DataObject
         $messages = implode(' ', $messages);
         $this->logErrorMessage->execute($this, $messages, null, \Magento\Framework\Notification\MessageInterface::SEVERITY_MINOR);
 
-        throw new \Creativestyle\CustomizationIpetOrder\Exception\OrderExport($messages, 0, $e);
+        throw new \Exception($messages, 0, $e); //phpcs:ignore
     }
 }
