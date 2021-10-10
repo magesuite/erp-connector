@@ -28,6 +28,14 @@ interface SchedulerRepositoryInterface
     public function getByProviderId($providerId);
 
     /**
+     * @param $providerId
+     * @param $type
+     * @return \MageSuite\ErpConnector\Model\Data\Scheduler
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getByProviderIdAndType($providerId, $type);
+
+    /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
      * @return \Magento\Framework\Api\SearchResultsInterface
      */

@@ -129,4 +129,9 @@ class Email extends \Magento\Framework\DataObject implements ClientInterface
             'order' => $item['order']
         ];
     }
+
+    public function validateProcessedFile($fileName)
+    {
+        throw new \Exception('Not possibile to verify if file exist for Email client.'); //phpcs:ignore
+    }
 }

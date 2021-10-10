@@ -138,4 +138,9 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
         $this->client = $client;
         return $this->client;
     }
+
+    public function validateProcessedFile($fileName)
+    {
+        throw new \Exception('Not possibile to verify if file exist for Http client.'); //phpcs:ignore
+    }
 }

@@ -170,4 +170,22 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
 
         return $this->connection;
     }
+
+    public function validateProcessedFile($fileName)
+    {
+        try {
+            $connection = $this->getConnection();
+            $connection->ls($this->getData('destination_dir'));
+
+            $destinationFileContent = $connection->read($fileName);
+
+            if (!empty($destinationFileContent)) {
+                return true;
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return false;
+    }
 }

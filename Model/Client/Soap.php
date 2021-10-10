@@ -163,4 +163,9 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
         $this->soapClient = $soapClient;
         return $this->soapClient;
     }
+
+    public function validateProcessedFile($fileName)
+    {
+        throw new \Exception('Not possibile to verify if file exist for Soap client.'); //phpcs:ignore
+    }
 }
