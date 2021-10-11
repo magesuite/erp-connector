@@ -29,11 +29,6 @@ class ProviderProcessor extends \Magento\Framework\DataObject
         $this->logErrorMessage = $logErrorMessage;
     }
 
-    public function execute()
-    {
-        return true;
-    }
-
     public function setScheduler($scheduler)
     {
         $this->scheduler = $scheduler;
