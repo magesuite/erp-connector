@@ -37,31 +37,23 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
 
     protected function sendItem($provider, $item)
     {
-        $content = $item['content'] ?? null;
+        $files = $item['files'] ?? null;
 
-        if (!$content) {
+        if (empty($files)) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                'Missing content',
-                $item
-            );
-            return false;
-        }
-
-        $fileName = $item['file_name'] ?? null;
-
-        if (!$fileName) {
-            $this->logErrorMessage->execute(
-                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                'Missing file name',
+                'Missing files data',
                 $item
             );
             return false;
         }
 
         try {
-            $response = $this->sendRequest($item);
-            $this->validateResponse($response, $item);
+            foreach ($files as $fileName => $content) {
+                $response = $this->sendRequest($fileName, $content);
+                $this->validateResponse($response, $fileName, $content);
+            }
+
         } catch (\Exception $e) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
@@ -73,15 +65,15 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
         return true;
     }
 
-    public function sendRequest($item, $requestMethod = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST)
+    public function sendRequest($fileName, $content, $requestMethod = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST)
     {
         try {
             $client = $this->getClient();
-            $params = $this->getParameters($item['content']);
+            $params = $this->getParameters($content);
 
             return $client->request($requestMethod, '', $params);
         } catch (\Exception $e) {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to send a content %1 file to %2 http location. Error: %3', $item['file_name'], $this->getData('url'), $e->getMessage()));
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to send a content %1 file to %2 http location. Error: %3', $fileName, $this->getData('url'), $e->getMessage()));
         }
     }
 
@@ -115,14 +107,14 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
         return $parameters;
     }
 
-    protected function validateResponse($response, $item)
+    protected function validateResponse($response, $fileName, $content)
     {
         if (empty($response)) {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Empty response for a send request of content %1 file to %2 http location.', $item['file_name'], $this->getData('url')));
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Empty response for a send request of content %1 file to %2 http location.', $fileName, $this->getData('url')));
         }
 
         if ($response->getStatusCode() != \Symfony\Component\HttpFoundation\Response::HTTP_OK) {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Wrong response status code for a send request of content %1 file to %2 http location.', $item['file_name'], $this->getData('url')));
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Wrong response status code for a send request of content %1 file to %2 http location.', $fileName, $this->getData('url')));
         }
 
         return true;
@@ -145,5 +137,10 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
 
         $this->client = $client;
         return $this->client;
+    }
+
+    public function validateProcessedFile($fileName)
+    {
+        throw new \Exception('Not possibile to verify if file exist for Http client.'); //phpcs:ignore
     }
 }

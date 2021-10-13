@@ -55,10 +55,12 @@ class Email extends \Magento\Framework\DataObject implements ClientInterface
 
     protected function sendItem($provider, $item)
     {
-        if (!isset($item['files']) || empty($item['files'])) {
+        $files = $item['files'] ?? null;
+
+        if (empty($files)) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                'Missing files',
+                'Missing files data',
                 $item
             );
             return false;
@@ -88,7 +90,7 @@ class Email extends \Magento\Framework\DataObject implements ClientInterface
         return true;
     }
 
-    protected function sendItemToRecipient($provider, $item, $recipient) //phpcs:ignore
+    protected function sendItemToRecipient($provider, $item, $recipient)
     {
         $emailTemplateVariables = $this->getEmailTemplateVariables($provider, $item);
 
@@ -107,8 +109,7 @@ class Email extends \Magento\Framework\DataObject implements ClientInterface
                 $transport->addAttachmentFromContent($content, $fileName, \Zend_Mime::TYPE_OCTETSTREAM);
             }
 
-            $transport->getTransport();
-            $transport->sendMessage();
+            $transport->getTransport()->sendMessage();
         } catch (\Exception $e) {
             $this->logErrorMessage->execute(
                 sprintf('Can\'t send %s item to recipient email %s', $provider->getName(), $recipient),
@@ -127,5 +128,10 @@ class Email extends \Magento\Framework\DataObject implements ClientInterface
             'provider' => $provider,
             'order' => $item['order']
         ];
+    }
+
+    public function validateProcessedFile($fileName)
+    {
+        throw new \Exception('Not possibile to verify if file exist for Email client.'); //phpcs:ignore
     }
 }

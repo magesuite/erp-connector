@@ -67,7 +67,7 @@
                     <rule name="max_text_length" xsi:type="number">50</rule>
                 </validation>
                 <dataType>text</dataType>
-                <label translate="true">Provider Name</label>
+                <label translate="true">Name</label>
             </settings>
         </field>
         <field name="email" sortOrder="20" formElement="input">
@@ -83,7 +83,7 @@
                     <rule name="max_text_length" xsi:type="number">255</rule>
                 </validation>
                 <dataType>text</dataType>
-                <label translate="true">Provider Email</label>
+                <label translate="true">Email</label>
             </settings>
         </field>
         <!--suppress XmlDefaultAttributeValue -->
@@ -99,7 +99,7 @@
                     <rule name="max_text_length" xsi:type="number">255</rule>
                 </validation>
                 <dataType>text</dataType>
-                <label translate="true">Provider Code</label>
+                <label translate="true">Code</label>
                 <notice>Value used for found class for process providers data in export etc. Used default class if not exist or not found</notice>
             </settings>
         </field>

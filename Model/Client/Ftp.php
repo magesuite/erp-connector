@@ -53,23 +53,12 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
 
     protected function sendItem($provider, $item)
     {
-        $content = $item['content'] ?? null;
+        $files = $item['files'] ?? null;
 
-        if (!$content) {
+        if (empty($files)) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                'Missing content',
-                $item
-            );
-            return false;
-        }
-
-        $fileName = $item['file_name'] ?? null;
-
-        if (!$fileName) {
-            $this->logErrorMessage->execute(
-                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                'Missing file name',
+                'Missing files data',
                 $item
             );
             return false;
@@ -81,27 +70,29 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
         try {
             $connection = $this->getConnection();
 
-            $this->validateFileOnExternalServerDirectory($sourceDir, $fileName, $content, $provider->getName());
-            $this->validateFileOnExternalServerDirectory($this->getData('destination_dir'), $fileName, $content, $provider->getName());
+            foreach ($files as $fileName => $content) {
+                $this->validateFileOnExternalServerDirectory($sourceDir, $fileName, $content, $provider->getName());
+                $this->validateFileOnExternalServerDirectory($this->getData('destination_dir'), $fileName, $content, $provider->getName());
 
-            $connection->cd($sourceDir);
-            $result = $connection->write($fileName, $content);
+                $connection->cd($sourceDir);
+                $result = $connection->write($fileName, $content);
 
-            if (!$result) {
-                throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to upload a file "%1" to "%2" at a "%3" remote FTP location %4.', $sourceDir, $provider->getName(), $location));
-            }
+                if (!$result) {
+                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to upload a file "%1" to "%2" at a "%3" remote FTP location %4.', $sourceDir, $provider->getName(), $location));
+                }
 
-            if ($this->getData('skip_validation')) {
-                return $result;
-            }
+                if ($this->getData('skip_validation')) {
+                    return $result;
+                }
 
-            $exportedFileContent = $connection->read($fileName);
+                $exportedFileContent = $connection->read($fileName);
 
-            if (!$exportedFileContent || $exportedFileContent !== $content) {
-                $connection->rm($fileName);
-                $connection->close();
+                if (!$exportedFileContent || $exportedFileContent !== $content) {
+                    $connection->rm($fileName);
+                    $connection->close();
 
-                throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to write a content to a file "%1" at a "%2" remote FTP location %3.', $sourceDir, $provider->getName(), $location));
+                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to write a content to a file "%1" at a "%2" remote FTP location %3.', $sourceDir, $provider->getName(), $location));
+                }
             }
 
             $connection->close();
@@ -178,5 +169,23 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
         $this->connection = $connection;
 
         return $this->connection;
+    }
+
+    public function validateProcessedFile($fileName)
+    {
+        try {
+            $connection = $this->getConnection();
+            $connection->ls($this->getData('destination_dir'));
+
+            $destinationFileContent = $connection->read($fileName);
+
+            if (!empty($destinationFileContent)) {
+                return true;
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+
+        return false;
     }
 }

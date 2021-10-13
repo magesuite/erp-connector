@@ -89,13 +89,15 @@ class SaveConnectors
             foreach ($connectorConfigurationFields as $configurationField => $fieldConfig) {
                 $modifierClass = $fieldConfig['modifier_class'] ?? null;
 
+                $configurationItemValue = $connectorData[$configurationField] ?? null;
+
                 $configurationItem = $this->connectorConfigurationFactory->create();
                 $configurationItem
                     ->setProviderId($providerId)
                     ->setConnectorId($connector->getId())
                     ->setModifierClass($modifierClass)
                     ->setName($configurationField)
-                    ->setValue($connectorData[$configurationField]);
+                    ->setValue($configurationItemValue);
 
                 $this->connectorConfigurationRepository->save($configurationItem);
             }
@@ -125,10 +127,12 @@ class SaveConnectors
                         ->setConnectorId($connector->getId());
                 }
 
+                $configurationItemValue = $connectorData[$configurationField] ?? null;
+
                 $configurationItem
                     ->setModifierClass($modifierClass)
                     ->setName($configurationField)
-                    ->setValue($connectorData[$configurationField]);
+                    ->setValue($configurationItemValue);
 
                 $this->connectorConfigurationRepository->save($configurationItem);
             }

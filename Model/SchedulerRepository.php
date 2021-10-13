@@ -95,6 +95,22 @@ class SchedulerRepository implements \MageSuite\ErpConnector\Api\SchedulerReposi
         return $list->getItems();
     }
 
+    public function getByProviderIdAndType($providerId, $type)
+    {
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter(\MageSuite\ErpConnector\Model\Data\Scheduler::PROVIDER_ID, $providerId)
+            ->addFilter(\MageSuite\ErpConnector\Model\Data\Scheduler::TYPE, $type)
+            ->create();
+
+        $list = $this->getList($searchCriteria);
+
+        if (!$list->getTotalCount()) {
+            return [];
+        }
+
+        return $list->getItems();
+    }
+
     public function getList($criteria = null)
     {
         $collection = $this->collectionFactory->create();

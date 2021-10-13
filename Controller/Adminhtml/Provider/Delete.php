@@ -1,7 +1,7 @@
 <?php
 namespace MageSuite\ErpConnector\Controller\Adminhtml\Provider;
 
-class Delete extends \Magento\Backend\App\Action implements \Magento\Framework\App\Action\HttpPostActionInterface
+class Delete extends \Magento\Backend\App\Action implements \Magento\Framework\App\Action\HttpPostActionInterface, \Magento\Framework\App\Action\HttpGetActionInterface
 {
     const ADMIN_RESOURCE = 'MageSuite_ErpConnector::erp_connector';
 
