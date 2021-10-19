@@ -152,7 +152,7 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
 
         $sftpConfig = [
             'host' => $this->getData('host'),
-            'user' => $this->getData('username'),
+            'username' => $this->getData('username'),
             'password' => $this->getData('password'),
             'timeout' => $this->getData('timeout') ?? 15,
         ];
