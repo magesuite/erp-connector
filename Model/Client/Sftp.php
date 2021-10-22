@@ -29,7 +29,7 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
     public function checkConnection()
     {
         $connection = $this->getConnection();
-        $location = sprintf(self::LOCATION_FORMAT, $this->getData('user'), $this->getData('host'));
+        $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
 
         if (!$connection->cd($this->getData('destination_dir'))) {
             throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to detect a directory "%1" at a remote SFTP location %2.', $this->getData('destination_dir'), $location));
@@ -64,7 +64,7 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
             return false;
         }
 
-        $location = sprintf(self::LOCATION_FORMAT, $this->getData('user'), $this->getData('host'));
+        $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
         $sourceDir = $this->getData('source_dir');
 
         try {
@@ -111,7 +111,7 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
     {
         $connection = $this->getConnection();
 
-        $location = sprintf(self::LOCATION_FORMAT, $this->getData('user'), $this->getData('host'));
+        $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
 
         if ($connection->cd($directory)) {
             $files = $connection->ls();
