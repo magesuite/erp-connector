@@ -39,7 +39,7 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
             throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to detect a directory "%1" at a remote FTP location %2.', $this->getData('source_dir'), $location));
         }
 
-        $connection->close();
+        $this->closeConnection($connection);
     }
 
     public function sendItems($provider, $items)
@@ -89,13 +89,13 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
 
                 if (!$exportedFileContent || $exportedFileContent !== $content) {
                     $connection->rm($fileName);
-                    $connection->close();
+                    $this->closeConnection($connection);
 
                     throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to write a content to a file "%1" at a "%2" remote FTP location %3.', $sourceDir, $provider->getName(), $location));
                 }
             }
 
-            $connection->close();
+            $this->closeConnection($connection);
         } catch (\Exception $e) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
@@ -169,6 +169,12 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
         $this->connection = $connection;
 
         return $this->connection;
+    }
+
+    private function closeConnection($connection)
+    {
+        $connection->close();
+        $this->connection = null;
     }
 
     public function validateProcessedFile($fileName)
