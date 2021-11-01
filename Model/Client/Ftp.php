@@ -131,23 +131,24 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
                 if (!$this->validateFileName($fileName)) {
                     continue;
                 }
+
                 $downloaded[$fileName] = $connection->read($fileName);
 
-                $fileMoved = $connection->mv(
-                    sprintf(self::FILE_PATH_FORMAT, $sourceDir, $fileName),
-                    sprintf(self::MOVED_FILE_NAME_FORMAT, $destinationDir, date(self::FILE_PREFIX_DATETIME_FORMAT), $fileName)
-                );
-
-                if (!$fileMoved) {
-                    throw new \MageSuite\ErpConnector\Exception\RemoteImportFailed(__(
-                        'Can\'t move a file "%1" from a source directory "%2" to a destination directory "%3" at a "%4" remote FTP location %5.',
-                        $fileName,
-                        $sourceDir,
-                        $destinationDir,
-                        $provider->getName(),
-                        $location
-                    ));
-                }
+//                $fileMoved = $connection->mv(
+//                    sprintf(self::FILE_PATH_FORMAT, $sourceDir, $fileName),
+//                    sprintf(self::MOVED_FILE_NAME_FORMAT, $destinationDir, date(self::FILE_PREFIX_DATETIME_FORMAT), $fileName)
+//                );
+//
+//                if (!$fileMoved) {
+//                    throw new \MageSuite\ErpConnector\Exception\RemoteImportFailed(__(
+//                        'Can\'t move a file "%1" from a source directory "%2" to a destination directory "%3" at a "%4" remote FTP location %5.',
+//                        $fileName,
+//                        $sourceDir,
+//                        $destinationDir,
+//                        $provider->getName(),
+//                        $location
+//                    ));
+//                }
             }
 
             $connection->close();
@@ -175,7 +176,7 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
             return false;
         }
 
-        $pattern = $this->getData('file_name_pattern');
+        $pattern = $this->getData('file_name_pattern'); //TODO: to sie chyba nie przekazuje?
 
         if (empty($pattern) || preg_match($pattern, $fileName)) {
             return true;

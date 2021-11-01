@@ -24,7 +24,7 @@ class SchedulersPool
     public function getSchedulersByType($type)
     {
         if (!isset($this->schedulerGroups[$type])) {
-            throw new \Exception('Scheduler group for type %1 doesn\'t exist', $type); //phpcs:ignore
+            throw new \Exception(__('Scheduler group for type %1 doesn\'t exist', $type)); //phpcs:ignore
         }
 
         $result = [];
