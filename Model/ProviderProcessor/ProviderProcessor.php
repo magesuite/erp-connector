@@ -16,7 +16,11 @@ class ProviderProcessor extends \Magento\Framework\DataObject
 
     protected $scheduler = null;
 
-    protected $provider = null;
+    /**
+     * Scheduler ID => Provider
+     * @var array
+     */
+    protected $schedulerIdToProviderMap = [];
 
     public function __construct(
         \MageSuite\ErpConnector\Api\ProviderRepositoryInterface $providerRepository,
@@ -40,12 +44,14 @@ class ProviderProcessor extends \Magento\Framework\DataObject
             throw new \Exception('Scheduler isn\'t set.'); //phpcs:ignore
         }
 
-        if ($this->provider !== null) {
-            return $this->provider;
+        $schedulerId = $this->scheduler->getId();
+
+        if (isset($this->schedulerIdToProviderMap[$schedulerId])) {
+            return $this->schedulerIdToProviderMap[$schedulerId];
         }
 
-        $this->provider = $this->providerRepository->getById($this->scheduler->getProviderId());
-        return $this->provider;
+        $this->schedulerIdToProviderMap[$schedulerId] = $this->providerRepository->getById($this->scheduler->getProviderId());
+        return $this->schedulerIdToProviderMap[$schedulerId];
     }
 
     protected function processErrorMessage($e)
