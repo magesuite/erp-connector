@@ -29,7 +29,7 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
     public function checkConnection()
     {
         $connection = $this->getConnection();
-        $location = sprintf(self::LOCATION_FORMAT, $this->getData('user'), $this->getData('host'));
+        $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
 
         if (!$connection->cd($this->getData('destination_dir'))) {
             throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to detect a directory "%1" at a remote SFTP location %2.', $this->getData('destination_dir'), $location));
@@ -39,7 +39,7 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
             throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to detect a directory "%1" at a remote SFTP location %2.', $this->getData('source_dir'), $location));
         }
 
-        $connection->close();
+        $this->closeConnection($connection);
     }
 
     public function sendItems($provider, $items)
@@ -64,7 +64,7 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
             return false;
         }
 
-        $location = sprintf(self::LOCATION_FORMAT, $this->getData('user'), $this->getData('host'));
+        $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
         $sourceDir = $this->getData('source_dir');
 
         try {
@@ -89,13 +89,13 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
 
                 if (!$exportedFileContent || $exportedFileContent !== $content) {
                     $connection->rm($fileName);
-                    $connection->close();
+                    $this->closeConnection($connection);
 
                     throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to write a content to a file "%1" at a "%2" remote SFTP location %3.', $sourceDir, $provider->getName(), $location));
                 }
             }
 
-            $connection->close();
+            $this->closeConnection($connection);
         } catch (\Exception $e) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
@@ -111,7 +111,7 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
     {
         $downloaded = [];
 
-        $location = sprintf(self::LOCATION_FORMAT, $this->getData('user'), $this->getData('host'));
+        $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
 
         try {
             $connection = $this->getConnection();
@@ -150,7 +150,7 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
                 }
             }
 
-            $connection->close();
+            $this->closeConnection($connection);
         } catch (\Exception $e) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
@@ -187,7 +187,7 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
     protected function validateDirectoryOnExternalServer($directory, $providerName)
     {
         $connection = $this->getConnection();
-        $location = sprintf(self::LOCATION_FORMAT, $this->getData('user'), $this->getData('host'));
+        $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
 
         if ($connection->cd($directory)) {
             return true;
@@ -200,7 +200,7 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
     {
         $connection = $this->getConnection();
 
-        $location = sprintf(self::LOCATION_FORMAT, $this->getData('user'), $this->getData('host'));
+        $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
 
         if ($connection->cd($directory)) {
             $files = $connection->ls();
@@ -252,6 +252,12 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
         $this->connection = $connection;
 
         return $this->connection;
+    }
+
+    private function closeConnection($connection)
+    {
+        $connection->close();
+        $this->connection = null;
     }
 
     public function validateProcessedFile($fileName)
