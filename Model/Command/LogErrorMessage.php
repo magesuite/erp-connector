@@ -49,5 +49,4 @@ class LogErrorMessage
 
         return $result;
     }
-
 }
