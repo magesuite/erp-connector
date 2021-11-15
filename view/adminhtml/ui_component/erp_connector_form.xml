@@ -713,6 +713,70 @@
                         <label>Soap Action</label>
                     </settings>
                 </field>
+                <dynamicRows name="parameters" component="Magento_Ui/js/dynamic-rows/dynamic-rows" template="MageSuite_ErpConnector/dynamic-rows/custom_array_fields">
+                    <settings>
+                        <addButtonLabel translate="true">Add custom header</addButtonLabel>
+                        <componentType>dynamicRows</componentType>
+                        <deleteValue>true</deleteValue>
+                        <deleteProperty>deleted</deleteProperty>
+                        <identificationProperty>parameters</identificationProperty>
+                        <dndConfig>
+                            <param name="enabled" xsi:type="boolean">false</param>
+                        </dndConfig>
+                        <headerLabel>Customer</headerLabel>
+                        <label>Parameters</label>
+                        <columnsHeader>false</columnsHeader>
+                    </settings>
+                    <container name="record" component="Magento_Ui/js/dynamic-rows/record">
+                        <argument name="data" xsi:type="array">
+                            <item name="config" xsi:type="array">
+                                <item name="isTemplate" xsi:type="boolean">true</item>
+                                <item name="is_collection" xsi:type="boolean">true</item>
+                                <item name="componentType" xsi:type="string">container</item>
+                            </item>
+                        </argument>
+                        <field name="key" formElement="input">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="fit" xsi:type="boolean">false</item>
+                                </item>
+                            </argument>
+                            <settings>
+                                <validation>
+                                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                                </validation>
+                                <dataType>text</dataType>
+                                <label>Key</label>
+                            </settings>
+                        </field>
+                        <field name="value" formElement="input">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="fit" xsi:type="boolean">false</item>
+                                </item>
+                            </argument>
+                            <settings>
+                                <validation>
+                                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                                </validation>
+                                <dataType>text</dataType>
+                                <label>Value</label>
+                            </settings>
+                        </field>
+                        <actionDelete template="Magento_Backend/dynamic-rows/cells/action-delete">
+                            <argument name="data" xsi:type="array">
+                                <item name="config" xsi:type="array">
+                                    <item name="fit" xsi:type="boolean">false</item>
+                                </item>
+                            </argument>
+                            <settings>
+                                <dataType>text</dataType>
+                                <label>Actions</label>
+                                <componentType>actionDelete</componentType>
+                            </settings>
+                        </actionDelete>
+                    </container>
+                </dynamicRows>
                 <!--suppress XmlDefaultAttributeValue -->
                 <field name="check" formElement="input" component="MageSuite_ErpConnector/js/form/element/check">
                     <argument name="data" xsi:type="array">
@@ -861,7 +925,7 @@
                         <label>Timeout</label>
                     </settings>
                 </field>
-                <dynamicRows name="custom_headers" component="Magento_Ui/js/dynamic-rows/dynamic-rows" template="MageSuite_ErpConnector/dynamic-rows/custom_headers">
+                <dynamicRows name="custom_headers" component="Magento_Ui/js/dynamic-rows/dynamic-rows" template="MageSuite_ErpConnector/dynamic-rows/custom_array_fields">
                     <settings>
                         <addButtonLabel translate="true">Add custom header</addButtonLabel>
                         <componentType>dynamicRows</componentType>
