@@ -176,7 +176,7 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
             return false;
         }
 
-        $pattern = $this->getData('file_name_pattern'); //TODO: to sie chyba nie przekazuje?
+        $pattern = $this->getData('file_name_pattern');
 
         if (empty($pattern) || preg_match($pattern, $fileName)) {
             return true;
