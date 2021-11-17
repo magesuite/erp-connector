@@ -3,6 +3,7 @@ namespace MageSuite\ErpConnector\Model\Client;
 
 class Soap extends \Magento\Framework\DataObject implements ClientInterface
 {
+    const RESPONSE_METHOD_FORMAT = '%sResult';
     /**
      * @var \Magento\Framework\DomDocument\DomDocumentFactory
      */
@@ -69,28 +70,38 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
             }
 
         } catch (\Exception $e) {
-            $messages = [
-                __('%1 provider ERROR.', $provider->getName()),
-                __($e->getMessage())
-            ];
-
-            $previous = $e->getPrevious();
-
-            while ($previous) {
-                $messages[] = __($previous->getMessage());
-                $previous = $previous->getPrevious();
-            }
-
-            $mergedMessages = implode(' ', $messages);
-
-            $this->logErrorMessage->execute(
-                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                $mergedMessages,
-                $item
-            );
+            $this->processErrorMessage($provider, $e);
         }
 
         return true;
+    }
+
+    public function downloadItems($provider)
+    {
+        $downloaded = [];
+
+        try {
+            $soapClient = $this->getSoapClient();
+            $action = $this->getData('action');
+
+            $preparedParameters = [];
+            $parameters = $this->getData('parameters');
+
+            if (!empty($parameters)) {
+                foreach ($parameters['parameters'] as $parameter) {
+                    $preparedParameters[$parameter['key']] = $parameter['value'];
+                }
+            }
+
+            $response = $soapClient->__soapCall($action, [$preparedParameters]);
+
+            $responseMethod = sprintf(self::RESPONSE_METHOD_FORMAT, $action);
+            $downloaded[$action] = $response->$responseMethod;
+        } catch (\Exception $e) {
+            $this->processErrorMessage($provider, $e);
+        }
+
+        return $downloaded;
     }
 
     public function processSoapApiResponse($response)
@@ -129,6 +140,28 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
 
             throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed($errorMessage);
         }
+    }
+
+    public function processErrorMessage($provider, $e)
+    {
+        $messages = [
+            __('%1 provider ERROR.', $provider->getName()),
+            __($e->getMessage())
+        ];
+
+        $previous = $e->getPrevious();
+
+        while ($previous) {
+            $messages[] = __($previous->getMessage());
+            $previous = $previous->getPrevious();
+        }
+
+        $mergedMessages = implode(' ', $messages);
+
+        $this->logErrorMessage->execute(
+            sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+            $mergedMessages
+        );
     }
 
     protected function getSoapClient()

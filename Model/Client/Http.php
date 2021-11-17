@@ -51,7 +51,7 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
         try {
             foreach ($files as $fileName => $content) {
                 $response = $this->sendRequest($fileName, $content);
-                $this->validateResponse($response, $fileName, $content);
+                $this->validateResponse($response, $fileName);
             }
 
         } catch (\Exception $e) {
@@ -65,15 +65,40 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
         return true;
     }
 
-    public function sendRequest($fileName, $content, $requestMethod = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST)
+    public function downloadItems($provider)
+    {
+        $downloaded = [];
+
+        try {
+            $response = $this->sendRequest();
+            $this->validateResponse($response);
+
+            $downloaded[$this->getData('url')] = $response->getBody()->getContents();
+        } catch (\Exception $e) {
+            $this->logErrorMessage->execute(
+                sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
+                $e->getMessage()
+            );
+        }
+
+        return $downloaded;
+    }
+
+    public function sendRequest($fileName = null, $content = null)
     {
         try {
             $client = $this->getClient();
             $params = $this->getParameters($content);
 
-            return $client->request($requestMethod, '', $params);
+            return $client->request($this->getData('request_method'), '', $params);
         } catch (\Exception $e) {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to send a content %1 file to %2 http location. Error: %3', $fileName, $this->getData('url'), $e->getMessage()));
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__(
+                'Unable to send a request to %1 http location. File: %2, request_method: %3, error: %4',
+                $this->getData('url'),
+                $this->getData('request_method'),
+                $fileName,
+                $e->getMessage()
+            ));
         }
     }
 
@@ -107,7 +132,7 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
         return $parameters;
     }
 
-    protected function validateResponse($response, $fileName, $content)
+    protected function validateResponse($response, $fileName = null)
     {
         if (empty($response)) {
             throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Empty response for a send request of content %1 file to %2 http location.', $fileName, $this->getData('url')));
