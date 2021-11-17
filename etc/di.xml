@@ -76,6 +76,7 @@
                     <item name="client" xsi:type="object">MageSuite\ErpConnector\Model\Client\Http</item>
                     <item name="fields" xsi:type="array">
                         <item name="url" xsi:type="null"></item>
+                        <item name="request_method" xsi:type="null"></item>
                         <item name="login" xsi:type="null"></item>
                         <item name="password" xsi:type="array">
                             <item name="modifier_class" xsi:type="object">MageSuite\ErpConnector\Model\Modifier\SensitiveModifier</item>

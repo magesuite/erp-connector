@@ -119,8 +119,8 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
             $sourceDir = $this->getData('source_dir');
             $destinationDir = $this->getData('destination_dir');
 
-            $this->validateDirectoryOnExternalServer($sourceDir, $provider);
-            $this->validateDirectoryOnExternalServer($destinationDir, $provider);
+            $this->validateDirectoryExistOnExternalServer($sourceDir, $provider);
+            $this->validateDirectoryExistOnExternalServer($destinationDir, $provider);
 
             $connection->cd($sourceDir);
             $files = $connection->ls();
@@ -128,7 +128,7 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
             foreach ($files as $file) {
                 $fileName = $connection->getCleanPath($file['text']);
 
-                if (!$this->validateFileName($fileName)) {
+                if (!$this->isValidFileName($fileName)) {
                     continue;
                 }
                 $downloaded[$fileName] = $connection->read($fileName);
@@ -169,7 +169,7 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
         return $downloaded;
     }
 
-    protected function validateFileName($fileName)
+    protected function isValidFileName($fileName)
     {
         if (empty($fileName) || $fileName == '../') {
             return false;
@@ -184,7 +184,7 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
         return false;
     }
 
-    protected function validateDirectoryOnExternalServer($directory, $providerName)
+    protected function validateDirectoryExistOnExternalServer($directory, $providerName)
     {
         $connection = $this->getConnection();
         $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
@@ -192,7 +192,12 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
         if ($connection->cd($directory)) {
             return true;
         } else {
-            throw new \MageSuite\ErpConnector\Exception\DirectoryNotFound(__('Unable to detect a directory "%1" at a "%2" remote SFTP location %3.', $directory, $providerName, $location));
+            throw new \MageSuite\ErpConnector\Exception\DirectoryNotFound(__(
+                'Unable to detect a directory "%1" at a "%2" remote SFTP location %3.',
+                $directory,
+                $providerName,
+                $location
+            ));
         }
     }
 
@@ -217,17 +222,37 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
                 $destinationFileContent = $connection->read($fileName);
 
                 if (!$destinationFileContent) {
-                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('A file "%1" with the same name and without content already exists at a "%2" remote SFTP location %3 (%4).', $directory, $providerName, $location));
+                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__(
+                        'A file "%1" with the same name and without content already exists at a "%2" remote SFTP location %3 (%4).',
+                        $directory,
+                        $providerName,
+                        $location
+                    ));
                 }
 
                 if ($destinationFileContent === $content) {
-                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('A file "%1" with the same name and same content already exists at a "%2" remote SFTP location %3 (%4).', $directory, $providerName, $location));
+                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__(
+                        'A file "%1" with the same name and same content already exists at a "%2" remote SFTP location %3 (%4).',
+                        $directory,
+                        $providerName,
+                        $location
+                    ));
                 }
 
-                throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('A file "%1" with the same name and different content already exists at a "%2" remote SFTP location %3 (%4).', $directory, $providerName, $location));
+                throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__(
+                    'A file "%1" with the same name and different content already exists at a "%2" remote SFTP location %3 (%4).',
+                    $directory,
+                    $providerName,
+                    $location
+                ));
             }
         } else {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to detect a directory "%1" at a "%2" remote SFTP location %3.', $directory, $providerName, $location));
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__(
+                'Unable to detect a directory "%1" at a "%2" remote SFTP location %3.',
+                $directory,
+                $providerName,
+                $location
+            ));
         }
 
         return true;

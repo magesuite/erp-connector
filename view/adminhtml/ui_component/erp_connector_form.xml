@@ -856,6 +856,27 @@
                         <label>URL</label>
                     </settings>
                 </field>
+                <field name="request_method" formElement="select">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="string">2</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <validation>
+                            <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+                        <dataType>text</dataType>
+                        <label>Request Method</label>
+                    </settings>
+                    <formElements>
+                        <select>
+                            <settings>
+                                <options class="MageSuite\ErpConnector\Model\Source\RequestMethod"/>
+                            </settings>
+                        </select>
+                    </formElements>
+                </field>
                 <field name="login" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">

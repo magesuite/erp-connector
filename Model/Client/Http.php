@@ -50,7 +50,7 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
 
         try {
             foreach ($files as $fileName => $content) {
-                $response = $this->sendRequest(\Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST, $fileName, $content);
+                $response = $this->sendRequest($fileName, $content);
                 $this->validateResponse($response, $fileName);
             }
 
@@ -70,7 +70,7 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
         $downloaded = [];
 
         try {
-            $response = $this->sendRequest(\Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST);
+            $response = $this->sendRequest();
             $this->validateResponse($response);
 
             $downloaded[$this->getData('url')] = $response->getBody()->getContents();
@@ -84,15 +84,21 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
         return $downloaded;
     }
 
-    public function sendRequest($requestMethod = \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST, $fileName = null, $content = null)
+    public function sendRequest($fileName = null, $content = null)
     {
         try {
             $client = $this->getClient();
             $params = $this->getParameters($content);
 
-            return $client->request($requestMethod, '', $params);
+            return $client->request($this->getData('request_method'), '', $params);
         } catch (\Exception $e) {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to send a content %1 file to %2 http location. Error: %3', $fileName, $this->getData('url'), $e->getMessage()));
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__(
+                'Unable to send a request to %1 http location. File: %2, request_method: %3, error: %4',
+                $this->getData('url'),
+                $this->getData('request_method'),
+                $fileName,
+                $e->getMessage())
+            );
         }
     }
 
