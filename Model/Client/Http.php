@@ -97,8 +97,8 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
                 $this->getData('url'),
                 $this->getData('request_method'),
                 $fileName,
-                $e->getMessage())
-            );
+                $e->getMessage()
+            ));
         }
     }
 
