@@ -208,7 +208,11 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
         $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
 
         if ($connection->cd($directory)) {
-            $files = $connection->ls();
+            try {
+                $files = $connection->ls();
+            } catch (\Exception $e) {
+                $files = [];
+            }
 
             if (!is_array($files)) {
                 return true;
