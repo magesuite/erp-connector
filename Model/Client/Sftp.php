@@ -268,19 +268,22 @@ class Sftp extends \Magento\Framework\DataObject implements ClientInterface
             return $this->connection;
         }
 
-        $sftpConfig = [
+        $connection = $this->sftpFactory->create();
+        $connection->open($this->getClientConfiguration());
+
+        $this->connection = $connection;
+
+        return $this->connection;
+    }
+
+    public function getClientConfiguration()
+    {
+        return [
             'host' => $this->getData('host'),
             'username' => $this->getData('username'),
             'password' => $this->getData('password'),
             'timeout' => $this->getData('timeout') ?? 15,
         ];
-
-        $connection = $this->sftpFactory->create();
-        $connection->open($sftpConfig);
-
-        $this->connection = $connection;
-
-        return $this->connection;
     }
 
     private function closeConnection($connection)

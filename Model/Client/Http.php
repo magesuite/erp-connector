@@ -151,17 +151,22 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
             return $this->client;
         }
 
-         $client = $this->clientFactory->create([
+         $client = $this->clientFactory->create($this->getClientConfiguration());
+
+        $this->client = $client;
+        return $this->client;
+    }
+
+    public function getClientConfiguration()
+    {
+        return [
             'config' => [
                 'base_uri' => $this->getData('url'),
                 'timeout' => $this->getData('timeout'),
                 'allow_redirects' => true,
                 'http_errors' => true,
             ]
-         ]);
-
-        $this->client = $client;
-        return $this->client;
+        ];
     }
 
     public function validateProcessedFile($fileName)

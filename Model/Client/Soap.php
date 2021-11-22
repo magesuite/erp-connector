@@ -174,13 +174,7 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
         $soapLocation = $this->getData('location');
 
         try {
-            $soapClient = new \SoapClient($this->getData('wsdl'), [
-                'soap_version' => $this->getData('version'),
-                'login' => $this->getData('login'),
-                'password' => $this->getData('password'),
-                'cache_wsdl' => WSDL_CACHE_NONE,
-                "trace" => 1
-            ]);
+            $soapClient = new \SoapClient($this->getData('wsdl'), $this->getClientConfiguration());
         } catch (\SoapFault $e) {
             $message = __('Unable to connect to a remote SOAP API "%1" as "%2"', $soapLocation, $soapLogin);
 
@@ -195,6 +189,17 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
 
         $this->soapClient = $soapClient;
         return $this->soapClient;
+    }
+
+    public function getClientConfiguration()
+    {
+        return [
+            'soap_version' => $this->getData('version'),
+            'login' => $this->getData('login'),
+            'password' => $this->getData('password'),
+            'cache_wsdl' => WSDL_CACHE_NONE,
+            'trace' => true
+        ];
     }
 
     public function validateProcessedFile($fileName)

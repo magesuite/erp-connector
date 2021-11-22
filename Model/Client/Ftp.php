@@ -265,7 +265,17 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
             return $this->connection;
         }
 
-        $ftpConfig = [
+        $connection = $this->ftpFactory->create();
+        $connection->open($this->getClientConfiguration());
+
+        $this->connection = $connection;
+
+        return $this->connection;
+    }
+
+    public function getClientConfiguration()
+    {
+        $configuration = [
             'host' => $this->getData('host'),
             'user' => $this->getData('username'),
             'password' => $this->getData('password'),
@@ -275,15 +285,10 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
         $port = $this->getData('port');
 
         if ($port) {
-            $ftpConfig['port'] = $port;
+            $configuration['port'] = $port;
         }
 
-        $connection = $this->ftpFactory->create();
-        $connection->open($ftpConfig);
-
-        $this->connection = $connection;
-
-        return $this->connection;
+        return $configuration;
     }
 
     private function closeConnection($connection)
