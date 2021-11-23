@@ -9,6 +9,11 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
     protected $clientFactory;
 
     /**
+     * @var \MageSuite\ErpConnector\Helper\Configuration
+     */
+    protected $configuration;
+
+    /**
      * @var \MageSuite\ErpConnector\Model\Command\LogErrorMessage
      */
     protected $logErrorMessage;
@@ -17,12 +22,14 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
 
     public function __construct(
         \GuzzleHttp\ClientFactory $clientFactory,
+        \MageSuite\ErpConnector\Helper\Configuration $configuration,
         \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
         array $data = []
     ) {
         parent::__construct($data);
 
         $this->clientFactory = $clientFactory;
+        $this->configuration = $configuration;
         $this->logErrorMessage = $logErrorMessage;
     }
 
@@ -159,7 +166,7 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
 
     public function getClientConfiguration()
     {
-        return [
+        $configuration = [
             'config' => [
                 'base_uri' => $this->getData('url'),
                 'timeout' => $this->getData('timeout'),
@@ -167,6 +174,15 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
                 'http_errors' => true,
             ]
         ];
+
+        $proxy = $this->configuration->getHttpConnectorProxy();
+
+        if (empty($proxy)) {
+            return $configuration;
+        }
+
+        $configuration['config']['proxy'] = $proxy;
+        return $configuration;
     }
 
     public function validateProcessedFile($fileName)

@@ -30,6 +30,12 @@
                     <source_model>MageSuite\ErpConnector\Model\Source\SchedulingMethod</source_model>
                 </field>
             </group>
+            <group id="connector" translate="label" type="hidden" sortOrder="20" showInDefault="1">
+                <field id="http_proxy" translate="label" type="hidden" sortOrder="10" showInDefault="1">
+                    <label>Proxy for Http connector</label>
+                    <comment><![CDATA[Important: napisz tylko że wymagane jest proxy obsługujące protokół socks5]]></comment>
+                </field>
+            </group>
         </section>
     </system>
 </config>
