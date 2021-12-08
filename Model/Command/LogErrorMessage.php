@@ -36,6 +36,10 @@ class LogErrorMessage
 
     protected function prepareData($data)
     {
+        if (is_string($data)) {
+            return [$data];
+        }
+
         $result = [];
 
         foreach ($data as $key => $value) {
