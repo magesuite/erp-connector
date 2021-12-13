@@ -14,17 +14,24 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
      */
     protected $logErrorMessage;
 
+    /**
+     * @var \MageSuite\ErpConnector\Logger\Logger
+     */
+    protected $logger;
+
     protected $soapClient = null;
 
     public function __construct(
         \Magento\Framework\DomDocument\DomDocumentFactory $domDocumentFactory,
         \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
+        \MageSuite\ErpConnector\Logger\Logger $logger,
         array $data = []
     ) {
         parent::__construct($data);
 
         $this->domDocumentFactory = $domDocumentFactory;
         $this->logErrorMessage = $logErrorMessage;
+        $this->logger = $logger;
     }
 
     public function checkConnection()
@@ -66,6 +73,12 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
 
             foreach ($files as $fileName => $content) {
                 $response = $soapClient->__doRequest($content, $this->getData('location'), $this->getData('action'), $this->getData('version'));
+
+                $this->logger->info($response);
+                if (empty($response)) {
+                    $this->logger->info($soapClient->__getLastResponseHeaders());
+                }
+
                 $this->processSoapApiResponse($response);
             }
 
@@ -94,6 +107,11 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
             }
 
             $response = $soapClient->__soapCall($action, [$preparedParameters]);
+
+            $this->logger->info($response);
+            if (empty($response)) {
+                $this->logger->info($soapClient->__getLastResponseHeaders());
+            }
 
             $responseMethod = sprintf(self::RESPONSE_METHOD_FORMAT, $action);
             $downloaded[$action] = $response->$responseMethod;
@@ -204,6 +222,6 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
 
     public function validateProcessedFile($fileName)
     {
-        throw new \Exception('Not possibile to verify if file exist for Soap client.'); //phpcs:ignore
+        throw new \Exception('Not possible to verify if file exist for Soap client.'); //phpcs:ignore
     }
 }
