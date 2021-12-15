@@ -108,9 +108,11 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
 
             $response = $soapClient->__soapCall($action, [$preparedParameters]);
 
-            $this->logger->info($response);
-            if (empty($response)) {
-                $this->logger->info($soapClient->__getLastResponseHeaders());
+            if (is_string($response)) {
+                $this->logger->info($response);
+                if (empty($response)) {
+                    $this->logger->info($soapClient->__getLastResponseHeaders());
+                }
             }
 
             $responseMethod = sprintf(self::RESPONSE_METHOD_FORMAT, $action);
