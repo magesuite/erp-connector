@@ -132,8 +132,8 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
             'body' => $content
         ];
 
-        if ($this->getData('username') && $this->getData('password')) {
-            $parameters['auth'] = [$this->getData('username'), $this->getData('password')];
+        if ($this->getData('login') && $this->getData('password')) {
+            $parameters['auth'] = [$this->getData('login'), $this->getData('password')];
         }
 
         return $parameters;
