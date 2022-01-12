@@ -33,7 +33,8 @@ class ArrayModifier
     public function afterLoad($value)
     {
         if (empty($value)) {
-            return $value;
+            //returning an empty string in order to render the UI form correctly
+            return '';
         }
 
         return $this->serializer->unserialize($value);
