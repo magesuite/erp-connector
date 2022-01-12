@@ -10,6 +10,11 @@ class SaveSchedulers
     protected $schedulerRepository;
 
     /**
+     * @var \MageSuite\ErpConnector\Model\Validator\CronExpression
+     */
+    protected $cronExpressionValidator;
+
+    /**
      * @var \MageSuite\ErpConnector\Model\Data\SchedulerFactory
      */
     protected $schedulerFactory;
@@ -26,11 +31,13 @@ class SaveSchedulers
 
     public function __construct(
         \MageSuite\ErpConnector\Api\SchedulerRepositoryInterface $schedulerRepository,
+        \MageSuite\ErpConnector\Model\Validator\CronExpression $cronExpressionValidator,
         \MageSuite\ErpConnector\Model\Data\SchedulerFactory $schedulerFactory,
         \MageSuite\ErpConnector\Api\SchedulerConnectorConfigurationRepositoryInterface $schedulerConnectorConfigurationRepository,
         \MageSuite\ErpConnector\Model\Data\SchedulerConnectorConfigurationFactory $schedulerConnectorConfigurationFactory
     ) {
         $this->schedulerRepository = $schedulerRepository;
+        $this->cronExpressionValidator = $cronExpressionValidator;
         $this->schedulerFactory = $schedulerFactory;
         $this->schedulerConnectorConfigurationRepository = $schedulerConnectorConfigurationRepository;
         $this->schedulerConnectorConfigurationFactory = $schedulerConnectorConfigurationFactory;
@@ -43,6 +50,12 @@ class SaveSchedulers
         $schedulersData = [];
 
         foreach ($formData as $schedulerData) {
+            $isCronExpressionValid = $this->cronExpressionValidator->validate($schedulerData['cron_expression']);
+
+            if (!$isCronExpressionValid) {
+                throw new \MageSuite\ErpConnector\Exception\InvalidSchedulerException(__('Invalid cron syntax "%1" in %2 scheduler.', trim($schedulerData['cron_expression']), $schedulerData['name']));
+            }
+
             $schedulerData['provider_id'] = $providerId;
 
             if (isset($schedulerData['id'])) {
