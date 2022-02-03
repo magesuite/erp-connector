@@ -88,6 +88,10 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
             );
         }
 
+        if (empty($downloaded)) {
+            throw new \MageSuite\ErpConnector\Exception\MissingDownloadData(__('Can\'t detect any valid data'));
+        }
+
         return $downloaded;
     }
 

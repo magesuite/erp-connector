@@ -160,7 +160,7 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
         }
 
         if (empty($downloaded)) {
-            throw new \MageSuite\ErpConnector\Exception\FilesNotFound(__(
+            throw new \MageSuite\ErpConnector\Exception\MissingDownloadData(__(
                 'Can\'t detect any valid files at a "%1" remote FTP location %2.',
                 $location,
                 $provider->getName()
