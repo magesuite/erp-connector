@@ -52,7 +52,7 @@ class Processor
         }
     }
 
-    protected function getProviderProcessor(\MageSuite\ErpConnector\Model\Data\Scheduler $scheduler)
+    public function getProviderProcessor(\MageSuite\ErpConnector\Model\Data\Scheduler $scheduler)
     {
         try {
             $provider = $this->providerRepository->getById($scheduler->getProviderId());
