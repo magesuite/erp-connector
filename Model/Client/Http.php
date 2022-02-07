@@ -3,6 +3,8 @@ namespace MageSuite\ErpConnector\Model\Client;
 
 class Http extends \Magento\Framework\DataObject implements ClientInterface
 {
+    const AUTH_BEARER_TOKEN_FORMAT = 'Bearer %s';
+
     /**
      * @var \GuzzleHttp\ClientFactory
      */
@@ -140,6 +142,10 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
             $parameters['auth'] = [$this->getData('login'), $this->getData('password')];
         }
 
+        if ($this->getData('authorization_bearer')) {
+            $parameters['headers']['Authorization'] = sprintf(self::AUTH_BEARER_TOKEN_FORMAT, $this->getData('authorization_bearer'));
+        }
+
         return $parameters;
     }
 
@@ -156,13 +162,13 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
         return true;
     }
 
-    protected function getClient()
+    public function getClient()
     {
         if ($this->client) {
             return $this->client;
         }
 
-         $client = $this->clientFactory->create($this->getClientConfiguration());
+        $client = $this->clientFactory->create($this->getClientConfiguration());
 
         $this->client = $client;
         return $this->client;
@@ -185,7 +191,7 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
             return $configuration;
         }
 
-        $configuration['config']['proxy'] = $proxy;
+        //$configuration['config']['proxy'] = $proxy;
         return $configuration;
     }
 
