@@ -41,7 +41,7 @@ class ProviderProcessor extends \Magento\Framework\DataObject
     protected function getProvider()
     {
         if ($this->scheduler === null) {
-            throw new \Exception('Scheduler isn\'t set.'); //phpcs:ignore
+            throw new \InvalidArgumentException('Scheduler isn\'t set.');
         }
 
         $schedulerId = $this->scheduler->getId();

@@ -1,6 +1,6 @@
 <?php
 
-namespace MageSuite\ErpConnector\Model\Command\Adminhtml;
+namespace MageSuite\ErpConnector\Model\Command\Provider;
 
 class SaveSchedulers
 {

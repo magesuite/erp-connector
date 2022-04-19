@@ -33,6 +33,10 @@ class SensitiveModifier
 
     public function beforeSave($connectorConfigurationItem)
     {
+        if (empty($connectorConfigurationItem->getValue())) {
+            return null;
+        }
+
         if ($connectorConfigurationItem->getValue() == \MageSuite\ErpConnector\Model\Data\VaultItem::VAULT_VALUE_PLACEHOLDER) {
             return null;
         }
