@@ -44,6 +44,5 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
         $providerProcessor = $this->schedulerProcessor->getProviderProcessor($scheduler);
 
         $this->assertInstanceOf(\MageSuite\ErpConnector\Model\ProviderProcessor\General::class, $providerProcessor);
-
     }
 }

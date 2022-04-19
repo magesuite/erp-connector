@@ -53,7 +53,6 @@ class ProviderTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->assertEquals($provider->getId(), $configurationItem->getProviderId());
         $this->assertEquals('address', $configurationItem->getKey());
         $this->assertEquals('Test Address', $configurationItem->getValue());
-
     }
 
     protected function saveProviderWithAdditionalConfiguration($provider)
