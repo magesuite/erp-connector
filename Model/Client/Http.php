@@ -191,7 +191,7 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
             return $configuration;
         }
 
-        //$configuration['config']['proxy'] = $proxy;
+        $configuration['config']['proxy'] = $proxy;
         return $configuration;
     }
 
