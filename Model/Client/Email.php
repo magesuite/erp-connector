@@ -84,6 +84,8 @@ class Email extends \Magento\Framework\DataObject implements ClientInterface
                     $e->getMessage(),
                     $item
                 );
+
+                throw $e;
             }
         }
 

@@ -102,6 +102,8 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
                 $e->getMessage(),
                 $item
             );
+
+            throw $e;
         }
 
         return true;

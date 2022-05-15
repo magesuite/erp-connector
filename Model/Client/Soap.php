@@ -84,6 +84,7 @@ class Soap extends \Magento\Framework\DataObject implements ClientInterface
 
         } catch (\Exception $e) {
             $this->processErrorMessage($provider, $e);
+            throw $e;
         }
 
         return true;
