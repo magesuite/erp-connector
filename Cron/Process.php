@@ -3,31 +3,28 @@ namespace MageSuite\ErpConnector\Cron;
 
 class Process
 {
+    const LOCK_NAME = 'erp_connector_scheduler';
+
     protected $handlerClass = \MageSuite\ErpConnector\Model\Queue\SchedulerHandler::class;
 
-    /**
-     * @var \MageSuite\ErpConnector\Helper\Configuration
-     */
-    protected $configuration;
+    protected \MageSuite\ErpConnector\Helper\Configuration $configuration;
 
-    /**
-     * @var \MageSuite\Queue\Service\Publisher
-     */
-    protected $queuePublisher;
+    protected \MageSuite\Queue\Service\Publisher $queuePublisher;
 
-    /**
-     * @var \MageSuite\ErpConnector\Service\Scheduler\Processor
-     */
-    protected $schedulerProcessor;
+    protected \MageSuite\ErpConnector\Service\Scheduler\Processor $schedulerProcessor;
+
+    protected \Magento\Framework\Lock\Backend\Database $databaseLocker;
 
     public function __construct(
         \MageSuite\ErpConnector\Helper\Configuration $configuration,
         \MageSuite\Queue\Service\Publisher $queuePublisher,
-        \MageSuite\ErpConnector\Service\Scheduler\Processor $schedulerProcessor
+        \MageSuite\ErpConnector\Service\Scheduler\Processor $schedulerProcessor,
+        \Magento\Framework\Lock\Backend\Database $databaseLocker
     ) {
         $this->configuration = $configuration;
         $this->queuePublisher = $queuePublisher;
         $this->schedulerProcessor = $schedulerProcessor;
+        $this->databaseLocker = $databaseLocker;
     }
 
     /**
@@ -42,6 +39,8 @@ class Process
         if (!$this->configuration->isEnabled()) {
             return;
         }
+
+        $this->waitUntilUnlocked();
 
         if (preg_match('/scheduler_([0-9+])/', $name)) {
             $schedulerId = $this->getSchedulerId($name);
@@ -71,5 +70,14 @@ class Process
 
     public function execute() //phpcs:ignore
     {
+    }
+
+    protected function waitUntilUnlocked()
+    {
+        while ($this->databaseLocker->isLocked(self::LOCK_NAME)) {
+            sleep(1); //phpcs:ignore
+        }
+
+        $this->databaseLocker->lock(self::LOCK_NAME);
     }
 }
