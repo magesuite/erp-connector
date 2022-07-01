@@ -13,8 +13,6 @@ class Process
 
     protected \MageSuite\ErpConnector\Service\Scheduler\Processor $schedulerProcessor;
 
-    protected \Magento\Framework\Lock\Backend\Database $databaseLocker;
-
     public function __construct(
         \MageSuite\ErpConnector\Helper\Configuration $configuration,
         \MageSuite\Queue\Service\Publisher $queuePublisher,
@@ -24,7 +22,6 @@ class Process
         $this->configuration = $configuration;
         $this->queuePublisher = $queuePublisher;
         $this->schedulerProcessor = $schedulerProcessor;
-        $this->databaseLocker = $databaseLocker;
     }
 
     /**
@@ -39,8 +36,6 @@ class Process
         if (!$this->configuration->isEnabled()) {
             return;
         }
-
-        $this->waitUntilUnlocked();
 
         if (preg_match('/scheduler_([0-9+])/', $name)) {
             $schedulerId = $this->getSchedulerId($name);
@@ -70,14 +65,5 @@ class Process
 
     public function execute() //phpcs:ignore
     {
-    }
-
-    protected function waitUntilUnlocked()
-    {
-        while ($this->databaseLocker->isLocked(self::LOCK_NAME)) {
-            sleep(1); //phpcs:ignore
-        }
-
-        $this->databaseLocker->lock(self::LOCK_NAME);
     }
 }

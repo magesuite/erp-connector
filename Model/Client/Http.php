@@ -157,7 +157,7 @@ class Http extends \Magento\Framework\DataObject implements ClientInterface
             throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Empty response for a send request of content %1 file to %2 http location.', $fileName, $this->getData('url')));
         }
 
-        if ($response->getStatusCode() != \Symfony\Component\HttpFoundation\Response::HTTP_OK) {
+        if ($response->getStatusCode() != \Symfony\Component\HttpFoundation\Response::HTTP_OK && $response->getStatusCode() != \Symfony\Component\HttpFoundation\Response::HTTP_CREATED) {
             throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Wrong response status code for a send request of content %1 file to %2 http location.', $fileName, $this->getData('url')));
         }
 
