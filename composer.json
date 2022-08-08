@@ -5,7 +5,7 @@
     "license": "OSL-3.0",
     "type": "magento2-module",
     "require": {
-        "creativestyle/magesuite-queue": "^1.0.0",
+        "creativestyle/magesuite-schedule": "1.x-dev",
         "creativestyle/magesuite-email-attachments": "^3.0.0"
     },
     "autoload": {

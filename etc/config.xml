@@ -5,9 +5,6 @@
             <general>
                 <is_enabled>1</is_enabled>
             </general>
-            <scheduler>
-                <method>cron</method>
-            </scheduler>
         </erp_connector>
     </default>
 </config>

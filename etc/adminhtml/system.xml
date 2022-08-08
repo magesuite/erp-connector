@@ -23,13 +23,6 @@
                     </comment>
                 </field>
             </group>
-            <group id="scheduler" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Scheduler</label>
-                <field id="method" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Method</label>
-                    <source_model>MageSuite\ErpConnector\Model\Source\SchedulingMethod</source_model>
-                </field>
-            </group>
             <group id="connector" translate="label" type="text" sortOrder="20" showInDefault="1">
                 <label>Connectors</label>
                 <field id="http_proxy" translate="label" type="text" sortOrder="10" showInDefault="1">
