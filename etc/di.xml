@@ -102,6 +102,17 @@
         </arguments>
     </type>
 
+    <type name="MageSuite\Schedule\Model\SchedulerJobsCollector">
+        <arguments>
+            <argument name="jobsGroups" xsi:type="array">
+                <item name="erpConnector" xsi:type="array">
+                    <item name="cronjob" xsi:type="object">MageSuite\ErpConnector\Model\Schedule\Jobs</item>
+                    <item name="processor" xsi:type="object">MageSuite\ErpConnector\Service\Scheduler\Processor</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="MageSuite\ErpConnector\Model\SchedulersPool">
         <arguments>
             <argument name="schedulerGroups" xsi:type="array">
@@ -110,13 +121,5 @@
                 </item>
             </argument>
         </arguments>
-    </type>
-
-    <type name="Magento\Cron\Model\Config">
-        <plugin name="add_erp_connector_jobs" type="MageSuite\ErpConnector\Plugin\Cron\Model\Config\AddSchedulerJobs" sortOrder="10" />
-    </type>
-
-    <type name="Magento\Cron\Observer\ProcessCronQueueObserver">
-        <plugin name="add_pending_erp_connector_jobs" type="MageSuite\ErpConnector\Plugin\Cron\Observer\ProcessCronQueueObserver\AddPendingCronJobs" sortOrder="10" />
     </type>
 </config>
