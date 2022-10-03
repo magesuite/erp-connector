@@ -1,33 +1,24 @@
 <?php
 namespace MageSuite\ErpConnector\Model\Client;
 
-class Soap extends \Magento\Framework\DataObject implements ClientInterface
+class Soap extends \MageSuite\ErpConnector\Model\Client\Client implements ClientInterface
 {
     const RESPONSE_METHOD_FORMAT = '%sResult';
-    /**
-     * @var \Magento\Framework\DomDocument\DomDocumentFactory
-     */
-    protected $domDocumentFactory;
 
-    /**
-     * @var \MageSuite\ErpConnector\Model\Command\LogErrorMessage
-     */
-    protected $logErrorMessage;
-
-    /**
-     * @var \MageSuite\ErpConnector\Logger\Logger
-     */
-    protected $logger;
+    protected \Magento\Framework\DomDocument\DomDocumentFactory $domDocumentFactory;
+    protected \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage;
+    protected \MageSuite\ErpConnector\Logger\Logger $logger;
 
     protected $soapClient = null;
 
     public function __construct(
+        \Magento\Framework\Event\Manager $eventManager,
         \Magento\Framework\DomDocument\DomDocumentFactory $domDocumentFactory,
         \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
         \MageSuite\ErpConnector\Logger\Logger $logger,
         array $data = []
     ) {
-        parent::__construct($data);
+        parent::__construct($eventManager, $data);
 
         $this->domDocumentFactory = $domDocumentFactory;
         $this->logErrorMessage = $logErrorMessage;

@@ -1,26 +1,20 @@
 <?php
 namespace MageSuite\ErpConnector\Model\Client;
 
-class Ftp extends \Magento\Framework\DataObject implements ClientInterface
+class Ftp extends \MageSuite\ErpConnector\Model\Client\Client implements ClientInterface
 {
-    /**
-     * @var \Magento\Framework\Filesystem\Io\FtpFactory;
-     */
-    protected $ftpFactory;
-
-    /**
-     * @var \MageSuite\ErpConnector\Model\Command\LogErrorMessage
-     */
-    protected $logErrorMessage;
+    protected \Magento\Framework\Filesystem\Io\FtpFactory $ftpFactory;
+    protected \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage;
 
     protected $connection = null;
 
     public function __construct(
+        \Magento\Framework\Event\Manager $eventManager,
         \Magento\Framework\Filesystem\Io\FtpFactory $ftpFactory,
         \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
         array $data = []
     ) {
-        parent::__construct($data);
+        parent::__construct($eventManager, $data);
 
         $this->ftpFactory = $ftpFactory;
         $this->logErrorMessage = $logErrorMessage;
@@ -71,8 +65,8 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
             $connection = $this->getConnection();
 
             foreach ($files as $fileName => $content) {
-                $this->validateFileOnExternalServerDirectory($sourceDir, $fileName, $content, $provider->getName());
-                $this->validateFileOnExternalServerDirectory($this->getData('destination_dir'), $fileName, $content, $provider->getName());
+                $this->validateFile($sourceDir, $fileName, $content, $provider->getName());
+                $this->validateFile($this->getData('destination_dir'), $fileName, $content, $provider->getName());
 
                 $connection->cd($sourceDir);
                 $result = $connection->write($fileName, $content);
@@ -121,8 +115,8 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
             $sourceDir = $this->getData('source_dir');
             $destinationDir = $this->getData('destination_dir');
 
-            $this->validateDirectoryExistOnExternalServer($sourceDir, $provider);
-            $this->validateDirectoryExistOnExternalServer($destinationDir, $provider);
+            $this->validateDirectoryExist($sourceDir, $provider);
+            $this->validateDirectoryExist($destinationDir, $provider);
 
             $connection->cd($sourceDir);
             $files = $connection->ls();
@@ -172,7 +166,7 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
         return $downloaded;
     }
 
-    protected function isValidFileName($fileName)
+    public function isValidFileName($fileName)
     {
         if (empty($fileName) || $fileName == '../') {
             return false;
@@ -187,7 +181,7 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
         return false;
     }
 
-    protected function validateDirectoryExistOnExternalServer($directory, $providerName)
+    protected function validateDirectoryExist($directory, $providerName)
     {
         $connection = $this->getConnection();
         $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
@@ -204,7 +198,7 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
         }
     }
 
-    protected function validateFileOnExternalServerDirectory($directory, $fileName, $content, $providerName) //phpcs:ignore
+    protected function validateFile($directory, $fileName, $content, $providerName) //phpcs:ignore
     {
         $connection = $this->getConnection();
 
@@ -261,7 +255,7 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
         return true;
     }
 
-    private function getConnection()
+    public function getConnection()
     {
         if ($this->connection !== null) {
             return $this->connection;
@@ -293,7 +287,7 @@ class Ftp extends \Magento\Framework\DataObject implements ClientInterface
         return $configuration;
     }
 
-    private function closeConnection($connection)
+    public function closeConnection($connection)
     {
         $connection->close();
         $this->connection = null;

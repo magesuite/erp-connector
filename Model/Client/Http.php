@@ -1,34 +1,24 @@
 <?php
 namespace MageSuite\ErpConnector\Model\Client;
 
-class Http extends \Magento\Framework\DataObject implements ClientInterface
+class Http extends \MageSuite\ErpConnector\Model\Client\Client implements ClientInterface
 {
     const AUTH_BEARER_TOKEN_FORMAT = 'Bearer %s';
 
-    /**
-     * @var \GuzzleHttp\ClientFactory
-     */
-    protected $clientFactory;
-
-    /**
-     * @var \MageSuite\ErpConnector\Helper\Configuration
-     */
-    protected $configuration;
-
-    /**
-     * @var \MageSuite\ErpConnector\Model\Command\LogErrorMessage
-     */
-    protected $logErrorMessage;
+    protected \GuzzleHttp\ClientFactory $clientFactory;
+    protected \MageSuite\ErpConnector\Helper\Configuration $configuration;
+    protected \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage;
 
     protected $client = null;
 
     public function __construct(
+        \Magento\Framework\Event\Manager $eventManager,
         \GuzzleHttp\ClientFactory $clientFactory,
         \MageSuite\ErpConnector\Helper\Configuration $configuration,
         \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
         array $data = []
     ) {
-        parent::__construct($data);
+        parent::__construct($eventManager, $data);
 
         $this->clientFactory = $clientFactory;
         $this->configuration = $configuration;
