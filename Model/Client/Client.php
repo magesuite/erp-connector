@@ -23,13 +23,15 @@ class Client extends \Magento\Framework\DataObject
         try {
             return parent::__call($method, $args);
         } catch (\Magento\Framework\Exception\LocalizedException $exception) {
+            $snakeCaseMethodName = $this->convertCamelCaseToSnakeCase($method);
+
             $this->eventManager->dispatch(
-                sprintf('erp_connector_client_%s', $method),
+                sprintf('erp_connector_client_%s', $snakeCaseMethodName),
                 ['client' => $this]
             );
 
             $this->eventManager->dispatch(
-                sprintf('erp_connector_%s_client_%s', $this->getClassName(), $method),
+                sprintf('erp_connector_%s_client_%s', $this->getClassName(), $snakeCaseMethodName),
                 ['client' => $this]
             );
         } catch (\Exception $exception) {
@@ -41,5 +43,10 @@ class Client extends \Magento\Framework\DataObject
     {
         $classNameParts = explode('\\', get_class($this));
         return strtolower(end($classNameParts));
+    }
+
+    protected function convertCamelCaseToSnakeCase(string $name): string
+    {
+        return strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $name));
     }
 }
