@@ -98,7 +98,10 @@ class Save extends \Magento\Backend\App\Action implements \Magento\Framework\App
                     $formData = $this->getRequest()->getParam('connectors');
                     $this->saveConnectors->execute($provider->getId(), $formData);
 
-                    $this->eventManager->dispatch('erp_connector_full_save_after', ['provider' => $provider]);
+                    $this->_eventManager->dispatch(
+                        'erp_connector_full_save_after',
+                        ['controller' => $this, 'provider' => $provider]
+                    );
                 } catch (\Exception $e) {
                     $this->logger->error($e->getMessage());
                 }

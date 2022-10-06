@@ -1,36 +1,22 @@
 <?php
 namespace MageSuite\ErpConnector\Model\Client;
 
-class Email extends \Magento\Framework\DataObject implements ClientInterface
+class Email extends \MageSuite\ErpConnector\Model\Client\Client implements ClientInterface
 {
-    /**
-     * @var \MageSuite\ErpConnector\Helper\Configuration
-     */
-    protected $configuration;
-
-    /**
-     * @var \Magento\Framework\Translate\Inline\StateInterface
-     */
-    protected $inlineTranslation;
-
-    /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilderFactory
-     */
-    protected $transportBuilderFactory;
-
-    /**
-     * @var \MageSuite\ErpConnector\Model\Command\LogErrorMessage
-     */
-    protected $logErrorMessage;
+    protected \MageSuite\ErpConnector\Helper\Configuration $configuration;
+    protected \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation;
+    protected \Magento\Framework\Mail\Template\TransportBuilderFactory $transportBuilderFactory;
+    protected \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage;
 
     public function __construct(
+        \Magento\Framework\Event\Manager $eventManager,
         \MageSuite\ErpConnector\Helper\Configuration $configuration,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Framework\Mail\Template\TransportBuilderFactory $transportBuilderFactory,
         \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
         array $data = []
     ) {
-        parent::__construct($data);
+        parent::__construct($eventManager, $data);
 
         $this->configuration = $configuration;
         $this->inlineTranslation = $inlineTranslation;
