@@ -181,7 +181,7 @@ class Ftp extends \MageSuite\ErpConnector\Model\Client\Client implements ClientI
         return false;
     }
 
-    protected function validateDirectoryExist($directory, $providerName)
+    public function validateDirectoryExist($directory, $providerName)
     {
         $connection = $this->getConnection();
         $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
