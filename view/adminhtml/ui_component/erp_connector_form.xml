@@ -713,7 +713,7 @@
                         <label>Soap Action</label>
                     </settings>
                 </field>
-                <dynamicRows name="parameters" component="Magento_Ui/js/dynamic-rows/dynamic-rows" template="MageSuite_ErpConnector/dynamic-rows/custom_array_fields">
+                <dynamicRows name="parameters" component="Magento_Ui/js/dynamic-rows/dynamic-rows">
                     <settings>
                         <addButtonLabel translate="true">Add parameter</addButtonLabel>
                         <componentType>dynamicRows</componentType>
@@ -946,7 +946,7 @@
                         <label>Timeout</label>
                     </settings>
                 </field>
-                <dynamicRows name="custom_headers" component="Magento_Ui/js/dynamic-rows/dynamic-rows" template="MageSuite_ErpConnector/dynamic-rows/custom_array_fields">
+                <dynamicRows name="custom_headers" component="Magento_Ui/js/dynamic-rows/dynamic-rows">
                     <settings>
                         <addButtonLabel translate="true">Add custom header</addButtonLabel>
                         <componentType>dynamicRows</componentType>
