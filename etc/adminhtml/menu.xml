@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="MageSuite_ErpConnector::erp_connector" title="Erp Connector" translate="title" module="Magento_Sales" sortOrder="10" parent="Magento_Sales::sales" resource="Magento_Sales::sales" />
-        <add id="MageSuite_ErpConnector::providers" title="Providers" translate="title" module="MageSuite_ErpConnector" sortOrder="10" parent="MageSuite_ErpConnector::erp_connector" action="erp_connector/provider" resource="MageSuite_ErpConnector::erp_connector"/>
+        <add id="MageSuite_ErpConnector::providers" title="Providers" translate="title" module="MageSuite_ErpConnector" sortOrder="10" parent="MageSuite_ErpConnectorSubmenu::submenu" action="erp_connector/provider" resource="MageSuite_ErpConnector::providers"/>
         <add id="MageSuite_ErpConnector::history" title="History" translate="title" module="Magento_Sales" sortOrder="50" parent="Magento_Sales::sales" resource="Magento_Sales::sales" />
     </menu>
 </config>
