@@ -5,6 +5,7 @@
     "license": "OSL-3.0",
     "type": "magento2-module",
     "require": {
+        "creativestyle/magesuite-erp-connector-submenu": "^1.0.0",
         "creativestyle/magesuite-schedule": "^1.0.0",
         "creativestyle/magesuite-email-attachments": "^3.0.0"
     },
