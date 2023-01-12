@@ -103,6 +103,28 @@
                 <notice>Value used for found class for process providers data in export etc. Used default class if not exist or not found</notice>
             </settings>
         </field>
+        <field name="external_sku" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">provider</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                    <rule name="max_text_length" xsi:type="number">50</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">External SKU</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="MageSuite\ErpConnector\Model\Source\ProductAttributes"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
         <dynamicRows name="additional_configuration" sortOrder="500">
             <settings>
                 <addButtonLabel translate="true">Add Config</addButtonLabel>
@@ -723,7 +745,6 @@
                         <dndConfig>
                             <param name="enabled" xsi:type="boolean">false</param>
                         </dndConfig>
-                        <headerLabel>Customer</headerLabel>
                         <label>Parameters</label>
                         <columnsHeader>false</columnsHeader>
                     </settings>
@@ -956,7 +977,6 @@
                         <dndConfig>
                             <param name="enabled" xsi:type="boolean">false</param>
                         </dndConfig>
-                        <headerLabel>Customer</headerLabel>
                         <label>Custom Headers</label>
                         <columnsHeader>false</columnsHeader>
                     </settings>
