@@ -27,11 +27,13 @@ class Http extends \MageSuite\ErpConnector\Model\Client\Client implements Client
 
     public function sendItems($provider, $items)
     {
+        $responseContents = [];
+
         foreach ($items as $item) {
-            $this->sendItem($provider, $item);
+            $responseContents[] = $this->sendItem($provider, $item);
         }
 
-        return $this;
+        return empty($responseContents) ? null : implode(PHP_EOL, $responseContents);
     }
 
     protected function sendItem($provider, $item)
@@ -47,23 +49,32 @@ class Http extends \MageSuite\ErpConnector\Model\Client\Client implements Client
             return false;
         }
 
+        $responseContents = [];
+
         try {
             foreach ($files as $fileName => $content) {
                 $response = $this->sendRequest($fileName, $content);
-                $this->validateResponse($response, $fileName);
+
+                $responseContent = $response->getBody()->getContents();
+                $responseContents[] = $responseContent;
+
+                $this->validateResponse($response, ['provider' => $provider, 'content' => $responseContent, 'file_name' => $fileName]);
             }
 
         } catch (\Exception $e) {
+            $responseContents = empty($responseContents) ? null : implode(PHP_EOL, $responseContents);
+            $messageWithResponseContents = sprintf('%s, response content: %s', $e->getMessage(), $responseContents);
+
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
-                $e->getMessage(),
+                $messageWithResponseContents,
                 $item
             );
 
-            throw $e;
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed($messageWithResponseContents);
         }
 
-        return true;
+        return empty($responseContents) ? null : implode(PHP_EOL, $responseContents);
     }
 
     public function downloadItems($provider)
@@ -72,9 +83,11 @@ class Http extends \MageSuite\ErpConnector\Model\Client\Client implements Client
 
         try {
             $response = $this->sendRequest();
-            $this->validateResponse($response);
+            $responseContent = $response->getBody()->getContents();
 
-            $downloaded[$this->getData('url')] = $response->getBody()->getContents();
+            $this->validateResponse($response, ['provider' => $provider, 'content' => $responseContent, 'file_name' => null]);
+
+            $downloaded[$this->getData('url')] = $responseContent;
         } catch (\Exception $e) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
@@ -141,14 +154,14 @@ class Http extends \MageSuite\ErpConnector\Model\Client\Client implements Client
         return $parameters;
     }
 
-    protected function validateResponse($response, $fileName = null)
+    public function validateResponse($response, $data)
     {
         if (empty($response)) {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Empty response for a send request of content %1 file to %2 http location.', $fileName, $this->getData('url')));
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Empty response for a send request of content %1 file to %2 http location.', $data['file_name'], $this->getData('url')));
         }
 
         if ($response->getStatusCode() != \Symfony\Component\HttpFoundation\Response::HTTP_OK && $response->getStatusCode() != \Symfony\Component\HttpFoundation\Response::HTTP_CREATED) {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Wrong response status code for a send request of content %1 file to %2 http location.', $fileName, $this->getData('url')));
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Wrong response status code for a send request of content %1 file to %2 http location.', $data['file_name'], $this->getData('url')));
         }
 
         return true;
