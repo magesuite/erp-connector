@@ -43,7 +43,7 @@
         <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"/>
         <column xsi:type="int" name="connector_id" padding="10" unsigned="true" nullable="false"/>
         <column xsi:type="varchar" name="identifier" nullable="false" length="100"/>
-        <column xsi:type="varchar" name="value" nullable="false" length="255"/>
+        <column xsi:type="text" name="value" nullable="false"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>
         </constraint>
