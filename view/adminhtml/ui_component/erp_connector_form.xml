@@ -1006,6 +1006,8 @@
                             <argument name="data" xsi:type="array">
                                 <item name="config" xsi:type="array">
                                     <item name="fit" xsi:type="boolean">false</item>
+                                    <item name="elementTmpl" xsi:type="string">MageSuite_ErpConnector/form/element/input-maxlength</item>
+                                    <item name="maxlength" xsi:type="number">4096</item>
                                 </item>
                             </argument>
                             <settings>
