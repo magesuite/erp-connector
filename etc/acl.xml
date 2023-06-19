@@ -4,6 +4,7 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
+                <resource id="MageSuite_ErpConnector::erp_connector" title="Erp connectors" translate="title" sortOrder="20" />
                 <resource id="MageSuite_ErpConnector::general" title="Erp connectors" translate="title" sortOrder="30">
                     <resource id="MageSuite_ErpConnector::providers" title="Providers" translate="title" sortOrder="30" />
                 </resource>
