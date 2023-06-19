@@ -94,7 +94,7 @@ class Email extends \MageSuite\ErpConnector\Model\Client\Client implements Clien
                 ->addTo($recipient);
 
             foreach ($item['files'] as $fileName => $content) {
-                $transport->addAttachmentFromContent($content, $fileName, \Zend_Mime::TYPE_OCTETSTREAM);
+                $transport->addAttachmentFromContent($content, $fileName, \Magento\Framework\Mail\MimeInterface::TYPE_OCTET_STREAM);
             }
 
             $transport->getTransport()->sendMessage();
