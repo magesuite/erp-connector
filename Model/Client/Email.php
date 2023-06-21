@@ -94,6 +94,10 @@ class Email extends \MageSuite\ErpConnector\Model\Client\Client implements Clien
                 ->addTo($recipient);
 
             foreach ($item['files'] as $fileName => $content) {
+                if (is_array($content)) {
+                    $content = json_encode($content, JSON_PRETTY_PRINT);
+                }
+                
                 $transport->addAttachmentFromContent($content, $fileName, \Magento\Framework\Mail\MimeInterface::TYPE_OCTET_STREAM);
             }
 
