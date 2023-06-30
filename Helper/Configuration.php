@@ -1,4 +1,5 @@
 <?php
+
 namespace MageSuite\ErpConnector\Helper;
 
 class Configuration
@@ -8,16 +9,12 @@ class Configuration
     const XML_PATH_EMAIL_GENERAL_NAME = 'trans_email/ident_general/name';
     const XML_PATH_EMAIL_GENERAL_EMAIL = 'trans_email/ident_general/email';
     const XML_PATH_CONNECTOR_HTTP_PROXY = 'erp_connector/connector/http_proxy';
+    const XML_PATH_CONNECTOR_SOAP_PROXY_HOST = 'erp_connector/connector/soap_proxy_host';
+    const XML_PATH_CONNECTOR_SOAP_PROXY_PORT = 'erp_connector/connector/soap_proxy_port';
 
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfig;
+    protected \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig;
 
-    /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
-     */
-    protected $serializer;
+    protected \Magento\Framework\Serialize\SerializerInterface $serializer;
 
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -27,12 +24,12 @@ class Configuration
         $this->serializer = $serializer;
     }
 
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_IS_ENABLED);
     }
 
-    public function getProviderAdditionalConfigurationCodes()
+    public function getProviderAdditionalConfigurationCodes(): array
     {
         $configurationCodes = $this->scopeConfig->getValue(self::XML_PATH_PROVIDER_CONFIGURATION_CODES);
 
@@ -43,12 +40,22 @@ class Configuration
         return $this->serializer->unserialize($configurationCodes);
     }
 
-    public function getHttpConnectorProxy()
+    public function getHttpConnectorProxy(): string
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_CONNECTOR_HTTP_PROXY);
+        return (string)$this->scopeConfig->getValue(self::XML_PATH_CONNECTOR_HTTP_PROXY);
     }
 
-    public function getEmailSenderInfo()
+    public function getSoapConnectorProxyHost(): string
+    {
+        return (string)$this->scopeConfig->getValue(self::XML_PATH_CONNECTOR_SOAP_PROXY_HOST);
+    }
+
+    public function getSoapConnectorProxyPort(): string
+    {
+        return (string)$this->scopeConfig->getValue(self::XML_PATH_CONNECTOR_SOAP_PROXY_PORT);
+    }
+
+    public function getEmailSenderInfo(): array
     {
         return [
             'name' => $this->scopeConfig->getValue(self::XML_PATH_EMAIL_GENERAL_NAME, \Magento\Store\Model\ScopeInterface::SCOPE_STORE),

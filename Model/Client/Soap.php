@@ -1,4 +1,5 @@
 <?php
+
 namespace MageSuite\ErpConnector\Model\Client;
 
 class Soap extends \MageSuite\ErpConnector\Model\Client\Client implements ClientInterface
@@ -6,6 +7,7 @@ class Soap extends \MageSuite\ErpConnector\Model\Client\Client implements Client
     const RESPONSE_METHOD_FORMAT = '%sResult';
 
     protected \Magento\Framework\DomDocument\DomDocumentFactory $domDocumentFactory;
+    protected \MageSuite\ErpConnector\Helper\Configuration $configuration;
     protected \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage;
     protected \MageSuite\ErpConnector\Logger\Logger $logger;
 
@@ -14,6 +16,7 @@ class Soap extends \MageSuite\ErpConnector\Model\Client\Client implements Client
     public function __construct(
         \Magento\Framework\Event\Manager $eventManager,
         \Magento\Framework\DomDocument\DomDocumentFactory $domDocumentFactory,
+        \MageSuite\ErpConnector\Helper\Configuration $configuration,
         \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
         \MageSuite\ErpConnector\Logger\Logger $logger,
         array $data = []
@@ -21,6 +24,7 @@ class Soap extends \MageSuite\ErpConnector\Model\Client\Client implements Client
         parent::__construct($eventManager, $data);
 
         $this->domDocumentFactory = $domDocumentFactory;
+        $this->configuration = $configuration;
         $this->logErrorMessage = $logErrorMessage;
         $this->logger = $logger;
     }
@@ -209,13 +213,25 @@ class Soap extends \MageSuite\ErpConnector\Model\Client\Client implements Client
 
     public function getClientConfiguration()
     {
-        return [
+        $configuration = [
             'soap_version' => $this->getData('version'),
             'login' => $this->getData('login'),
             'password' => $this->getData('password'),
             'cache_wsdl' => WSDL_CACHE_NONE,
             'trace' => true
         ];
+
+        $proxyHost = $this->configuration->getSoapConnectorProxyHost();
+        $proxyPort = $this->configuration->getSoapConnectorProxyPort();
+
+        if (empty($proxyHost) || empty($proxyPort)) {
+            return $configuration;
+        }
+
+        $configuration['proxy_host'] = $proxyHost;
+        $configuration['proxy_port'] = $proxyPort;
+
+        return $configuration;
     }
 
     public function validateProcessedFile($fileName)

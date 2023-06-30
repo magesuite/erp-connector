@@ -1,4 +1,5 @@
 <?php
+
 namespace MageSuite\ErpConnector\Model\Client;
 
 class Http extends \MageSuite\ErpConnector\Model\Client\Client implements ClientInterface
@@ -202,6 +203,6 @@ class Http extends \MageSuite\ErpConnector\Model\Client\Client implements Client
 
     public function validateProcessedFile($fileName)
     {
-        throw new \Exception('Not possibile to verify if file exist for Http client.'); //phpcs:ignore
+        throw new \Exception('Not possible to verify if file exist for Http client.'); //phpcs:ignore
     }
 }
