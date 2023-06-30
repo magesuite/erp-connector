@@ -35,6 +35,13 @@
                     <ticket_id>IPET-2054</ticket_id>
                 </entry>
             </tag>
+            <tag version="1.3.0" date="2023-06-28">
+                <entry>
+                    <type>FEATURE</type>
+                    <overview>Add possibility to use proxy for SOAP connector.</overview>
+                    <ticket_id>IPET-2034</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>

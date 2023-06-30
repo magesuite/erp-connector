@@ -8,13 +8,13 @@
             <label>Erp Connector</label>
             <tab>magesuite</tab>
             <resource>MageSuite_ErpConnector::erp_connector</resource>
-            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" >
                 <label>General</label>
-                <field id="is_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="is_enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Is Enabled</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="provider_configuration_codes" translate="label" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="provider_configuration_codes" translate="label" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
                     <label>Additional configuration codes list</label>
                     <frontend_model>MageSuite\ErpConnector\Block\Adminhtml\System\Config\Form\Field\ProviderAdditionalConfiguration\ConfigurationCodes</frontend_model>
                     <backend_model>MageSuite\ErpConnector\Model\Config\Backend\ProviderAdditionalConfiguration\ConfigurationCodes</backend_model>
@@ -25,9 +25,19 @@
             </group>
             <group id="connector" translate="label" type="text" sortOrder="20" showInDefault="1">
                 <label>Connectors</label>
-                <field id="http_proxy" translate="label" type="text" sortOrder="10" showInDefault="1">
-                    <label>Proxy for Http connector</label>
-                    <comment><![CDATA[Optional. This option requires a configured proxy (preferably socks5 protocol) on the server. The proxy must be set up first, otherwise there may be problems with communication over HTTP.]]></comment>
+                <field id="http_proxy" translate="label" type="text" sortOrder="10" showInDefault="1" canRestore="1">
+                    <label>Proxy for HTTP connector</label>
+                    <comment>
+                        <![CDATA[This option is optional requires a configured proxy (preferably socks5 protocol) on the server. The proxy must be set up first, otherwise there may be problems with communication over HTTP.]]>
+                    </comment>
+                </field>
+                <field id="soap_proxy_host" translate="label" type="text" sortOrder="20" showInDefault="1" canRestore="1">
+                    <label>Proxy host for SOAP connector</label>
+                    <comment><![CDATA[This option is optional requires a configured proxy (preferably tinyproxy) on the server. The proxy must be set up first, otherwise there may be problems with communication over SOAP.]]></comment>
+                </field>
+                <field id="soap_proxy_port" translate="label" type="text" sortOrder="30" showInDefault="1" canRestore="1">
+                    <label>Proxy port for SOAP connector</label>
+                    <comment><![CDATA[This option is optional requires a configured proxy (preferably tinyproxy) on the server. The proxy must be set up first, otherwise there may be problems with communication over SOAP.]]></comment>
                 </field>
             </group>
         </section>
