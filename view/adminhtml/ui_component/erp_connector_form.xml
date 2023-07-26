@@ -735,6 +735,29 @@
                         <label>Soap Action</label>
                     </settings>
                 </field>
+                <field name="use_proxy" formElement="checkbox">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                            <item name="default" xsi:type="number">0</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label>Use proxy</label>
+                        <dataType>boolean</dataType>
+                    </settings>
+                    <formElements>
+                        <checkbox>
+                            <settings>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                                <prefer>checkbox</prefer>
+                            </settings>
+                        </checkbox>
+                    </formElements>
+                </field>
                 <dynamicRows name="parameters" component="Magento_Ui/js/dynamic-rows/dynamic-rows">
                     <settings>
                         <addButtonLabel translate="true">Add parameter</addButtonLabel>
