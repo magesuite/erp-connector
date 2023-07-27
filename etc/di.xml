@@ -67,6 +67,7 @@
                         </item>
                         <item name="location" xsi:type="null"></item>
                         <item name="action" xsi:type="null"></item>
+                        <item name="use_proxy" xsi:type="null"></item>
                         <item name="parameters" xsi:type="array">
                             <item name="modifier_class" xsi:type="object">MageSuite\ErpConnector\Model\Modifier\ArrayModifier</item>
                         </item>

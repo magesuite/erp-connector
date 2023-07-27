@@ -221,10 +221,11 @@ class Soap extends \MageSuite\ErpConnector\Model\Client\Client implements Client
             'trace' => true
         ];
 
+        $useProxy = (bool)$this->getData('use_proxy');
         $proxyHost = $this->configuration->getSoapConnectorProxyHost();
         $proxyPort = $this->configuration->getSoapConnectorProxyPort();
 
-        if (empty($proxyHost) || empty($proxyPort)) {
+        if (!$useProxy || empty($proxyHost) || empty($proxyPort)) {
             return $configuration;
         }
 
