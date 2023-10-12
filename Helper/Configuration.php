@@ -46,7 +46,7 @@ class Configuration
     {
         return [
             'host' => (string)$this->scopeConfig->getValue(self::XML_PATH_CONNECTOR_SFTP_PROXY_HOST),
-            'post' => (string)$this->scopeConfig->getValue(self::XML_PATH_CONNECTOR_SFTP_PROXY_PORT)
+            'port' => (string)$this->scopeConfig->getValue(self::XML_PATH_CONNECTOR_SFTP_PROXY_PORT)
         ];
     }
 
