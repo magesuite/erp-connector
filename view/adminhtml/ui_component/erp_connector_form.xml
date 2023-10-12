@@ -42,7 +42,6 @@
         <settings>
             <label translate="true">General</label>
         </settings>
-        <!--suppress XmlDefaultAttributeValue -->
         <field name="id" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -54,7 +53,6 @@
                 <visible>false</visible>
             </settings>
         </field>
-        <!--suppress XmlDefaultAttributeValue -->
         <field name="name" sortOrder="10" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -86,7 +84,6 @@
                 <label translate="true">Email</label>
             </settings>
         </field>
-        <!--suppress XmlDefaultAttributeValue -->
         <field name="code" sortOrder="30" formElement="input">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -235,7 +232,6 @@
                         </item>
                     </argument>
                 </hidden>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="name" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -250,7 +246,6 @@
                         <label>Name</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="host" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -265,7 +260,6 @@
                         <label>Host</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="port" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -278,7 +272,6 @@
                         <label>Port</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="username" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -293,7 +286,6 @@
                         <label>User Name</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="password" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -308,7 +300,6 @@
                         <label>Password</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="passive_mode" formElement="checkbox">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -332,7 +323,6 @@
                         </checkbox>
                     </formElements>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="source_dir" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -347,7 +337,6 @@
                         <label>Source Directory</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="destination_dir" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -385,7 +374,6 @@
                         </checkbox>
                     </formElements>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="check" formElement="input" component="MageSuite_ErpConnector/js/form/element/check">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -442,7 +430,6 @@
                         </item>
                     </argument>
                 </hidden>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="name" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -457,7 +444,6 @@
                         <label>Name</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="host" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -472,7 +458,6 @@
                         <label>Host</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="username" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -487,7 +472,6 @@
                         <label>User Name</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="password" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -502,7 +486,6 @@
                         <label>Password</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="timeout" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -514,7 +497,6 @@
                         <label>Timeout</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="source_dir" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -529,7 +511,6 @@
                         <label>Source Directory</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="destination_dir" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -567,7 +548,32 @@
                         </checkbox>
                     </formElements>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
+                <field name="use_proxy" formElement="checkbox">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="fit" xsi:type="boolean">false</item>
+                            <item name="default" xsi:type="number">0</item>
+                            <item name="additionalInfo" xsi:type="string">
+                                <![CDATA[<small>socks5 proxy must be configured</small>]]>
+                            </item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <label>Use proxy</label>
+                        <dataType>boolean</dataType>
+                    </settings>
+                    <formElements>
+                        <checkbox>
+                            <settings>
+                                <valueMap>
+                                    <map name="false" xsi:type="string">0</map>
+                                    <map name="true" xsi:type="string">1</map>
+                                </valueMap>
+                                <prefer>toggle</prefer>
+                            </settings>
+                        </checkbox>
+                    </formElements>
+                </field>
                 <field name="check" formElement="input" component="MageSuite_ErpConnector/js/form/element/check">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -624,7 +630,6 @@
                         </item>
                     </argument>
                 </hidden>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="name" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -660,7 +665,6 @@
                         </select>
                     </formElements>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="wsdl" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -675,7 +679,6 @@
                         <label>WSDL</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="login" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -690,7 +693,6 @@
                         <label>Login</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="password" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -705,7 +707,6 @@
                         <label>Password</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="location" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -720,7 +721,6 @@
                         <label>Location</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="action" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -753,7 +753,7 @@
                                     <map name="false" xsi:type="string">0</map>
                                     <map name="true" xsi:type="string">1</map>
                                 </valueMap>
-                                <prefer>checkbox</prefer>
+                                <prefer>toggle</prefer>
                             </settings>
                         </checkbox>
                     </formElements>
@@ -821,7 +821,6 @@
                         </actionDelete>
                     </container>
                 </dynamicRows>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="check" formElement="input" component="MageSuite_ErpConnector/js/form/element/check">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -871,7 +870,6 @@
                         <item name="componentType" xsi:type="string">container</item>
                     </item>
                 </argument>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="name" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -975,7 +973,6 @@
                         </select>
                     </formElements>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="timeout" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -1100,7 +1097,6 @@
                         </item>
                     </argument>
                 </hidden>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="name" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
@@ -1115,7 +1111,6 @@
                         <label>Name</label>
                     </settings>
                 </field>
-                <!--suppress XmlDefaultAttributeValue -->
                 <field name="email" formElement="input">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">

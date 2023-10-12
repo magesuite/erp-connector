@@ -25,17 +25,29 @@
             </group>
             <group id="connector" translate="label" type="text" sortOrder="20" showInDefault="1">
                 <label>Connectors</label>
-                <field id="http_proxy" translate="label" type="text" sortOrder="10" showInDefault="1" canRestore="1">
+                <field id="sftp_proxy_host" translate="label" type="text" sortOrder="10" showInDefault="1" canRestore="1">
+                    <label>Proxy host for SFTP connector</label>
+                    <comment>
+                        <![CDATA[This option is optional requires a configured proxy (preferably socks5 protocol) on the server.]]>
+                    </comment>
+                </field>
+                <field id="sftp_proxy_port" translate="label" type="text" sortOrder="20" showInDefault="1" canRestore="1">
+                    <label>Proxy port for SFTP connector</label>
+                    <comment>
+                        <![CDATA[This option is optional requires a configured proxy (preferably socks5 protocol) on the server.]]>
+                    </comment>
+                </field>
+                <field id="http_proxy" translate="label" type="text" sortOrder="30" showInDefault="1" canRestore="1">
                     <label>Proxy for HTTP connector</label>
                     <comment>
                         <![CDATA[This option is optional requires a configured proxy (preferably socks5 protocol) on the server. The proxy must be set up first, otherwise there may be problems with communication over HTTP.]]>
                     </comment>
                 </field>
-                <field id="soap_proxy_host" translate="label" type="text" sortOrder="20" showInDefault="1" canRestore="1">
+                <field id="soap_proxy_host" translate="label" type="text" sortOrder="40" showInDefault="1" canRestore="1">
                     <label>Proxy host for SOAP connector</label>
                     <comment><![CDATA[This option is optional requires a configured proxy (preferably tinyproxy) on the server. The proxy must be set up first, otherwise there may be problems with communication over SOAP.]]></comment>
                 </field>
-                <field id="soap_proxy_port" translate="label" type="text" sortOrder="30" showInDefault="1" canRestore="1">
+                <field id="soap_proxy_port" translate="label" type="text" sortOrder="50" showInDefault="1" canRestore="1">
                     <label>Proxy port for SOAP connector</label>
                     <comment><![CDATA[This option is optional requires a configured proxy (preferably tinyproxy) on the server. The proxy must be set up first, otherwise there may be problems with communication over SOAP.]]></comment>
                 </field>
