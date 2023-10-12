@@ -20,7 +20,7 @@ class Sftp extends \MageSuite\ErpConnector\Model\Client\Client implements Client
     ) {
         parent::__construct($eventManager, $data);
 
-        $this->connection = $configuration;
+        $this->configuration = $configuration;
         $this->sftpFactory = $sftpFactory;
         $this->sftpProxyFactory = $sftpProxyFactory;
         $this->logErrorMessage = $logErrorMessage;
