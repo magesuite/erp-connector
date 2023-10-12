@@ -3,20 +3,26 @@ namespace MageSuite\ErpConnector\Model\Client;
 
 class Sftp extends \MageSuite\ErpConnector\Model\Client\Client implements ClientInterface
 {
+    protected \MageSuite\ErpConnector\Helper\Configuration $configuration;
     protected \Magento\Framework\Filesystem\Io\SftpFactory $sftpFactory;
+    protected \MageSuite\ErpConnector\Model\Framework\Filesystem\Io\SftpProxyFactory $sftpProxyFactory;
     protected \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage;
 
     protected $connection = null;
 
     public function __construct(
+        \MageSuite\ErpConnector\Helper\Configuration $configuration,
         \Magento\Framework\Event\Manager $eventManager,
         \Magento\Framework\Filesystem\Io\SftpFactory $sftpFactory,
+        \MageSuite\ErpConnector\Model\Framework\Filesystem\Io\SftpProxyFactory $sftpProxyFactory,
         \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
         array $data = []
     ) {
         parent::__construct($eventManager, $data);
 
+        $this->connection = $configuration;
         $this->sftpFactory = $sftpFactory;
+        $this->sftpProxyFactory = $sftpProxyFactory;
         $this->logErrorMessage = $logErrorMessage;
     }
 
@@ -264,7 +270,12 @@ class Sftp extends \MageSuite\ErpConnector\Model\Client\Client implements Client
             return $this->connection;
         }
 
-        $connection = $this->sftpFactory->create();
+        if ($this->getData('use_proxy')) {
+            $connection = $this->sftpProxyFactory->create();
+        } else {
+            $connection = $this->sftpFactory->create();
+        }
+
         $connection->open($this->getClientConfiguration());
 
         $this->connection = $connection;
@@ -279,6 +290,7 @@ class Sftp extends \MageSuite\ErpConnector\Model\Client\Client implements Client
             'username' => $this->getData('username'),
             'password' => $this->getData('password'),
             'timeout' => $this->getData('timeout') ?? 15,
+            'proxy' => $this->configuration->getSftpConnectorProxy()
         ];
     }
 

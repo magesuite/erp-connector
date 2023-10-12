@@ -8,6 +8,8 @@ class Configuration
     const XML_PATH_PROVIDER_CONFIGURATION_CODES = 'erp_connector/general/provider_configuration_codes';
     const XML_PATH_EMAIL_GENERAL_NAME = 'trans_email/ident_general/name';
     const XML_PATH_EMAIL_GENERAL_EMAIL = 'trans_email/ident_general/email';
+    const XML_PATH_CONNECTOR_SFTP_PROXY_HOST = 'erp_connector/connector/sftp_proxy_host';
+    const XML_PATH_CONNECTOR_SFTP_PROXY_PORT = 'erp_connector/connector/sftp_proxy_port';
     const XML_PATH_CONNECTOR_HTTP_PROXY = 'erp_connector/connector/http_proxy';
     const XML_PATH_CONNECTOR_SOAP_PROXY_HOST = 'erp_connector/connector/soap_proxy_host';
     const XML_PATH_CONNECTOR_SOAP_PROXY_PORT = 'erp_connector/connector/soap_proxy_port';
@@ -38,6 +40,14 @@ class Configuration
         }
 
         return $this->serializer->unserialize($configurationCodes);
+    }
+
+    public function getSftpConnectorProxy(): array
+    {
+        return [
+            'host' => (string)$this->scopeConfig->getValue(self::XML_PATH_CONNECTOR_SFTP_PROXY_HOST),
+            'post' => (string)$this->scopeConfig->getValue(self::XML_PATH_CONNECTOR_SFTP_PROXY_PORT)
+        ];
     }
 
     public function getHttpConnectorProxy(): string

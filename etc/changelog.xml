@@ -49,6 +49,13 @@
                     <ticket_id>IPET-2123</ticket_id>
                 </entry>
             </tag>
+            <tag version="1.3.2" date="2023-10-09">
+                <entry>
+                    <type>FEATURE</type>
+                    <overview>Add possibility to use a proxy for specific SFTP connector.</overview>
+                    <ticket_id>IPET-2231</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>

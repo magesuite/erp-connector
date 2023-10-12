@@ -54,6 +54,7 @@
                         <item name="source_dir" xsi:type="null"></item>
                         <item name="destination_dir" xsi:type="null"></item>
                         <item name="skip_validation" xsi:type="null"></item>
+                        <item name="use_proxy" xsi:type="null"></item>
                     </item>
                 </item>
                 <item name="soap" xsi:type="array">
