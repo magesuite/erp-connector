@@ -41,9 +41,7 @@ class Email extends \MageSuite\ErpConnector\Model\Client\Client implements Clien
 
     protected function sendItem($provider, $item)
     {
-        $files = $item['files'] ?? null;
-
-        if (empty($files)) {
+        if (isset($item['files']) && empty($files)) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
                 'Missing files data',
@@ -93,12 +91,14 @@ class Email extends \MageSuite\ErpConnector\Model\Client\Client implements Clien
                 ->setFromByScope($item['sender'])
                 ->addTo($recipient);
 
-            foreach ($item['files'] as $fileName => $content) {
-                if (is_array($content)) {
-                    $content = json_encode($content, JSON_PRETTY_PRINT);
-                }
+            if (isset($item['files'])) {
+                foreach ($item['files'] as $fileName => $content) {
+                    if (is_array($content)) {
+                        $content = json_encode($content, JSON_PRETTY_PRINT);
+                    }
 
-                $transport->addAttachmentFromContent($content, $fileName, \Magento\Framework\Mail\MimeInterface::TYPE_OCTET_STREAM);
+                    $transport->addAttachmentFromContent($content, $fileName, \Magento\Framework\Mail\MimeInterface::TYPE_OCTET_STREAM);
+                }
             }
 
             $transport->getTransport()->sendMessage();
@@ -115,8 +115,10 @@ class Email extends \MageSuite\ErpConnector\Model\Client\Client implements Clien
 
     public function getEmailTemplateVariables($provider, $item)
     {
+        $filename = isset($item['files']) ? current(array_keys($item['files'])) : null;
+
         return [
-            'file_name' => current(array_keys($item['files'])),
+            'file_name' => $filename,
             'provider' => $provider,
             'order' => $item['order']
         ];
