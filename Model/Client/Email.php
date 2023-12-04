@@ -41,7 +41,7 @@ class Email extends \MageSuite\ErpConnector\Model\Client\Client implements Clien
 
     protected function sendItem($provider, $item)
     {
-        if (isset($item['files']) && empty($files)) {
+        if (isset($item['files']) && empty($item['files'])) {
             $this->logErrorMessage->execute(
                 sprintf(self::ERROR_MESSAGE_TITLE_FORMAT, $provider->getName()),
                 'Missing files data',
