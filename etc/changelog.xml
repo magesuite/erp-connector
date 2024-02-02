@@ -56,6 +56,13 @@
                     <ticket_id>IPET-2231</ticket_id>
                 </entry>
             </tag>
+            <tag version="1.3.7" date="2024-02-02">
+                <entry>
+                    <type>FIX</type>
+                    <overview>Fix product attributes list.</overview>
+                    <ticket_id>LP-2301</ticket_id>
+                </entry>
+            </tag>
         </changelog>
     </module>
 </config>
