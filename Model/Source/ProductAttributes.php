@@ -8,20 +8,27 @@ class ProductAttributes implements \Magento\Framework\Data\OptionSourceInterface
 {
     protected \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory;
     protected \Magento\Store\Model\StoreManagerInterface $storeManager;
+    protected \Magento\Eav\Model\Config $eavConfig;
 
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $collectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Eav\Model\Config $eavConfig
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->storeManager = $storeManager;
+        $this->eavConfig = $eavConfig;
     }
 
     protected function getProductAttributes(): \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
     {
+        $entityTypeId = $this->eavConfig
+            ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
+            ->getEntityTypeId();
+
         return $this->collectionFactory
             ->create()
-            ->addFieldToFilter('entity_type_id', 4);
+            ->addFieldToFilter('entity_type_id', $entityTypeId);
     }
 
     public function toOptionArray(): array
