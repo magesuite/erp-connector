@@ -4,22 +4,21 @@ namespace MageSuite\ErpConnector\Model\Modifier;
 
 class SensitiveModifier
 {
-    /**
-     * @var \MageSuite\ErpConnector\Model\Data\VaultItemFactory
-     */
-    protected $vaultItemFactory;
-
-    /**
-     * @var \MageSuite\ErpConnector\Api\VaultRepositoryInterface
-     */
-    protected $vaultRepository;
+    protected \MageSuite\ErpConnector\Model\Data\VaultItemFactory$vaultItemFactory;
+    protected \MageSuite\ErpConnector\Api\VaultRepositoryInterface $vaultRepository;
+    protected \MageSuite\ErpConnector\Model\ResourceModel\GetRawConnectorConfigurationValue $getRawConnectorConfigurationValue;
+    protected \MageSuite\ErpConnector\Model\ResourceModel\VaultItem $vaultItemResourceModel;
 
     public function __construct(
         \MageSuite\ErpConnector\Model\Data\VaultItemFactory $vaultItemFactory,
-        \MageSuite\ErpConnector\Api\VaultRepositoryInterface $vaultRepository
+        \MageSuite\ErpConnector\Api\VaultRepositoryInterface $vaultRepository,
+        \MageSuite\ErpConnector\Model\ResourceModel\GetRawConnectorConfigurationValue $getRawConnectorConfigurationValue,
+        \MageSuite\ErpConnector\Model\ResourceModel\VaultItem $vaultItemResourceModel
     ) {
         $this->vaultItemFactory = $vaultItemFactory;
         $this->vaultRepository = $vaultRepository;
+        $this->getRawConnectorConfigurationValue = $getRawConnectorConfigurationValue;
+        $this->vaultItemResourceModel = $vaultItemResourceModel;
     }
 
     public function isSaveAllowed($connectorConfigurationItem, $isSaveAllowed)
@@ -42,9 +41,19 @@ class SensitiveModifier
         }
 
         $vaultItem = $this->vaultItemFactory->create();
+        $encryptedValue = $vaultItem->encryptValue($connectorConfigurationItem->getValue());
+
+        $currentIdentifier = $this->getRawConnectorConfigurationValue->execute($connectorConfigurationItem->getConnectorId(), $connectorConfigurationItem->getName());
+
+        if ($currentIdentifier) {
+            $this->vaultItemResourceModel->load($vaultItem, $currentIdentifier, 'identifier');
+            $vaultItem->setValue($encryptedValue);
+            $this->vaultRepository->save($vaultItem);
+
+            return $currentIdentifier;
+        }
 
         $identifier = $connectorConfigurationItem->getConnectorId() . uniqid();
-        $encryptedValue = $vaultItem->encryptValue($connectorConfigurationItem->getValue());
 
         $vaultItem
             ->setConnectorId($connectorConfigurationItem->getConnectorId())

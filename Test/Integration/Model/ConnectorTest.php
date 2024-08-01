@@ -22,6 +22,16 @@ class ConnectorTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     private $connection;
 
+    /**
+     * @var \MageSuite\ErpConnector\Model\ConnectorResolver
+     */
+    private $connectorResolver;
+
+    /**
+     * @var \MageSuite\ErpConnector\Model\ConnectorConfigurationRepository
+     */
+    private $connectorConfigurationRepository;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -29,6 +39,8 @@ class ConnectorTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->providerRepository = $this->_objectManager->get(\MageSuite\ErpConnector\Model\ProviderRepository::class);
         $this->connectorRepository = $this->_objectManager->get(\MageSuite\ErpConnector\Model\ConnectorRepository::class);
         $this->connection = $this->_objectManager->get(\Magento\Framework\App\ResourceConnection::class)->getConnection();
+        $this->connectorResolver = $this->_objectManager->get(\MageSuite\ErpConnector\Model\ConnectorResolver::class);
+        $this->connectorConfigurationRepository = $this->_objectManager->get(\MageSuite\ErpConnector\Model\ConnectorConfigurationRepository::class);
     }
 
     /**
@@ -39,7 +51,7 @@ class ConnectorTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     {
         $provider = $this->providerRepository->getByName('Test Provider');
 
-        $this->saveConnectors($provider);
+        $this->saveConnectors($this->getConnectorsFormData($provider));
 
         $connectors = $this->connectorRepository->getByProviderId($provider->getId());
 
@@ -47,9 +59,48 @@ class ConnectorTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->savedConnectorsHaveCorrectData($connectors);
     }
 
-    protected function saveConnectors($provider)
+    /**
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture MageSuite_ErpConnector::Test/Integration/_files/provider.php
+     */
+    public function testItClearsOldPasswordOnPasswordUpdate()
     {
-        $data = [
+        $provider = $this->providerRepository->getByName('Test Provider');
+        $formData = $this->getConnectorsFormData($provider);
+
+        $this->saveConnectors($formData);
+
+        $formData['connectors']['http']['http'][0]['password'] = 'updatedpassword';
+        $formData['connectors']['http']['http'][0]['authorization_bearer'] = 'updatedbearertoken';
+
+        $this->saveConnectors($formData);
+
+        $connectors = $this->connectorRepository->getByProviderId($provider->getId());
+
+        foreach ($connectors as $connector) {
+            if ($connector->getType() == 'http') {
+                $tableName = $this->connection->getTableName('erp_connector_vault');
+
+                $select = $this->connection->select()
+                    ->from($tableName, ['COUNT(*) AS count'])
+                    ->where('connector_id = ?', $connector->getId());
+
+                $result = $this->connection->fetchOne($select);
+
+                $this->assertEquals(2, (int)$result);
+
+                $password = $this->connectorConfigurationRepository->getItemByConnectorIdAndName($connector->getId(), 'password');
+                $bearerToken = $this->connectorConfigurationRepository->getItemByConnectorIdAndName($connector->getId(), 'authorization_bearer');
+
+                $this->assertEquals('updatedpassword', $password->getValue());
+                $this->assertEquals('updatedbearertoken', $bearerToken->getValue());
+            }
+        }
+    }
+
+    protected function getConnectorsFormData($provider)
+    {
+        return [
             'general' => $provider->getData(),
             'connectors' => [
                 'ftp' => [
@@ -84,6 +135,7 @@ class ConnectorTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
                             'request_method' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
                             'login' => 'ruser',
                             'password' => 'abcdefgh',
+                            'authorization_bearer' => 'testbearer1',
                             'content_type' => \MageSuite\ErpConnector\Model\Source\ContentType::CONTENT_TYPE_JSON,
                             'timeout' => 7337
                         ]
@@ -96,9 +148,12 @@ class ConnectorTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
                 ]
             ]
         ];
+    }
 
+    protected function saveConnectors($formData)
+    {
         $this->getRequest()->setMethod(\Magento\Framework\App\Request\Http::METHOD_POST);
-        $this->getRequest()->setPostValue($data);
+        $this->getRequest()->setPostValue($formData);
         $this->dispatch('backend/erp_connector/provider/save');
     }
 
@@ -163,6 +218,7 @@ class ConnectorTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $this->assertEquals(\Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST, $httpClient->getRequestMethod());
         $this->assertEquals('ruser', $httpClient->getLogin());
         $this->assertEquals('abcdefgh', $httpClient->getPassword());
+        $this->assertEquals('testbearer1', $httpClient->getAuthorizationBearer());
         $this->assertEquals(\MageSuite\ErpConnector\Model\Source\ContentType::CONTENT_TYPE_JSON, $httpClient->getContentType());
         $this->assertEquals(7337, $httpClient->getTimeout());
 
