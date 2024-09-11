@@ -4,23 +4,15 @@ namespace MageSuite\ErpConnector\Model\ProviderProcessor;
 
 class ProviderProcessor extends \Magento\Framework\DataObject
 {
-    /**
-     * @var \MageSuite\ErpConnector\Api\ProviderRepositoryInterface
-     */
-    protected $providerRepository;
-
-    /**
-     * @var \MageSuite\ErpConnector\Model\Command\LogErrorMessage
-     */
-    protected $logErrorMessage;
+    protected \MageSuite\ErpConnector\Api\ProviderRepositoryInterface $providerRepository;
+    protected \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage;
 
     protected $scheduler = null;
 
     /**
      * Scheduler ID => Provider
-     * @var array
      */
-    protected $schedulerIdToProviderMap = [];
+    protected array $schedulerIdToProviderMap = [];
 
     public function __construct(
         \MageSuite\ErpConnector\Api\ProviderRepositoryInterface $providerRepository,
