@@ -39,10 +39,10 @@ interface ConnectorConfigurationRepositoryInterface
     public function getItemByConnectorIdAndName($connectorId, $name);
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
      * @return \Magento\Framework\Api\SearchResultsInterface
      */
-    public function getList($searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria);
 
     /**
      * @param \MageSuite\ErpConnector\Model\Data\ConnectorConfiguration $connectorConfiguration

@@ -110,7 +110,7 @@ class SchedulerConnectorConfigurationRepository implements \MageSuite\ErpConnect
         return $list->getItems();
     }
 
-    public function getList($criteria = null)
+    public function getList(?\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
         $collection = $this->collectionFactory->create();
 
