@@ -30,7 +30,7 @@ interface ConnectorRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return Data\ConnectorSearchResultsInterface
      */
-    public function getList($searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
      * @param \MageSuite\ErpConnector\Model\Data\Connector $connector

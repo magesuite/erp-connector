@@ -95,7 +95,7 @@ class ProviderRepository implements \MageSuite\ErpConnector\Api\ProviderReposito
         return $provider;
     }
 
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria = null)
+    public function getList(?\Magento\Framework\Api\SearchCriteriaInterface $criteria = null)
     {
         $collection = $this->collectionFactory->create();
 

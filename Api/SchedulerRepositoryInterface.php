@@ -39,7 +39,7 @@ interface SchedulerRepositoryInterface
      * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
      * @return \Magento\Framework\Api\SearchResultsInterface
      */
-    public function getList($searchCriteria = null);
+    public function getList(?\Magento\Framework\Api\SearchCriteriaInterface $criteria = null);
 
     /**
      * @param \MageSuite\ErpConnector\Model\Data\Scheduler $scheduler

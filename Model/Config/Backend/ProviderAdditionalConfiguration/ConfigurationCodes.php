@@ -15,10 +15,10 @@ class ConfigurationCodes extends \Magento\Config\Model\Config\Backend\Serialized
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \MageSuite\ErpConnector\Helper\Configuration $configuration,
         \MageSuite\ErpConnector\Model\Command\ProviderAdditionalConfiguration\ValidateConfigurationCodes $validateConfigurationCodes,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        ?\Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         parent::__construct(
             $context,

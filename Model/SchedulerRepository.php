@@ -111,7 +111,7 @@ class SchedulerRepository implements \MageSuite\ErpConnector\Api\SchedulerReposi
         return $list->getItems();
     }
 
-    public function getList($criteria = null)
+    public function getList(?\Magento\Framework\Api\SearchCriteriaInterface $criteria = null)
     {
         $collection = $this->collectionFactory->create();
 

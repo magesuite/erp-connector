@@ -80,7 +80,7 @@ class ConnectorConfigurationRepository implements \MageSuite\ErpConnector\Api\Co
         return $this->connectorConfigurations[$id];
     }
 
-    public function getList($criteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
         $collection = $this->collectionFactory->create();
 

@@ -25,11 +25,11 @@ interface ProviderAdditionalConfigurationRepositoryInterface
     public function getByProviderId($providerId);
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
      * @return \Magento\Framework\Api\SearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getList($searchCriteria);
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria);
 
     /**
      * @param \MageSuite\ErpConnector\Model\Data\ProviderAdditionalConfiguration $providerAdditionalConfiguration

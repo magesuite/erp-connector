@@ -87,7 +87,7 @@ class ProviderAdditionalConfigurationRepository implements \MageSuite\ErpConnect
         return $list->getItems();
     }
 
-    public function getList($criteria)
+    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
         $collection = $this->collectionFactory->create();
 
