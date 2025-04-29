@@ -35,10 +35,10 @@ interface SchedulerConnectorConfigurationRepositoryInterface
     public function getByProviderId($providerId);
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface|null $searchCriteria
+     * @param \Magento\Framework\Api\SearchCriteriaInterface|null $criteria
      * @return \Magento\Framework\Api\SearchResultsInterface
      */
-    public function getList(?\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null);
+    public function getList(?\Magento\Framework\Api\SearchCriteriaInterface $criteria = null);
 
     /**
      * @param \MageSuite\ErpConnector\Model\Data\SchedulerConnectorConfiguration $schedulerConnectorConfiguration
