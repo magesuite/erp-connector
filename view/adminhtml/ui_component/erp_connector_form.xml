@@ -335,6 +335,13 @@
                         </validation>
                         <dataType>text</dataType>
                         <label>Source Directory</label>
+                        <tooltip>
+                            <description translate="true">Placeholders can be used:
+                                {date} - date in format Y.m.d
+                                {date_time_short} - date in format dmY_His
+                                {date_time_full} - date in format Y.m.d_H.i.s
+                                ex: /files/{date}/</description>
+                        </tooltip>
                     </settings>
                 </field>
                 <field name="destination_dir" formElement="input">
@@ -349,6 +356,15 @@
                         </validation>
                         <dataType>text</dataType>
                         <label>Destination Directory</label>
+                        <tooltip>
+                            <description translate="true">Placeholders can be used:
+                                {provider_name} - provider name
+                                {provider_code} - provider code
+                                {date} - date in format Y.m.d
+                                {date_time_short} - date in format dmY_His
+                                {date_time_full} - date in format Y.m.d_H.i.s
+                                ex: /files/{date}/</description>
+                        </tooltip>
                     </settings>
                 </field>
                 <field name="skip_validation" formElement="checkbox">
@@ -509,6 +525,15 @@
                         </validation>
                         <dataType>text</dataType>
                         <label>Source Directory</label>
+                        <tooltip>
+                            <description translate="true">Placeholders can be used:
+                                {provider_name} - provider name
+                                {provider_code} - provider code
+                                {date} - date in format Y.m.d
+                                {date_time_short} - date in format dmY_His
+                                {date_time_full} - date in format Y.m.d_H.i.s
+                                ex: /files/{date}/</description>
+                        </tooltip>
                     </settings>
                 </field>
                 <field name="destination_dir" formElement="input">
@@ -523,6 +548,15 @@
                         </validation>
                         <dataType>text</dataType>
                         <label>Destination Directory</label>
+                        <tooltip>
+                            <description translate="true">Placeholders can be used:
+                                {provider_name} - provider name
+                                {provider_code} - provider code
+                                {date} - date in format Y.m.d
+                                {date_time_short} - date in format dmY_His
+                                {date_time_full} - date in format Y.m.d_H.i.s
+                                ex: /files/{date}/</description>
+                        </tooltip>
                     </settings>
                 </field>
                 <field name="skip_validation" formElement="checkbox">

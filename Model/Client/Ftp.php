@@ -1,42 +1,40 @@
 <?php
+
+declare(strict_types=1);
+
 namespace MageSuite\ErpConnector\Model\Client;
 
-class Ftp extends \MageSuite\ErpConnector\Model\Client\Client implements ClientInterface
+class Ftp extends FileClient implements ClientInterface
 {
-    protected \Magento\Framework\Filesystem\Io\FtpFactory $ftpFactory;
-    protected \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage;
-
-    protected $connection = null;
+    protected ?\Magento\Framework\Filesystem\Io\Ftp $connection = null;
 
     public function __construct(
-        \Magento\Framework\Event\Manager $eventManager,
-        \Magento\Framework\Filesystem\Io\FtpFactory $ftpFactory,
-        \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
+        protected \Magento\Framework\Event\Manager $eventManager,
+        protected \MageSuite\ErpConnector\Model\Command\FormatDirectoryName $formatDirectoryName,
+        protected \Magento\Framework\Filesystem\Io\FtpFactory $ftpFactory,
+        protected \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
         array $data = []
     ) {
-        parent::__construct($eventManager, $data);
-
-        $this->ftpFactory = $ftpFactory;
-        $this->logErrorMessage = $logErrorMessage;
+        parent::__construct($eventManager, $formatDirectoryName, $data);
     }
 
-    public function checkConnection()
+    public function checkConnection(): void
     {
         $connection = $this->getConnection();
         $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
 
-        if (!$connection->cd($this->getData('destination_dir'))) {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to detect a directory "%1" at a remote FTP location %2.', $this->getData('destination_dir'), $location));
+        if (!$connection->cd($this->getDestinationDirectory())) {
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to detect a directory "%1" at a remote FTP location %2.', $this->getDestinationDirectory(), $location));
         }
 
-        if (!$connection->cd($this->getData('source_dir'))) {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to detect a directory "%1" at a remote FTP location %2.', $this->getData('source_dir'), $location));
+        if (!$connection->cd($this->getSourceDirectory())) {
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to detect a directory "%1" at a remote FTP location %2.', $this->getSourceDirectory(), $location));
         }
 
         $this->closeConnection($connection);
     }
 
-    public function sendItems($provider, $items)
+    public function sendItems(\MageSuite\ErpConnector\Api\Data\ProviderInterface $provider, array $items): self
     {
         foreach ($items as $item) {
             $this->sendItem($provider, $item);
@@ -45,7 +43,7 @@ class Ftp extends \MageSuite\ErpConnector\Model\Client\Client implements ClientI
         return $this;
     }
 
-    protected function sendItem($provider, $item)
+    protected function sendItem(\MageSuite\ErpConnector\Api\Data\ProviderInterface $provider, array $item): bool
     {
         $files = $item['files'] ?? null;
 
@@ -59,14 +57,14 @@ class Ftp extends \MageSuite\ErpConnector\Model\Client\Client implements ClientI
         }
 
         $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
-        $sourceDir = $this->getData('source_dir');
+        $sourceDir = $this->getSourceDirectory();
 
         try {
             $connection = $this->getConnection();
 
             foreach ($files as $fileName => $content) {
                 $this->validateFile($sourceDir, $fileName, $content, $provider->getName());
-                $this->validateFile($this->getData('destination_dir'), $fileName, $content, $provider->getName());
+                $this->validateFile($this->getDestinationDirectory(), $fileName, $content, $provider->getName());
 
                 $connection->cd($sourceDir);
                 $result = $connection->write($fileName, $content);
@@ -103,7 +101,7 @@ class Ftp extends \MageSuite\ErpConnector\Model\Client\Client implements ClientI
         return true;
     }
 
-    public function downloadItems($provider)
+    public function downloadItems(\MageSuite\ErpConnector\Api\Data\ProviderInterface $provider): array
     {
         $downloaded = [];
 
@@ -112,11 +110,11 @@ class Ftp extends \MageSuite\ErpConnector\Model\Client\Client implements ClientI
         try {
             $connection = $this->getConnection();
 
-            $sourceDir = $this->getData('source_dir');
-            $destinationDir = $this->getData('destination_dir');
+            $sourceDir = $this->getSourceDirectory();
+            $destinationDir = $this->getDestinationDirectory();
 
-            $this->validateDirectoryExist($sourceDir, $provider);
-            $this->validateDirectoryExist($destinationDir, $provider);
+            $this->validateDirectoryExist($sourceDir, $provider->getName());
+            $this->validateDirectoryExist($destinationDir, $provider->getName());
 
             $connection->cd($sourceDir);
             $files = $connection->ls();
@@ -166,7 +164,7 @@ class Ftp extends \MageSuite\ErpConnector\Model\Client\Client implements ClientI
         return $downloaded;
     }
 
-    public function isValidFileName($fileName)
+    public function isValidFileName(string $fileName): bool
     {
         if (empty($fileName) || $fileName == '../') {
             return false;
@@ -181,7 +179,7 @@ class Ftp extends \MageSuite\ErpConnector\Model\Client\Client implements ClientI
         return false;
     }
 
-    public function validateDirectoryExist($directory, $providerName)
+    public function validateDirectoryExist(string $directory, string $providerName): bool
     {
         $connection = $this->getConnection();
         $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
@@ -198,7 +196,7 @@ class Ftp extends \MageSuite\ErpConnector\Model\Client\Client implements ClientI
         }
     }
 
-    protected function validateFile($directory, $fileName, $content, $providerName) //phpcs:ignore
+    protected function validateFile(string $directory, string $fileName, string $content, string $providerName): bool //phpcs:ignore
     {
         $connection = $this->getConnection();
 
@@ -255,7 +253,7 @@ class Ftp extends \MageSuite\ErpConnector\Model\Client\Client implements ClientI
         return true;
     }
 
-    public function getConnection()
+    public function getConnection(): \Magento\Framework\Filesystem\Io\Ftp
     {
         if ($this->connection !== null) {
             return $this->connection;
@@ -269,7 +267,7 @@ class Ftp extends \MageSuite\ErpConnector\Model\Client\Client implements ClientI
         return $this->connection;
     }
 
-    public function getClientConfiguration()
+    public function getClientConfiguration(): array
     {
         $configuration = [
             'host' => $this->getData('host'),
@@ -287,17 +285,17 @@ class Ftp extends \MageSuite\ErpConnector\Model\Client\Client implements ClientI
         return $configuration;
     }
 
-    public function closeConnection($connection)
+    public function closeConnection(\Magento\Framework\Filesystem\Io\Ftp $connection): void
     {
         $connection->close();
         $this->connection = null;
     }
 
-    public function validateProcessedFile($fileName)
+    public function validateProcessedFile(string $fileName): bool
     {
         try {
             $connection = $this->getConnection();
-            $connection->cd($this->getData('destination_dir'));
+            $connection->cd($this->getDestinationDirectory());
 
             $destinationFileContent = $connection->read($fileName);
 
