@@ -15,11 +15,12 @@ class FormatDirectoryName
         return str_replace(
             [
                 '{date}',
-                '{date_time_full}',
+                '{date_time_short}',
                 '{date_time_full}',
             ],
             [
                 $this->dateTime->date('Y.m.d'),
+                $this->dateTime->date('Ymd_His'),
                 $this->dateTime->date('Y-m-d_H:i:s')
             ],
             $directoryName
