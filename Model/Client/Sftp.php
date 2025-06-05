@@ -190,52 +190,52 @@ class Sftp extends FileClient implements ClientInterface
 
         $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
 
-        if ($connection->cd($directory)) {
-            try {
-                $files = $connection->ls();
-            } catch (\Exception $e) {
-                $files = [];
+        if (!$connection->cd($directory)) {
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
+                'Unable to detect a directory "%s" at a "%s" remote SFTP location %s.',
+                $directory,
+                $providerName,
+                $location
+            ));
+        }
+
+        try {
+            $files = $connection->ls();
+        } catch (\Exception $e) {
+            $files = [];
+        }
+
+        if (!is_array($files)) {
+            return true;
+        }
+
+        foreach ($files as $file) {
+            if ($file['text'] !== $fileName) {
+                continue;
             }
 
-            if (!is_array($files)) {
-                return true;
-            }
+            $destinationFileContent = $connection->read($fileName);
 
-            foreach ($files as $file) {
-                if ($file['text'] !== $fileName) {
-                    continue;
-                }
-
-                $destinationFileContent = $connection->read($fileName);
-
-                if (!$destinationFileContent) {
-                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
-                        'A file "%s" with the same name and without content already exists at a "%s" remote SFTP location %s.',
-                        $directory,
-                        $providerName,
-                        $location
-                    ));
-                }
-
-                if ($destinationFileContent === $content) {
-                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
-                        'A file "%s" with the same name and same content already exists at a "%s" remote SFTP location %s.',
-                        $directory,
-                        $providerName,
-                        $location
-                    ));
-                }
-
+            if (!$destinationFileContent) {
                 throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
-                    'A file "%s" with the same name and different content already exists at a "%s" remote SFTP location %s.',
+                    'A file "%s" with the same name and without content already exists at a "%s" remote SFTP location %s.',
                     $directory,
                     $providerName,
                     $location
                 ));
             }
-        } else {
+
+            if ($destinationFileContent === $content) {
+                throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
+                    'A file "%s" with the same name and same content already exists at a "%s" remote SFTP location %s.',
+                    $directory,
+                    $providerName,
+                    $location
+                ));
+            }
+
             throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
-                'Unable to detect a directory "%s" at a "%s" remote SFTP location %s.',
+                'A file "%s" with the same name and different content already exists at a "%s" remote SFTP location %s.',
                 $directory,
                 $providerName,
                 $location

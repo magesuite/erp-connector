@@ -25,14 +25,14 @@ class FileClient extends Client implements ClientInterface
 
         if ($connection->cd($directory)) {
             return true;
-        } else {
-            throw new \MageSuite\ErpConnector\Exception\DirectoryNotFound((string)__(
-                'Unable to detect a directory "%1" at a "%2" remote location %3.',
-                $directory,
-                $providerName,
-                $location
-            ));
         }
+
+        throw new \MageSuite\ErpConnector\Exception\DirectoryNotFound((string)__(
+            'Unable to detect a directory "%1" at a "%2" remote location %3.',
+            $directory,
+            $providerName,
+            $location
+        ));
     }
 
     protected function hasDirectoryPlaceholder(string $directory): bool

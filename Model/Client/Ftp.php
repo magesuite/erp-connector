@@ -185,48 +185,48 @@ class Ftp extends FileClient implements ClientInterface
 
         $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
 
-        if ($connection->cd($directory)) {
-            $files = $connection->ls();
+        if (!$connection->cd($directory)) {
+            throw new \MageSuite\ErpConnector\Exception\DirectoryNotFound(sprintf(
+                'Unable to detect a directory "%s" at a "%s" remote FTP location %s.',
+                $directory,
+                $providerName,
+                $location
+            ));
+        }
 
-            if (!is_array($files)) {
-                return true;
+        $files = $connection->ls();
+
+        if (!is_array($files)) {
+            return true;
+        }
+
+        foreach ($files as $file) {
+            if ($file['text'] !== $fileName) {
+                continue;
             }
 
-            foreach ($files as $file) {
-                if ($file['text'] !== $fileName) {
-                    continue;
-                }
+            $destinationFileContent = $connection->read($fileName);
 
-                $destinationFileContent = $connection->read($fileName);
-
-                if (!$destinationFileContent) {
-                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
-                        'A file "%s" with the same name and without content already exists at a "%s" remote FTP location %s.',
-                        $directory,
-                        $providerName,
-                        $location
-                    ));
-                }
-
-                if ($destinationFileContent === $content) {
-                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
-                        'A file "%s" with the same name and same content already exists at a "%s" remote FTP location %s.',
-                        $directory,
-                        $providerName,
-                        $location
-                    ));
-                }
-
+            if (!$destinationFileContent) {
                 throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
-                    'A file "%s" with the same name and different content already exists at a "%s" remote FTP location %s.',
+                    'A file "%s" with the same name and without content already exists at a "%s" remote FTP location %s.',
                     $directory,
                     $providerName,
                     $location
                 ));
             }
-        } else {
-            throw new \MageSuite\ErpConnector\Exception\DirectoryNotFound(sprintf(
-                'Unable to detect a directory "%s" at a "%s" remote FTP location %s.',
+
+            if ($destinationFileContent === $content) {
+                throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
+                    'A file "%s" with the same name and same content already exists at a "%s" remote FTP location %s.',
+                    $directory,
+                    $providerName,
+                    $location
+                ));
+            }
+
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
+                'A file "%s" with the same name and different content already exists at a "%s" remote FTP location %s.',
                 $directory,
                 $providerName,
                 $location
