@@ -26,11 +26,11 @@ class Sftp extends FileClient implements ClientInterface
         $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
 
         if (!$connection->cd($this->getDestinationDirectory())) {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to detect a directory "%1" at a remote SFTP location %2.', $this->getDestinationDirectory(), $location));
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf('Unable to detect a directory "%s" at a remote SFTP location %s.', $this->getDestinationDirectory(), $location));
         }
 
         if (!$connection->cd($this->getSourceDirectory())) {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to detect a directory "%1" at a remote SFTP location %2.', $this->getSourceDirectory(), $location));
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf('Unable to detect a directory "%s" at a remote SFTP location %s.', $this->getSourceDirectory(), $location));
         }
 
         $this->closeConnection($connection);
@@ -72,7 +72,7 @@ class Sftp extends FileClient implements ClientInterface
                 $result = $connection->write($fileName, $content);
 
                 if (!$result) {
-                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to upload a file "%1" to "%2" at a "%3" remote SFTP location %4.', $sourceDir, $provider->getName(), $location));
+                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf('Unable to upload a file to "%s" at a "%s" remote SFTP location %s.', $sourceDir, $provider->getName(), $location));
                 }
 
                 if ($this->getData('skip_validation')) {
@@ -85,7 +85,7 @@ class Sftp extends FileClient implements ClientInterface
                     $connection->rm($fileName);
                     $this->closeConnection($connection);
 
-                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__('Unable to write a content to a file "%1" at a "%2" remote SFTP location %3.', $sourceDir, $provider->getName(), $location));
+                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf('Unable to write a content to a file "%s" at a "%s" remote SFTP location %s.', $sourceDir, $provider->getName(), $location));
                 }
             }
 
@@ -116,7 +116,7 @@ class Sftp extends FileClient implements ClientInterface
             $destinationDir = $this->getDestinationDirectory();
 
             $this->validateDirectoryExist($sourceDir, $provider->getName());
-            $this->validateDirectoryExist($destinationDir, $provider->getName());
+            $this->validateDirectoryExist($destinationDir, $provider->getName(), $this->getData('destination_dir'));
 
             $connection->cd($sourceDir);
             $files = $connection->ls();
@@ -131,12 +131,12 @@ class Sftp extends FileClient implements ClientInterface
 
                 $fileMoved = $connection->mv(
                     sprintf(self::FILE_PATH_FORMAT, $sourceDir, $fileName),
-                    sprintf(self::MOVED_FILE_NAME_FORMAT, $destinationDir, date(self::FILE_PREFIX_DATETIME_FORMAT), $fileName)
+                    $this->getMovedFilePath($destinationDir, $fileName, (bool)$this->getData('rename_moved_file'))
                 );
 
                 if (!$fileMoved) {
-                    throw new \MageSuite\ErpConnector\Exception\RemoteImportFailed(__(
-                        'Can\'t move a file "%1" from a source directory "%2" to a destination directory "%3" at a "%4" remote SFTP location %5.',
+                    throw new \MageSuite\ErpConnector\Exception\RemoteImportFailed(sprintf(
+                        'Can\'t move a file "%s" from a source directory "%s" to a destination directory "%s" at a "%s" remote SFTP location %s.',
                         $fileName,
                         $sourceDir,
                         $destinationDir,
@@ -155,8 +155,8 @@ class Sftp extends FileClient implements ClientInterface
         }
 
         if (empty($downloaded)) {
-            throw new \MageSuite\ErpConnector\Exception\MissingDownloadData(__(
-                'Can\'t detect any valid files at a "%1" remote SFTP location %2.',
+            throw new \MageSuite\ErpConnector\Exception\MissingDownloadData(sprintf(
+                'Can\'t detect any valid files at a "%s" remote SFTP location %s.',
                 $location,
                 $provider->getName()
             ));
@@ -184,23 +184,6 @@ class Sftp extends FileClient implements ClientInterface
         return false;
     }
 
-    public function validateDirectoryExist(string $directory, string $providerName): bool
-    {
-        $connection = $this->getConnection();
-        $location = sprintf(self::LOCATION_FORMAT, $this->getData('username'), $this->getData('host'));
-
-        if ($connection->cd($directory)) {
-            return true;
-        } else {
-            throw new \MageSuite\ErpConnector\Exception\DirectoryNotFound(__(
-                'Unable to detect a directory "%1" at a "%2" remote SFTP location %3.',
-                $directory,
-                $providerName,
-                $location
-            ));
-        }
-    }
-
     protected function validateFile(string $directory, string $fileName, string $content, string $providerName): bool //phpcs:ignore
     {
         $connection = $this->getConnection();
@@ -226,8 +209,8 @@ class Sftp extends FileClient implements ClientInterface
                 $destinationFileContent = $connection->read($fileName);
 
                 if (!$destinationFileContent) {
-                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__(
-                        'A file "%1" with the same name and without content already exists at a "%2" remote SFTP location %3 (%4).',
+                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
+                        'A file "%s" with the same name and without content already exists at a "%s" remote SFTP location %s.',
                         $directory,
                         $providerName,
                         $location
@@ -235,24 +218,24 @@ class Sftp extends FileClient implements ClientInterface
                 }
 
                 if ($destinationFileContent === $content) {
-                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__(
-                        'A file "%1" with the same name and same content already exists at a "%2" remote SFTP location %3 (%4).',
+                    throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
+                        'A file "%s" with the same name and same content already exists at a "%s" remote SFTP location %s.',
                         $directory,
                         $providerName,
                         $location
                     ));
                 }
 
-                throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__(
-                    'A file "%1" with the same name and different content already exists at a "%2" remote SFTP location %3 (%4).',
+                throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
+                    'A file "%s" with the same name and different content already exists at a "%s" remote SFTP location %s.',
                     $directory,
                     $providerName,
                     $location
                 ));
             }
         } else {
-            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(__(
-                'Unable to detect a directory "%1" at a "%2" remote SFTP location %3.',
+            throw new \MageSuite\ErpConnector\Exception\RemoteExportFailed(sprintf(
+                'Unable to detect a directory "%s" at a "%s" remote SFTP location %s.',
                 $directory,
                 $providerName,
                 $location
