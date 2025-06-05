@@ -39,6 +39,7 @@
                         <item name="passive_mode" xsi:type="null"></item>
                         <item name="source_dir" xsi:type="null"></item>
                         <item name="destination_dir" xsi:type="null"></item>
+                        <item name="rename_moved_file" xsi:type="null"></item>
                         <item name="skip_validation" xsi:type="null"></item>
                     </item>
                 </item>
@@ -53,6 +54,7 @@
                         <item name="timeout" xsi:type="null"></item>
                         <item name="source_dir" xsi:type="null"></item>
                         <item name="destination_dir" xsi:type="null"></item>
+                        <item name="rename_moved_file" xsi:type="null"></item>
                         <item name="skip_validation" xsi:type="null"></item>
                         <item name="use_proxy" xsi:type="null"></item>
                     </item>
