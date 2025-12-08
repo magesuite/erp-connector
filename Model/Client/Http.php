@@ -6,24 +6,17 @@ class Http extends \MageSuite\ErpConnector\Model\Client\Client implements Client
 {
     const AUTH_BEARER_TOKEN_FORMAT = 'Bearer %s';
 
-    protected \GuzzleHttp\ClientFactory $clientFactory;
-    protected \MageSuite\ErpConnector\Helper\Configuration $configuration;
-    protected \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage;
-
-    protected $client = null;
+    protected array $clientPool = [];
 
     public function __construct(
         \Magento\Framework\Event\Manager $eventManager,
-        \GuzzleHttp\ClientFactory $clientFactory,
-        \MageSuite\ErpConnector\Helper\Configuration $configuration,
-        \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
+        protected \GuzzleHttp\ClientFactory $clientFactory,
+        protected \MageSuite\ErpConnector\Helper\Configuration $configuration,
+        protected \MageSuite\ErpConnector\Model\Command\LogErrorMessage $logErrorMessage,
+        protected \Magento\Framework\Serialize\SerializerInterface $serializer,
         array $data = []
     ) {
         parent::__construct($eventManager, $data);
-
-        $this->clientFactory = $clientFactory;
-        $this->configuration = $configuration;
-        $this->logErrorMessage = $logErrorMessage;
     }
 
     public function sendItems($provider, $items)
@@ -170,14 +163,14 @@ class Http extends \MageSuite\ErpConnector\Model\Client\Client implements Client
 
     public function getClient()
     {
-        if ($this->client) {
-            return $this->client;
+        $configuration = $this->getClientConfiguration();
+        $cacheKey = hash('sha1', $this->serializer->serialize($configuration));
+
+        if (!array_key_exists($cacheKey, $this->clientPool)) {
+            $this->clientPool[$cacheKey] = $this->clientFactory->create($configuration);
         }
 
-        $client = $this->clientFactory->create($this->getClientConfiguration());
-
-        $this->client = $client;
-        return $this->client;
+        return $this->clientPool[$cacheKey];
     }
 
     public function getClientConfiguration()
@@ -193,11 +186,10 @@ class Http extends \MageSuite\ErpConnector\Model\Client\Client implements Client
 
         $proxy = $this->configuration->getHttpConnectorProxy();
 
-        if (empty($proxy)) {
-            return $configuration;
+        if (!empty($proxy)) {
+            $configuration['config']['proxy'] = $proxy;
         }
 
-        $configuration['config']['proxy'] = $proxy;
         return $configuration;
     }
 
