@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\ErpConnector\Test\Unit\Model\Client;
 
 class HttpTest extends \PHPUnit\Framework\TestCase
@@ -9,15 +11,14 @@ class HttpTest extends \PHPUnit\Framework\TestCase
     public function setUp(): void
     {
         $objectManager = \Magento\TestFramework\ObjectManager::getInstance();
+
         $this->httpClient = $objectManager->get(\MageSuite\ErpConnector\Model\Client\Http::class);
     }
 
     /**
      * @dataProvider getTestData
-     * @param array $responseData
-     * @param string|null $exceptionMessage
      */
-    public function testItValidatesResponseCorrectly(array $responseData, ?string $exceptionMessage)
+    public function testItValidatesResponseCorrectly(array $responseData, ?string $exceptionMessage): void
     {
         $response = $this->prepareResponse($responseData);
 
@@ -33,7 +34,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function prepareResponse($responseData)
+    protected function prepareResponse(array $responseData): ?\Magento\Framework\DataObject
     {
         if (isset($responseData['is_empty'])) {
             return null;

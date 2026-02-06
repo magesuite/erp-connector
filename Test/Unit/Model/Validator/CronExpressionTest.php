@@ -1,20 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MageSuite\ErpConnector\Test\Unit\Model\Validator;
 
 class CronExpressionTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \MageSuite\ErpConnector\Model\Validator\CronExpression
-     */
-    protected $cronExpressionValidator;
+    protected ?\MageSuite\ErpConnector\Model\Validator\CronExpression $cronExpressionValidator;
 
     public function setUp(): void
     {
         $this->cronExpressionValidator = new \MageSuite\ErpConnector\Model\Validator\CronExpression();
     }
 
-    public static function getCronExpressions()
+    /**
+     * @dataProvider getCronExpressions
+     */
+    public function testItValidatesCronSyntaxCorrectly(string $cronExpression, bool $isValid): void
+    {
+        $result = $this->cronExpressionValidator->validate($cronExpression);
+
+        $this->assertEquals($isValid, $result);
+    }
+
+    public static function getCronExpressions(): array
     {
         return [
             'empty syntax' => ['', false],
@@ -31,17 +40,5 @@ class CronExpressionTest extends \PHPUnit\Framework\TestCase
             'at 02:00' => ['00 02 * * *', true],
             'at minute 9 and 12' => ['9,12 * * * *', true],
         ];
-    }
-
-    /**
-     * @dataProvider getCronExpressions
-     * @param $cronExpression
-     * @param $isValid
-     */
-    public function testItValidatesCronSyntaxCorrectly($cronExpression, $isValid)
-    {
-        $result = $this->cronExpressionValidator->validate($cronExpression);
-
-        $this->assertEquals($isValid, $result);
     }
 }
