@@ -126,4 +126,29 @@
             </argument>
         </arguments>
     </type>
+
+    <virtualType name="MageSuite\ErpConnector\Model\Data\ReEncryptorList\ErpConnectorVault\Handler" type="Magento\EncryptionKey\Model\Data\ReEncryptorList\ReEncryptor\SimpleHandler">
+        <arguments>
+            <argument name="tableName" xsi:type="string">erp_connector_vault</argument>
+            <argument name="identifierField" xsi:type="string">id</argument>
+            <argument name="fieldsToReEncrypt" xsi:type="array">
+                <item name="value" xsi:type="string">value</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="MageSuite\ErpConnector\Model\Data\ReEncryptorList\ErpConnectorVault" type="Magento\EncryptionKey\Model\Data\ReEncryptorList\ReEncryptor">
+        <arguments>
+            <argument name="description" xsi:type="string">Re-encrypts 'value' column in the "erp_connector_vault" DB table.</argument>
+            <argument name="handler" xsi:type="object">MageSuite\ErpConnector\Model\Data\ReEncryptorList\ErpConnectorVault\Handler</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\EncryptionKey\Model\Data\ReEncryptorList">
+        <arguments>
+            <argument name="reEncryptors" xsi:type="array">
+                <item name="erp_connector_vault" xsi:type="object">MageSuite\ErpConnector\Model\Data\ReEncryptorList\ErpConnectorVault</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
