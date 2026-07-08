@@ -13,9 +13,7 @@ class CronExpressionTest extends \PHPUnit\Framework\TestCase
         $this->cronExpressionValidator = new \MageSuite\ErpConnector\Model\Validator\CronExpression();
     }
 
-    /**
-     * @dataProvider getCronExpressions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getCronExpressions')]
     public function testItValidatesCronSyntaxCorrectly(string $cronExpression, bool $isValid): void
     {
         $result = $this->cronExpressionValidator->validate($cronExpression);

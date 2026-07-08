@@ -15,9 +15,7 @@ class HttpTest extends \PHPUnit\Framework\TestCase
         $this->httpClient = $objectManager->get(\MageSuite\ErpConnector\Model\Client\Http::class);
     }
 
-    /**
-     * @dataProvider getTestData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getTestData')]
     public function testItValidatesResponseCorrectly(array $responseData, ?string $exceptionMessage): void
     {
         $response = $this->prepareResponse($responseData);
